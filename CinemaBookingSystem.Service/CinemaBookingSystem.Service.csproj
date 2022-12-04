@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CinemaBookingSystem.Common\CinemaBookingSystem.Common.csproj" />
+    <ProjectReference Include="..\CinemaBookingSystem.Data\CinemaBookingSystem.Data.csproj" />
+    <ProjectReference Include="..\CinemaBookingSystem.Model\CinemaBookingSystem.Model.csproj" />
+  </ItemGroup>
+
 </Project>

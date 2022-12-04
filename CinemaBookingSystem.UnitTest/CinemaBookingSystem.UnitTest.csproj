@@ -15,4 +15,12 @@
     <PackageReference Include="coverlet.collector" Version="3.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CinemaBookingSystem.ClientWeb\CinemaBookingSystem.ClientWeb.csproj" />
+    <ProjectReference Include="..\CinemaBookingSystem.Common\CinemaBookingSystem.Common.csproj" />
+    <ProjectReference Include="..\CinemaBookingSystem.Data\CinemaBookingSystem.Data.csproj" />
+    <ProjectReference Include="..\CinemaBookingSystem.Model\CinemaBookingSystem.Model.csproj" />
+    <ProjectReference Include="..\CinemaBookingSystem.Service\CinemaBookingSystem.Service.csproj" />
+  </ItemGroup>
+
 </Project>
