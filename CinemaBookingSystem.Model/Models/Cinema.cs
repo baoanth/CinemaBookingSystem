@@ -7,15 +7,19 @@ namespace CinemaBookingSystem.Model.Models
     public class Cinema
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CinemaID { get; set; }
         [Required]
+        [MaxLength(256)]
         public string CinemaName { get; set; }
         [Required]
+        [MaxLength(256)]
         public string Location { get; set; }
         [Required]
+        [MaxLength(50)]
         public string FAX { get; set; }
         [Required]
-        [StringLength(10)]
+        [MaxLength(50)]
         public string Hotline { get; set; }
         [Required]
         public int ProvinceID { get; set; }

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CinemaBookingSystem.Model.Models
 {
@@ -12,6 +7,7 @@ namespace CinemaBookingSystem.Model.Models
     public class Screening
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ScreeningID { get; set; }
         [Required]
         public DateOnly ShowDate { get; set; }

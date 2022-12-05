@@ -3,15 +3,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CinemaBookingSystem.Model.Models
 {
-    [Table("Provinces")]
-    public class Province
+    [Table("Roles")]
+    public class Role
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ProvinceID { get; set; }
+        public int RoleID { get; set; }
         [Required]
         [MaxLength(100)]
-        public string ProvinceName { get; set; }
-        public virtual IEnumerable<Cinema> Cinemas { get; set; }
+        public string RoleName { get; set; }
+        [MaxLength(100)]
+        public string? RoleDescription { get; set; }
+        public IEnumerable<User> Users { get; set; }
     }
 }

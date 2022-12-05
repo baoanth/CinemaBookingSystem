@@ -7,23 +7,34 @@ namespace CinemaBookingSystem.Model.Models
     public class Movie
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MovieID { get; set; }
         [Required]
-        public int MovieName { get; set; }
+        [MaxLength(256)]
+        public string MovieName { get; set; }
         [Required]
-        public int Director { get; set; }
+        [MaxLength(50)]
+        public string Director { get; set; }
         [Required]
-        public int Cast { get; set; }
+        [MaxLength(256)]
+        public string Cast { get; set; }
         [Required]
         public DateOnly ReleaseDate { get; set; }
         [Required]
+        [MaxLength(256)]
         public string Genres { get; set; }
         [Required]
         public int RunningTime { get; set; }
+        [MaxLength(256)]
         public string? Rated { get; set; }
+        [MaxLength(256)]
+        public string? TrailerURL { get; set; }
+        [MaxLength(256)]
+        public string? ThumpnailImg { get; set; }
         [Required]
-        [MaxLength]
+        [MaxLength(1000)]
         public string Description { get; set; }
         public IEnumerable<Screening> Screenings { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
     }
 }

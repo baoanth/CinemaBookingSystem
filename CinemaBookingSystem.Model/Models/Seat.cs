@@ -7,8 +7,10 @@ namespace CinemaBookingSystem.Model.Models
     public class Seat
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SeatID { get; set; }
         [Required]
+        [MaxLength(5)]
         public string Row { get; set; }
         [Required]
         public int Column { get; set; }
