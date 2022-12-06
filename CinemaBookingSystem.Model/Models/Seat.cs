@@ -6,6 +6,10 @@ namespace CinemaBookingSystem.Model.Models
     [Table("Seats")]
     public class Seat
     {
+        public Seat()
+        {
+            Tickets = new HashSet<Ticket>();
+        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SeatID { get; set; }
@@ -18,6 +22,6 @@ namespace CinemaBookingSystem.Model.Models
         public int TheatreID { get; set; }
         [ForeignKey("TheatreID")]
         public virtual Theatre Theatre { get; set; }
-
+        public IEnumerable<Ticket> Tickets { get; set; }
     }
 }

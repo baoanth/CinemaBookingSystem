@@ -6,6 +6,10 @@ namespace CinemaBookingSystem.Model.Models
     [Table("Provinces")]
     public class Province
     {
+        public Province()
+        {
+            Cinemas = new HashSet<Cinema>();
+        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ProvinceID { get; set; }

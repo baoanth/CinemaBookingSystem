@@ -6,6 +6,10 @@ namespace CinemaBookingSystem.Model.Models
     [Table("Roles")]
     public class Role
     {
+        public Role()
+        {
+            Users = new HashSet<User>();
+        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RoleID { get; set; }

@@ -6,6 +6,10 @@ namespace CinemaBookingSystem.Model.Models
     [Table("Cinemas")]
     public class Cinema
     {
+        public Cinema() 
+        {
+            Theatres = new HashSet<Theatre>();
+        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CinemaID { get; set; }
