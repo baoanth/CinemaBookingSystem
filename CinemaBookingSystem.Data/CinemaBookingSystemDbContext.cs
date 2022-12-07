@@ -14,7 +14,7 @@ namespace CinemaBookingSystem.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=PTS;Integrated Security=True");
+                optionsBuilder.UseSqlServer(ContextConfigurations.CONNECTION_STRING);
             }
         }
         public DbSet<Booking> Bookings { get; set; }
@@ -32,5 +32,13 @@ namespace CinemaBookingSystem.Data
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<VisitorStatistic> VisitorStatistics { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Booking>(entity =>
+            {
+                entity.
+            });
+        }
     }
 }
