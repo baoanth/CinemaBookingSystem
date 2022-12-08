@@ -5,11 +5,7 @@ namespace CinemaBookingSystem.Model.Models
 {
     [Table("Screening")]
     public class Screening
-    {
-        public Screening()
-        {
-            Tickets = new HashSet<Ticket>();
-        }
+    {   
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ScreeningID { get; set; }

@@ -11,10 +11,6 @@ namespace CinemaBookingSystem.Model.Models
     [Table("Users")]
     public class User
     {
-        public User()
-        {
-            Comments = new HashSet<Comment>();
-        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserID { get; set; }

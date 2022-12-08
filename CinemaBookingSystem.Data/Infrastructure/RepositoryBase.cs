@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Data.Entity;
 using System.Linq.Expressions;
 
 namespace CinemaBookingSystem.Data.Infrastructure

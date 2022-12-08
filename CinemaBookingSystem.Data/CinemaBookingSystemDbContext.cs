@@ -1,22 +1,15 @@
 ﻿using CinemaBookingSystem.Model.Models;
-using Microsoft.EntityFrameworkCore;
+using System.Data.Entity;
 
 namespace CinemaBookingSystem.Data
 {
     public class CinemaBookingSystemDbContext : DbContext
     {
-        public CinemaBookingSystemDbContext() {}
-        public CinemaBookingSystemDbContext(DbContextOptions<CinemaBookingSystemDbContext> options) : base(options)
+        public CinemaBookingSystemDbContext() : base(ContextConfigurations.CONNECTION_STRING)
         {
+            this.Configuration.LazyLoadingEnabled = true;
+        }
 
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer(ContextConfigurations.CONNECTION_STRING);
-            }
-        }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Carousel> Carousels { get; set; }
         public DbSet<Cinema> Cinemas { get; set; }
@@ -32,13 +25,11 @@ namespace CinemaBookingSystem.Data
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<VisitorStatistic> VisitorStatistics { get; set; }
+        public DbSet<TicketBooking> TicketBookings { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Booking>(entity =>
-            {
-                entity.
-            });
+             
         }
     }
 }
