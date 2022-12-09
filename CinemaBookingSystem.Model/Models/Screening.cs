@@ -27,5 +27,6 @@ namespace CinemaBookingSystem.Model.Models
         public virtual Theatre Theatre { get; set; }
         [ForeignKey("MovieID")]
         public virtual Movie Movie { get; set; }
+        public IEnumerable<ScreeningPosition> ScreeningPositions { get; set; }
     }
 }

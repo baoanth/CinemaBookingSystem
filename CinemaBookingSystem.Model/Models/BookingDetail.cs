@@ -3,19 +3,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CinemaBookingSystem.Model.Models
 {
-    [Table("TicketBookings")]
-    public class TicketBooking
+    [Table("BookingDetails")]
+    public class BookingDetail
     {
         [Key]
         [Column(Order = 1)]
         public int BookingID { get; set; }
         [Key]
         [Column(Order = 2)]
-        public int TicketID { get; set; }
+        public int PositionID { get; set; }
 
         [ForeignKey("BookingID")]
         public virtual Booking Booking { get; set; }
-        [ForeignKey("TicketID")]
-        public virtual Ticket Ticket { get; set; }
+        [ForeignKey("PositionID")]
+        public virtual ScreeningPosition ScreeningPosition { get; set; }
     }
 }

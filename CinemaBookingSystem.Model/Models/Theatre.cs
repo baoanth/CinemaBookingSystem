@@ -18,7 +18,6 @@ namespace CinemaBookingSystem.Model.Models
         public int CinemaID { get; set; }
         [ForeignKey("CinemaID")]
         public virtual Cinema Cinema { get; set; }
-        public IEnumerable<Seat> Seats { get; set; }
         public IEnumerable<Screening> Screenings { get; set; }
     }
 }

@@ -19,13 +19,12 @@ namespace CinemaBookingSystem.Data
         public DbSet<Province> Provinces { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Screening> Screenings { get; set; }
-        public DbSet<Seat> Seats { get; set; }
         public DbSet<SupportOnline> SupportOnlines { get; set; }
         public DbSet<Theatre> Theatres { get; set; }
-        public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<ScreeningPosition> ScreeningPositions { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<VisitorStatistic> VisitorStatistics { get; set; }
-        public DbSet<TicketBooking> TicketBookings { get; set; }
+        public DbSet<BookingDetail> TicketBookings { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
