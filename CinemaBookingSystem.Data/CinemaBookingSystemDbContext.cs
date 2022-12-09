@@ -29,7 +29,7 @@ namespace CinemaBookingSystem.Data
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-             
+
         }
     }
 }

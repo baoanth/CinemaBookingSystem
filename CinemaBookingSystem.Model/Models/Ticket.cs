@@ -15,12 +15,7 @@ namespace CinemaBookingSystem.Model.Models
         public bool IsBooked { get; set; }
         [Required]
         public int SeatID { get; set; }
-        [Required]
-        public int ScreeningID { get; set; }
         [ForeignKey("SeatID")]
         public virtual Seat Seat { get; set; }
-        [ForeignKey("ScreeningID")]
-        public virtual Screening Screening { get; set; }
-
     }
 }

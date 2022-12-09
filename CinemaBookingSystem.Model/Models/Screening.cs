@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CinemaBookingSystem.Model.Models
 {
-    [Table("Screening")]
+    [Table("Screenings")]
     public class Screening
     {   
         [Key]
@@ -27,6 +27,5 @@ namespace CinemaBookingSystem.Model.Models
         public virtual Theatre Theatre { get; set; }
         [ForeignKey("MovieID")]
         public virtual Movie Movie { get; set; }
-        public IEnumerable<Ticket> Tickets { get; set; }
     }
 }
