@@ -3,7 +3,7 @@ using CinemaBookingSystem.Model.Models;
 
 namespace CinemaBookingSystem.Data.Repositories
 {
-    public interface ISupportOnlineRepository
+    public interface ISupportOnlineRepository : IRepository<SupportOnline>
     {
 
     }

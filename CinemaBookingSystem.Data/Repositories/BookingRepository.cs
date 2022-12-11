@@ -1,9 +1,10 @@
 ﻿using CinemaBookingSystem.Data.Infrastructure;
 using CinemaBookingSystem.Model.Models;
+using System.Linq.Expressions;
 
 namespace CinemaBookingSystem.Data.Repositories
 {
-    public interface IBookingRepository
+    public interface IBookingRepository : IRepository<Booking>
     {
 
     }

@@ -3,7 +3,7 @@ using CinemaBookingSystem.Model.Models;
 
 namespace CinemaBookingSystem.Data.Repositories
 {
-    public interface ICinemaRepository
+    public interface ICinemaRepository : IRepository<Cinema>
     {
 
     }

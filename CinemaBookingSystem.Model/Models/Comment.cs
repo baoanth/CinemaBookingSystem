@@ -16,6 +16,10 @@ namespace CinemaBookingSystem.Model.Models
         public DateTime CommentedAt { get; set; }
         [Required]
         public int CommentedBy { get; set; }
+        [Required]
+        public int MovieID { get; set; }
+        [ForeignKey("MovieID")]
+        public virtual Movie Movie { get; set; }
         [ForeignKey("CommentedBy")]
         public virtual User CommentedUser { get; set; }
         public int? StarRated { get; set; }
