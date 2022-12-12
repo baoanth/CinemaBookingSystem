@@ -54,7 +54,7 @@ namespace CinemaBookingSystem.Service
 
         public Province GetByID(int id)
         {
-            return _provinceRepository.GetSingleByID(id);
+            return _provinceRepository.GetSingleById(id);
         }
 
         public void Update(Province province)

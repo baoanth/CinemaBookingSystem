@@ -54,7 +54,7 @@ namespace CinemaBookingSystem.Service
 
         public bool Login(string username, string password)
         {
-            throw new NotImplementedException();
+            return _userRepository.Login(username,password);
         }
 
         public void SaveChanges()
@@ -64,7 +64,14 @@ namespace CinemaBookingSystem.Service
 
         public bool Signup(User user)
         {
-            throw new NotImplementedException();
+            bool isValidUser = _userRepository.UsernameCheck(user);
+            if (isValidUser)
+            {
+                _userRepository.Add(user);
+                return true;
+            }
+            else return false;
+            
         }
 
         public void Update(User user)

@@ -1,0 +1,63 @@
+﻿using CinemaBookingSystem.Data.Infrastructure;
+using CinemaBookingSystem.Data.Repositories;
+using CinemaBookingSystem.Model.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CinemaBookingSystem.Service
+{
+    public interface ITheatreService
+    {
+        void Add(Theatre theatre);
+        void Update(Theatre theatre);
+        void Delete(int id);
+        IEnumerable<Theatre> GetAll();
+        Theatre GetByID(int id);
+
+        void SaveChanges();
+    }
+    public class TheatreService : ITheatreService
+    {
+        private ITheatreRepository _theatreRepository;
+        private IUnitOfWork _unitOfWork;
+
+        public TheatreService(ITheatreRepository theatreRepository, IUnitOfWork unitOfWork)
+        {
+            _theatreRepository = theatreRepository;
+            _unitOfWork = unitOfWork;
+        }
+
+        public void Add(Theatre theatre)
+        {
+            _theatreRepository.Add(theatre);
+        }
+
+        public void Delete(int id)
+        {
+            _theatreRepository.Delete(id);
+        }
+
+        public IEnumerable<Theatre> GetAll()
+        {
+            return _theatreRepository.GetAll();
+        }
+
+        public Theatre GetByID(int id)
+        {
+            return _theatreRepository.GetSingleById(id);
+        }
+
+        public void SaveChanges()
+        {
+            _unitOfWork.Commit();
+        }
+
+        public void Update(Theatre theatre)
+        {
+            _theatreRepository.Update(theatre);
+        }
+    }
+}
