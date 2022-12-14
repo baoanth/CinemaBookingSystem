@@ -1,10 +1,24 @@
 ﻿using CinemaBookingSystem.Data.Infrastructure;
 using CinemaBookingSystem.Data.Repositories;
+using CinemaBookingSystem.Model.Models;
 
 namespace CinemaBookingSystem.Service
 {
     public interface ICinemaService
     {
+        void Add(Cinema cinema);
+
+        void Update(Cinema cinema);
+
+        void Delete(int id);
+
+        IEnumerable<Cinema> GetAll();
+
+        IEnumerable<Cinema> GetByProvince(int provinceId);
+
+        Cinema GetById(int id);
+
+        void SaveChanges();
     }
 
     public class CinemaService : ICinemaService
@@ -16,6 +30,41 @@ namespace CinemaBookingSystem.Service
         {
             _cinemaRepository = cinemaRepository;
             _unitOfWork = unitOfWork;
+        }
+
+        public void Add(Cinema cinema)
+        {
+            _cinemaRepository.Add(cinema);
+        }
+
+        public void Delete(int id)
+        {
+            _cinemaRepository.Delete(id);
+        }
+
+        public IEnumerable<Cinema> GetAll()
+        {
+            return _cinemaRepository.GetAll();
+        }
+
+        public Cinema GetById(int id)
+        {
+            return _cinemaRepository.GetSingleById(id);
+        }
+
+        public IEnumerable<Cinema> GetByProvince(int provinceId)
+        {
+            return _cinemaRepository.GetByProvince(provinceId);
+        }
+
+        public void SaveChanges()
+        {
+            _unitOfWork.Commit();
+        }
+
+        public void Update(Cinema cinema)
+        {
+            _cinemaRepository.Update(cinema);
         }
     }
 }

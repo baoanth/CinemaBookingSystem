@@ -15,7 +15,9 @@ namespace CinemaBookingSystem.Service
         IEnumerable<User> GetAll();
 
         User GetByID(int id);
+
         bool Login(string username, string password);
+
         bool Signup(User user);
 
         void SaveChanges();
@@ -54,7 +56,7 @@ namespace CinemaBookingSystem.Service
 
         public bool Login(string username, string password)
         {
-            return _userRepository.Login(username,password);
+            return _userRepository.Login(username, password);
         }
 
         public void SaveChanges()
@@ -71,7 +73,6 @@ namespace CinemaBookingSystem.Service
                 return true;
             }
             else return false;
-            
         }
 
         public void Update(User user)

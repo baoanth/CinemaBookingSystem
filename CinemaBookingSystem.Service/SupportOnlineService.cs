@@ -7,10 +7,15 @@ namespace CinemaBookingSystem.Service
     public interface ISupportOnlineService
     {
         void Add(SupportOnline supportOnline);
+
         void Update(SupportOnline supportOnline);
+
         void Delete(int id);
+
         IEnumerable<SupportOnline> GetAll();
+
         SupportOnline GetByID(int id);
+
         void SaveChanges();
     }
 

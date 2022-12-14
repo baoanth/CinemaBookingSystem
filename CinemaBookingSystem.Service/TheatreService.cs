@@ -1,24 +1,24 @@
 ﻿using CinemaBookingSystem.Data.Infrastructure;
 using CinemaBookingSystem.Data.Repositories;
 using CinemaBookingSystem.Model.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CinemaBookingSystem.Service
 {
     public interface ITheatreService
     {
         void Add(Theatre theatre);
+
         void Update(Theatre theatre);
+
         void Delete(int id);
+
         IEnumerable<Theatre> GetAll();
+
         Theatre GetByID(int id);
 
         void SaveChanges();
     }
+
     public class TheatreService : ITheatreService
     {
         private ITheatreRepository _theatreRepository;

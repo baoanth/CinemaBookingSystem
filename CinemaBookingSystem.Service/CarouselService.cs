@@ -7,16 +7,23 @@ namespace CinemaBookingSystem.Service
     public interface ICarouselService
     {
         void Add(Carousel carousel);
+
         void Update(Carousel carousel);
+
         void Delete(int id);
+
         IEnumerable<Carousel> GetAll();
+
         Carousel GetById(int id);
+
         void SaveChanges();
     }
+
     public class CarouselService : ICarouselService
     {
-        ICarouselRepository _carouselRepository;
-        IUnitOfWork _unitOfWork;
+        private ICarouselRepository _carouselRepository;
+        private IUnitOfWork _unitOfWork;
+
         public CarouselService(ICarouselRepository carouselRepository, IUnitOfWork unitOfWork)
         {
             _carouselRepository = carouselRepository;

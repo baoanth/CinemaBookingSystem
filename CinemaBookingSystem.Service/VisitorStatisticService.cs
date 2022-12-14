@@ -1,27 +1,27 @@
 ﻿using CinemaBookingSystem.Data.Infrastructure;
 using CinemaBookingSystem.Data.Repositories;
 using CinemaBookingSystem.Model.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CinemaBookingSystem.Service
 {
     public interface IVisitorStatisticService
     {
         IEnumerable<VisitorStatistic> GetAll();
-        VisitorStatistic GetById(int id);
-        IEnumerable<VisitorStatistic> GetByIPAddress(string IPAddress);
-        void Delete(int id);
-        void SaveChanges();
 
+        VisitorStatistic GetById(int id);
+
+        IEnumerable<VisitorStatistic> GetByIPAddress(string IPAddress);
+
+        void Delete(int id);
+
+        void SaveChanges();
     }
+
     public class VisitorStatisticService : IVisitorStatisticService
     {
-        IVisitorStatisticRepository _visitorStatisticRepository;
-        IUnitOfWork _unitOfWork;
+        private IVisitorStatisticRepository _visitorStatisticRepository;
+        private IUnitOfWork _unitOfWork;
+
         public VisitorStatisticService(IVisitorStatisticRepository visitorStatisticRepository, IUnitOfWork unitOfWork)
         {
             _visitorStatisticRepository = visitorStatisticRepository;
