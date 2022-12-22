@@ -9,6 +9,7 @@ namespace CinemaBookingSystem.Data.Repositories
     {
         bool Login(string username, string password);
         bool UsernameCheck(User user);
+        string PasswordHashing(string password);
     }
     public class UserRepository : RepositoryBase<User>, IUserRepository
     {
@@ -34,14 +35,12 @@ namespace CinemaBookingSystem.Data.Repositories
             else return false;
         }
 
-        [Obsolete]
         public bool UsernameCheck(User user)
         {
             bool isValid = true;
             var usernameCheck = DbContext.Users.Where(x => x.Username == user.Username).FirstOrDefault();
             if (usernameCheck == null)
             {
-                user.Password = PasswordHashing(user.Password);
                 return isValid;
             }
             else isValid = false;

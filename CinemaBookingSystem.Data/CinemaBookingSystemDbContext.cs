@@ -25,6 +25,7 @@ namespace CinemaBookingSystem.Data
         public DbSet<User> Users { get; set; }
         public DbSet<VisitorStatistic> VisitorStatistics { get; set; }
         public DbSet<BookingDetail> TicketBookings { get; set; }
+        public DbSet<Error> Errors { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

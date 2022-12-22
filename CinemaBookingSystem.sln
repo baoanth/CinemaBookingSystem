@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaBookingSystem.Common", "CinemaBookingSystem.Common\CinemaBookingSystem.Common.csproj", "{C57D87D9-E766-4F3A-BF01-B04C3990E900}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CinemaBookingSystem.Common", "CinemaBookingSystem.Common\CinemaBookingSystem.Common.csproj", "{C57D87D9-E766-4F3A-BF01-B04C3990E900}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaBookingSystem.Data", "CinemaBookingSystem.Data\CinemaBookingSystem.Data.csproj", "{D4CD5687-8DD7-4A5E-BD57-D604DA1427C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CinemaBookingSystem.Data", "CinemaBookingSystem.Data\CinemaBookingSystem.Data.csproj", "{D4CD5687-8DD7-4A5E-BD57-D604DA1427C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaBookingSystem.Model", "CinemaBookingSystem.Model\CinemaBookingSystem.Model.csproj", "{CB3DF35E-A974-4F0D-B66C-143E52959ECA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CinemaBookingSystem.Model", "CinemaBookingSystem.Model\CinemaBookingSystem.Model.csproj", "{CB3DF35E-A974-4F0D-B66C-143E52959ECA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaBookingSystem.Service", "CinemaBookingSystem.Service\CinemaBookingSystem.Service.csproj", "{81992972-DF44-4077-8682-481083FAB1EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CinemaBookingSystem.Service", "CinemaBookingSystem.Service\CinemaBookingSystem.Service.csproj", "{81992972-DF44-4077-8682-481083FAB1EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaBookingSystem.UnitTest", "CinemaBookingSystem.UnitTest\CinemaBookingSystem.UnitTest.csproj", "{B6392B18-F08B-40CC-8E4D-5DE1BF36063D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CinemaBookingSystem.UnitTest", "CinemaBookingSystem.UnitTest\CinemaBookingSystem.UnitTest.csproj", "{B6392B18-F08B-40CC-8E4D-5DE1BF36063D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaBookingSystem.ClientWeb", "CinemaBookingSystem.ClientWeb\CinemaBookingSystem.ClientWeb.csproj", "{2C89E9FF-41C7-49D3-8F2C-38F4750DB100}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CinemaBookingSystem.ClientWeb", "CinemaBookingSystem.ClientWeb\CinemaBookingSystem.ClientWeb.csproj", "{2C89E9FF-41C7-49D3-8F2C-38F4750DB100}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaBookingSystem.WebAPI", "CinemaBookingSystem.WebAPI\CinemaBookingSystem.WebAPI.csproj", "{4F0F60BE-600D-4E24-8C82-E594F497BFEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{2C89E9FF-41C7-49D3-8F2C-38F4750DB100}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C89E9FF-41C7-49D3-8F2C-38F4750DB100}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C89E9FF-41C7-49D3-8F2C-38F4750DB100}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F0F60BE-600D-4E24-8C82-E594F497BFEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F0F60BE-600D-4E24-8C82-E594F497BFEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F0F60BE-600D-4E24-8C82-E594F497BFEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F0F60BE-600D-4E24-8C82-E594F497BFEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
