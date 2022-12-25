@@ -1,6 +1,8 @@
-﻿using CinemaBookingSystem.Model.Models;
+﻿using AutoMapper;
+using CinemaBookingSystem.Model.Models;
 using CinemaBookingSystem.Service;
 using CinemaBookingSystem.WebAPI.Infrastructure.Core;
+using CinemaBookingSystem.WebAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -10,10 +12,12 @@ namespace CinemaBookingSystem.WebAPI.Controllers
     public class ProvinceController : ApiControllerBase
     {
         private IProvinceService _provinceService;
+        private readonly IMapper _mapper;
 
-        public ProvinceController(IErrorService errorService, IProvinceService provinceService) : base(errorService)
+        public ProvinceController(IErrorService errorService, IProvinceService provinceService, IMapper mapper) : base(errorService)
         {
             _provinceService = provinceService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -30,6 +34,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                 else
                 {
                     var provinceList = _provinceService.GetAll();
+                    var provinceListVm = _mapper.Map<List<ProvinceViewModel>>(provinceList);
                     response = request.CreateResponse(HttpStatusCode.OK, provinceList);
                 }
                 return response;
@@ -50,7 +55,8 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                 else
                 {
                     var province = _provinceService.GetByID(id);
-                    response = request.CreateResponse(HttpStatusCode.OK, province);
+                    var provinceVm = _mapper.Map<ProvinceViewModel>(province);
+                    response = request.CreateResponse(HttpStatusCode.OK, provinceVm);
                 }
                 return response;
             });
@@ -70,7 +76,8 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                 else
                 {
                     var province = _provinceService.GetByRegion(region);
-                    response = request.CreateResponse(HttpStatusCode.OK, province);
+                    var provinceVm = _mapper.Map<ProvinceViewModel>(province);
+                    response = request.CreateResponse(HttpStatusCode.OK, provinceVm);
                 }
                 return response;
             });
@@ -78,7 +85,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("create")]
-        public HttpResponseMessage Post(HttpRequestMessage request, [FromBody] Province province)
+        public HttpResponseMessage Post(HttpRequestMessage request, [FromBody] ProvinceViewModel provinceVm)
         {
             return CreateHttpResponse(request, () =>
             {
@@ -89,6 +96,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                 }
                 else
                 {
+                    var province = _mapper.Map<Province>(provinceVm);
                     _provinceService.Add(province);
                     _provinceService.SaveChanges();
                     response = request.CreateResponse(HttpStatusCode.Created);
@@ -99,7 +107,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("update")]
-        public HttpResponseMessage Put(HttpRequestMessage request, [FromBody] Province province)
+        public HttpResponseMessage Put(HttpRequestMessage request, [FromBody] ProvinceViewModel provinceVm)
         {
             return CreateHttpResponse(request, () =>
             {
@@ -110,6 +118,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                 }
                 else
                 {
+                    var province = _mapper.Map<Province>(provinceVm);
                     _provinceService.Update(province);
                     _provinceService.SaveChanges();
                     response = request.CreateResponse(HttpStatusCode.OK);
