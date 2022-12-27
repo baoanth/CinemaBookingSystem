@@ -1,8 +1,4 @@
-﻿using CinemaBookingSystem.Model.Models;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace CinemaBookingSystem.WebAPI.ViewModels
+﻿namespace CinemaBookingSystem.ClientWeb.Models
 {
     public class CinemaViewModel
     {

@@ -1,4 +1,4 @@
-﻿namespace CinemaBookingSystem.WebAPI.Infrastructure
+﻿namespace CinemaBookingSystem.ClientWeb.Infrastructure.Core
 {
     public class ApiKeyMiddleware
     {

@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Web.Http;
 
-namespace CinemaBookingSystem.WebAPI.Infrastructure.Core
+namespace CinemaBookingSystem.ClientWeb.Infrastructure.Core
 {
     public class ApiControllerBase : ApiController
     {

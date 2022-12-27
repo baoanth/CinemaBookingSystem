@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using CinemaBookingSystem.ClientWeb.Models;
 using CinemaBookingSystem.Model.Models;
-using CinemaBookingSystem.WebAPI.ViewModels;
 
-namespace CinemaBookingSystem.WebAPI.Infrastructure.Mappings
+namespace CinemaBookingSystem.ClientWeb.Infrastructure.Mappings
 {
     public class AutoMapperConfiguration : Profile
     {

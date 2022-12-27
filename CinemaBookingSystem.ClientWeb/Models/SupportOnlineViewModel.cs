@@ -1,4 +1,4 @@
-﻿namespace CinemaBookingSystem.WebAPI.ViewModels
+﻿namespace CinemaBookingSystem.ClientWeb.Models
 {
     public class SupportOnlineViewModel
     {
