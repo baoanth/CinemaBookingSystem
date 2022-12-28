@@ -7,16 +7,16 @@ namespace CinemaBookingSystem.Data.Repositories
     {
         IEnumerable<Province> GetByRegion(string region);
     }
+
     public class ProvinceRepository : RepositoryBase<Province>, IProvinceRepository
     {
         public ProvinceRepository(IDbFactory dbFactory) : base(dbFactory)
         {
-
         }
 
         public IEnumerable<Province> GetByRegion(string region)
         {
-            return DbContext.Provinces.Where(x=>x.Region == region).ToList();
+            return DbContext.Provinces.Where(x => x.Region == region).ToList();
         }
     }
 }

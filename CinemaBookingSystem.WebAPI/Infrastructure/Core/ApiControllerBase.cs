@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Web.Http;
 
-namespace CinemaBookingSystem.ClientWeb.Infrastructure.Core
+namespace CinemaBookingSystem.WebAPI.Infrastructure.Core
 {
     public class ApiControllerBase : ApiController
     {
@@ -19,6 +19,10 @@ namespace CinemaBookingSystem.ClientWeb.Infrastructure.Core
 
         protected HttpResponseMessage CreateHttpResponse(HttpRequestMessage requestMessage, Func<HttpResponseMessage> messageFunc)
         {
+            // Arrange.
+            var configuration = new HttpConfiguration();
+            requestMessage.SetConfiguration(configuration);
+
             HttpResponseMessage response = null;
             try
             {

@@ -2,7 +2,7 @@
 using CinemaBookingSystem.ClientWeb.Models;
 using CinemaBookingSystem.Model.Models;
 
-namespace CinemaBookingSystem.ClientWeb.Infrastructure.Mappings
+namespace CinemaBookingSystem.WebAPI.Infrastructure.Mappings
 {
     public class AutoMapperConfiguration : Profile
     {

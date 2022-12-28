@@ -1,4 +1,4 @@
-﻿namespace CinemaBookingSystem.ClientWeb.Models
+﻿namespace CinemaBookingSystem.WebAI.ViewModels
 {
     public class UserViewModel
     {

@@ -1,4 +1,4 @@
-﻿namespace CinemaBookingSystem.ClientWeb.Models
+﻿namespace CinemaBookingSystem.WebAPI.ViewModels
 {
     public class ScreeningPositionViewModel
     {

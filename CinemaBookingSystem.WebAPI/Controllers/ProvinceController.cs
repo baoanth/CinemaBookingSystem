@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
-using CinemaBookingSystem.ClientWeb.Infrastructure.Core;
-using CinemaBookingSystem.ClientWeb.Models;
 using CinemaBookingSystem.Model.Models;
 using CinemaBookingSystem.Service;
+using CinemaBookingSystem.WebAPI.Infrastructure.Core;
+using CinemaBookingSystem.WebAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace CinemaBookingSystem.ClientWeb.Api.Controllers
+namespace CinemaBookingSystem.WebAPI.Controllers
 {
     [Route("api/province")]
     public class ProvinceController : ApiControllerBase
     {
-        private IProvinceService _provinceService;
+        private readonly IProvinceService _provinceService;
         private readonly IMapper _mapper;
 
         public ProvinceController(IErrorService errorService, IProvinceService provinceService, IMapper mapper) : base(errorService)
