@@ -8,16 +8,21 @@ using System.Web.Http;
 
 namespace CinemaBookingSystem.WebAPI.Infrastructure.Core
 {
-    public class ApiControllerBase : ApiController
+    public interface IApiControllerBase
+    {
+        HttpResponseMessage CreateHttpResponse(HttpRequestMessage requestMessage, Func<HttpResponseMessage> messageFunc);
+    }
+
+    public class ApiControllerBase : ApiController, IApiControllerBase
     {
         private IErrorService _errorService;
 
         public ApiControllerBase(IErrorService errorService)
         {
-            this._errorService = errorService;
+            _errorService = errorService;
         }
 
-        protected HttpResponseMessage CreateHttpResponse(HttpRequestMessage requestMessage, Func<HttpResponseMessage> messageFunc)
+        public HttpResponseMessage CreateHttpResponse(HttpRequestMessage requestMessage, Func<HttpResponseMessage> messageFunc)
         {
             // Arrange.
             var configuration = new HttpConfiguration();

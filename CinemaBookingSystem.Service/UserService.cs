@@ -66,7 +66,7 @@ namespace CinemaBookingSystem.Service
 
         public bool Signup(User user)
         {
-            bool isValidUser = _userRepository.UsernameCheck(user);
+            bool isValidUser = _userRepository.UsernameCheck(user.Username);
             if (isValidUser)
             {
                 user.Password = _userRepository.PasswordHashing(user.Password);

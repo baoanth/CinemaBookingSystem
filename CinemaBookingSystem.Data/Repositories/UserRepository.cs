@@ -8,7 +8,7 @@ namespace CinemaBookingSystem.Data.Repositories
     public interface IUserRepository : IRepository<User>
     {
         bool Login(string username, string password);
-        bool UsernameCheck(User user);
+        bool UsernameCheck(string username);
         string PasswordHashing(string password);
     }
     public class UserRepository : RepositoryBase<User>, IUserRepository
@@ -35,14 +35,11 @@ namespace CinemaBookingSystem.Data.Repositories
             else return false;
         }
 
-        public bool UsernameCheck(User user)
+        public bool UsernameCheck(string username)
         {
             bool isValid = true;
-            var usernameCheck = DbContext.Users.Where(x => x.Username == user.Username).FirstOrDefault();
-            if (usernameCheck == null)
-            {
-                return isValid;
-            }
+            var user = DbContext.Users.Where(x => x.Username == username).FirstOrDefault();
+            if (user == null) return isValid;
             else isValid = false;
             return isValid;
         }

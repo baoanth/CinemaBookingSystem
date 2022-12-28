@@ -3,7 +3,7 @@
     public class ApiKeyMiddleware
     {
         private readonly RequestDelegate _next;
-        private const string APIKEY = "XApiKey";
+        private const string APIKEY = "CinemaBookingSystemToken";
 
         public ApiKeyMiddleware(RequestDelegate next)
         {

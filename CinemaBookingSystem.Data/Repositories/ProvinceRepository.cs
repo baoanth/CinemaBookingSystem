@@ -16,7 +16,8 @@ namespace CinemaBookingSystem.Data.Repositories
 
         public IEnumerable<Province> GetByRegion(string region)
         {
-            return DbContext.Provinces.Where(x => x.Region == region).ToList();
+            string str = region.ToLower().Trim();
+            return DbContext.Provinces.Where(x => (x.Region.ToLower().Trim()) == str).ToList();
         }
     }
 }

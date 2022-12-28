@@ -4,13 +4,13 @@ using CinemaBookingSystem.Data.Repositories;
 using CinemaBookingSystem.Data;
 using CinemaBookingSystem.Service;
 using CinemaBookingSystem.WebAPI.Infrastructure.Mappings;
+using CinemaBookingSystem.WebAPI.Infrastructure.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
@@ -22,6 +22,7 @@ builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
 //UnitOfWork & DbFactory
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IDbFactory, DbFactory>();
+builder.Services.AddScoped<IApiControllerBase, ApiControllerBase>();
 
 //Context
 builder.Services.AddTransient<CinemaBookingSystemDbContext>();
@@ -82,6 +83,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ApiKeyMiddleware>();
 
 app.MapControllers();
 
