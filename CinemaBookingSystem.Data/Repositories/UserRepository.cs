@@ -1,5 +1,6 @@
 ﻿using CinemaBookingSystem.Data.Infrastructure;
 using CinemaBookingSystem.Model.Models;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -30,9 +31,8 @@ namespace CinemaBookingSystem.Data.Repositories
         public bool Login(string username, string password)
         {
             var user = DbContext.Users.Where(x => x.Username == username).FirstOrDefault();
-            bool validUser = user != null && user.Password == PasswordHashing(password);
-            if (validUser) return true;
-            else return false;
+            bool IsValid = (user != null && user.Password == PasswordHashing(password));
+            return IsValid;
         }
 
         public bool UsernameCheck(string username)

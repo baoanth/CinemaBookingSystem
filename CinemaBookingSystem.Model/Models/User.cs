@@ -16,11 +16,11 @@ namespace CinemaBookingSystem.Model.Models
         public int UserID { get; set; }
         [Required]
         [MaxLength(50)]
-        [Column(TypeName = "char")]
+        [Column(TypeName = "varchar")]
         public string Username { get; set; }
         [Required]
         [MaxLength(50)]
-        [Column(TypeName = "char")]
+        [Column(TypeName = "varchar")]
         public string Password { get; set; }
         [Required]
         [MaxLength(50)]

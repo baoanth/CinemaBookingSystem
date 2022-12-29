@@ -21,17 +21,17 @@ namespace CinemaBookingSystem.WebAPI.Controllers.AccountManagement
         }
         [HttpGet]
         [Route("login")]
-        public ActionResult Login([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] LoginViewModel loginVm)
+        public ActionResult Login([FromHeader, Required] string CinemaBookingSystemToken,string username, string password)
         {
-            bool IsValid = _userService.Login(loginVm.Username, loginVm.Password);
-            if (!IsValid) return BadRequest("Username or Password is incorrect");
+            bool IsValid = _userService.Login(username, password);
+            if (!IsValid) return BadRequest("Username or Password is incorrect!");
             else
             {
-                return Ok();
+                return Ok("Account verified!");
             }
         }
-        [HttpGet]
-        [Route("login")]
+        [HttpPost]
+        [Route("signin")]
         public ActionResult Signin([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] UserViewModel userViewModel)
         {
             var user = _mapper.Map<User>(userViewModel);
@@ -40,7 +40,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers.AccountManagement
             else
             {
                 _userService.SaveChanges();
-                return Ok();
+                return Ok("Sign-in successful!");
             }
 
         }
