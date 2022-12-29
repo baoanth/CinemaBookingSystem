@@ -6,7 +6,7 @@ using CinemaBookingSystem.WebAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace CinemaBookingSystem.WebAPI.Controllers.ProvinceManagement
+namespace CinemaBookingSystem.WebAPI.Controllers
 {
     [Route("api/province")]
     [ApiController]
@@ -91,7 +91,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers.ProvinceManagement
         public ActionResult Delete([FromHeader, Required] string CinemaBookingSystemToken, int id)
         {
             var province = _provinceService.GetByID(id);
-            bool IsValid = (province != null);
+            bool IsValid = province != null;
             if (!IsValid) return BadRequest("The Id is not exist!");
             else
             {

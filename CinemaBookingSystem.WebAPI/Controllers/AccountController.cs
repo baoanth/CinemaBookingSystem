@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace CinemaBookingSystem.WebAPI.Controllers.AccountManagement
+namespace CinemaBookingSystem.WebAPI.Controllers
 {
     [Route("api/account")]
     [ApiController]
@@ -19,11 +19,11 @@ namespace CinemaBookingSystem.WebAPI.Controllers.AccountManagement
             _userService = userService;
             _mapper = mapper;
         }
-        [HttpGet]
+        [HttpPost]
         [Route("login")]
-        public ActionResult Login([FromHeader, Required] string CinemaBookingSystemToken,string username, string password)
+        public ActionResult Login([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] LoginViewModel login)
         {
-            bool IsValid = _userService.Login(username, password);
+            bool IsValid = _userService.Login(login.Username, login.Password);
             if (!IsValid) return BadRequest("Username or Password is incorrect!");
             else
             {

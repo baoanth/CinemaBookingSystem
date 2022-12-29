@@ -11,6 +11,9 @@ namespace CinemaBookingSystem.Data.Repositories
         bool Login(string username, string password);
         bool UsernameCheck(string username);
         string PasswordHashing(string password);
+        IEnumerable<User> GetByRole(int roleId);
+        IEnumerable<User> Search(string keyworks);
+        User GetByUsername(string username);
     }
     public class UserRepository : RepositoryBase<User>, IUserRepository
     {
@@ -42,6 +45,31 @@ namespace CinemaBookingSystem.Data.Repositories
             if (user == null) return isValid;
             else isValid = false;
             return isValid;
+        }
+
+        public IEnumerable<User> GetByRole(int roleId)
+        {
+            return DbContext.Users.Where(x => x.RoleID == roleId).ToList();
+        }
+
+        public User GetByUsername(string username)
+        {
+            return DbContext.Users.Where(x => x.Username == username).FirstOrDefault();
+        }
+
+        public IEnumerable<User> Search(string keyworks)
+        {
+            var key = LowerTrim(keyworks);
+            return DbContext.Users.Where(x => key.Contains(x.LastName)).ToList();
+        }
+
+        public string GetFullName(string firstName, string lastName)
+        {
+            return LowerTrim(firstName + lastName);
+        }
+        public string LowerTrim(string str)
+        {
+            return str.ToLower().Trim();
         }
     }
 }

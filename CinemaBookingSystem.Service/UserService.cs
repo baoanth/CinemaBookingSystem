@@ -13,6 +13,9 @@ namespace CinemaBookingSystem.Service
         void Delete(int id);
 
         IEnumerable<User> GetAll();
+        IEnumerable<User> GetByRole(int roleId);
+        IEnumerable<User> Search(string keywords);
+        User GetByUsername(string username);
 
         User GetByID(int id);
 
@@ -54,6 +57,16 @@ namespace CinemaBookingSystem.Service
             return _userRepository.GetSingleById(id);
         }
 
+        public IEnumerable<User> GetByRole(int roleId)
+        {
+            return _userRepository.GetByRole(roleId);
+        }
+
+        public User GetByUsername(string username)
+        {
+            return _userRepository.GetByUsername(username);
+        }
+
         public bool Login(string username, string password)
         {
             return _userRepository.Login(username, password);
@@ -62,6 +75,11 @@ namespace CinemaBookingSystem.Service
         public void SaveChanges()
         {
             _unitOfWork.Commit();
+        }
+
+        public IEnumerable<User> Search(string keywords)
+        {
+            return _userRepository.Search(keywords);
         }
 
         public bool Signup(User user)
