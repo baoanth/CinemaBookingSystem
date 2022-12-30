@@ -1,4 +1,6 @@
-﻿namespace CinemaBookingSystem.WebAPI.Infrastructure.Core
+﻿using CinemaBookingSystem.WebAPI.ViewModels;
+
+namespace CinemaBookingSystem.WebAPI.Infrastructure.Core
 {
     public class ApiKeyMiddleware
     {
@@ -16,7 +18,7 @@
                     var extractedApiKey))
             {
                 context.Response.StatusCode = 401;
-                await context.Response.WriteAsync("Api Key was not provided ");
+                await context.Response.WriteAsync("Token không đúng hoặc đã hết hạn!");
                 return;
             }
             var appSettings = context.RequestServices.GetRequiredService<IConfiguration>();
@@ -24,7 +26,7 @@
             if (!apiKey.Equals(extractedApiKey))
             {
                 context.Response.StatusCode = 401;
-                await context.Response.WriteAsync("Unauthorized client");
+                await context.Response.WriteAsync("Token không đúng hoặc đã hết hạn!");
                 return;
             }
             await _next(context);

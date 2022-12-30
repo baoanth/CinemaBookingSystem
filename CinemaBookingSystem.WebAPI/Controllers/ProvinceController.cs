@@ -3,6 +3,7 @@ using CinemaBookingSystem.Model.Models;
 using CinemaBookingSystem.Service;
 using CinemaBookingSystem.WebAPI.Infrastructure.Core;
 using CinemaBookingSystem.WebAPI.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -13,16 +14,13 @@ namespace CinemaBookingSystem.WebAPI.Controllers
     public class ProvinceController : ControllerBase
     {
         private readonly IProvinceService _provinceService;
-        private readonly IApiControllerBase _base;
         private readonly IMapper _mapper;
 
-        public ProvinceController(IProvinceService provinceService, IMapper mapper, IApiControllerBase @base)
+        public ProvinceController(IProvinceService provinceService, IMapper mapper)
         {
             _provinceService = provinceService;
             _mapper = mapper;
-            _base = @base;
         }
-
         [HttpGet]
         [Route("getall")]
         public ActionResult Get([FromHeader, Required] string CinemaBookingSystemToken)
@@ -36,7 +34,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         [Route("getsingle/{id}")]
         public ActionResult GetSingle([FromHeader, Required] string CinemaBookingSystemToken, int id)
         {
-            var province = _provinceService.GetByID(id);
+            var province = _provinceService.GetById(id);
             if (province == null) return NotFound();
             else
             {
@@ -62,7 +60,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         [Route("create")]
         public ActionResult Post([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] ProvinceViewModel provinceVm)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest();
             else
             {
                 var province = _mapper.Map<Province>(provinceVm);
@@ -76,7 +74,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         [Route("update")]
         public ActionResult Put([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] ProvinceViewModel provinceVm)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) return BadRequest();
             else
             {
                 var province = _mapper.Map<Province>(provinceVm);
@@ -90,9 +88,9 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         [Route("delete/{id}")]
         public ActionResult Delete([FromHeader, Required] string CinemaBookingSystemToken, int id)
         {
-            var province = _provinceService.GetByID(id);
+            var province = _provinceService.GetById(id);
             bool IsValid = province != null;
-            if (!IsValid) return BadRequest("The Id is not exist!");
+            if (!IsValid) return BadRequest();
             else
             {
                 _provinceService.Delete(id);

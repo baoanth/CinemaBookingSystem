@@ -1,5 +1,6 @@
 ﻿using CinemaBookingSystem.Data.Infrastructure;
 using CinemaBookingSystem.Model.Models;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
@@ -33,7 +34,7 @@ namespace CinemaBookingSystem.Data.Repositories
         [Obsolete]
         public bool Login(string username, string password)
         {
-            var user = DbContext.Users.Where(x => x.Username == username).FirstOrDefault();
+            var user = DbContext.Users.Where(x => x.Username.ToLower().Trim() == username.ToLower().Trim()).FirstOrDefault();
             bool IsValid = (user != null && user.Password == PasswordHashing(password));
             return IsValid;
         }
@@ -54,13 +55,19 @@ namespace CinemaBookingSystem.Data.Repositories
 
         public User GetByUsername(string username)
         {
-            return DbContext.Users.Where(x => x.Username == username).FirstOrDefault();
+            var str = LowerTrim(username);
+            return DbContext.Users.Where(x => x.Username.ToLower().Trim() == str).FirstOrDefault();
         }
 
         public IEnumerable<User> Search(string keyworks)
         {
             var key = LowerTrim(keyworks);
-            return DbContext.Users.Where(x => key.Contains(x.LastName)).ToList();
+            var user = DbContext.Users.Where(x => key.Contains(x.LastName.ToLower().Trim())).ToList();
+            if (user.Count() == 0)
+            {
+                user = DbContext.Users.Where(x => key.Contains(x.FirstName.ToLower().Trim())).ToList();
+            }
+            return user;
         }
 
         public string GetFullName(string firstName, string lastName)

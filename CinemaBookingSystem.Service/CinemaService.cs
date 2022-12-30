@@ -14,8 +14,6 @@ namespace CinemaBookingSystem.Service
 
         IEnumerable<Cinema> GetAll();
 
-        IEnumerable<Cinema> GetByProvince(int provinceId);
-
         Cinema GetById(int id);
 
         void SaveChanges();

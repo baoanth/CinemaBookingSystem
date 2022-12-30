@@ -14,7 +14,7 @@ namespace CinemaBookingSystem.Service
 
         IEnumerable<SupportOnline> GetAll();
 
-        SupportOnline GetByID(int id);
+        SupportOnline GetById(int id);
 
         void SaveChanges();
     }
@@ -45,7 +45,7 @@ namespace CinemaBookingSystem.Service
             return _supportOnlineRepository.GetAll();
         }
 
-        public SupportOnline GetByID(int id)
+        public SupportOnline GetById(int id)
         {
             return _supportOnlineRepository.GetSingleById(id);
         }

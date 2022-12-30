@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CinemaBookingSystem.Model.Models;
 using CinemaBookingSystem.Service;
 using CinemaBookingSystem.WebAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -47,8 +48,53 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         public ActionResult Search([FromHeader, Required] string CinemaBookingSystemToken, string keywords)
         {
             var listUser = _userService.Search(keywords);
-            var listUserVm = _mapper.Map<UserViewModel>(listUser);
+            if (listUser.Count() <= 0)
+            {
+                return NotFound("There is no user!");
+            }
+            var listUserVm = _mapper.Map<IEnumerable<UserViewModel>>(listUser);
             return Ok(listUserVm);
+        }
+        [HttpPost]
+        [Route("create")]
+        public ActionResult Post([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] UserViewModel userViewModel)
+        {
+            if (!ModelState.IsValid) return BadRequest("Model state is invalid!");
+            else
+            {
+                var user = _mapper.Map<User>(userViewModel);
+                _userService.Add(user);
+                _userService.SaveChanges();
+                return Ok(user);
+            }
+        }
+        [HttpPost]
+        [Route("update")]
+        public ActionResult Put([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] UserViewModel userVm)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            else
+            {
+                var user = _mapper.Map<User>(userVm);
+                _userService.Update(user);
+                _userService.SaveChanges();
+                return Ok(userVm);
+            }
+        }
+
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public ActionResult Delete([FromHeader, Required] string CinemaBookingSystemToken, int id)
+        {
+            var user = _userService.GetById(id);
+            bool IsValid = user != null;
+            if (!IsValid) return BadRequest("The Id is not exist!");
+            else
+            {
+                _userService.Delete(id);
+                _userService.SaveChanges();
+                return Ok("Deleted");
+            }
         }
     }
 }

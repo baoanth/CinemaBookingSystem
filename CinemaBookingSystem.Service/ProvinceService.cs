@@ -16,7 +16,7 @@ namespace CinemaBookingSystem.Service
 
         IEnumerable<Province> GetByRegion(string region);
 
-        Province GetByID(int id);
+        Province GetById(int id);
 
         void SaveChanges();
     }
@@ -52,7 +52,7 @@ namespace CinemaBookingSystem.Service
             return _provinceRepository.GetAll();
         }
 
-        public Province GetByID(int id)
+        public Province GetById(int id)
         {
             return _provinceRepository.GetSingleById(id);
         }

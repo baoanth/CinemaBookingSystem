@@ -12,9 +12,7 @@ namespace CinemaBookingSystem.Service
 
         void Delete(int id);
 
-        IEnumerable<Comment> GetAll();
-
-        IEnumerable<Comment> GetByMovieId(int id);
+        IEnumerable<Comment> GetAll(int movieId);
 
         Comment GetById(int id);
 
@@ -54,9 +52,9 @@ namespace CinemaBookingSystem.Service
             return _commentRepository.GetSingleById(id);
         }
 
-        public IEnumerable<Comment> GetByMovieId(int id)
+        public IEnumerable<Comment> GetAll(int movieId)
         {
-            return _commentRepository.GetByMovieId(id);
+            return _commentRepository.GetAll(movieId);
         }
 
         public void RateTheMovie(int id, int starRated)

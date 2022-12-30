@@ -17,7 +17,7 @@ namespace CinemaBookingSystem.Service
         IEnumerable<User> Search(string keywords);
         User GetByUsername(string username);
 
-        User GetByID(int id);
+        User GetById(int id);
 
         bool Login(string username, string password);
 
@@ -52,7 +52,7 @@ namespace CinemaBookingSystem.Service
             return _userRepository.GetAll();
         }
 
-        public User GetByID(int id)
+        public User GetById(int id)
         {
             return _userRepository.GetSingleById(id);
         }
