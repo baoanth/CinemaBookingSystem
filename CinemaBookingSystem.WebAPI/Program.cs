@@ -22,7 +22,6 @@ builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
 //UnitOfWork & DbFactory
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IDbFactory, DbFactory>();
-builder.Services.AddScoped<IApiControllerBase, ApiControllerBase>();
 
 //Context
 builder.Services.AddTransient<CinemaBookingSystemDbContext>();
