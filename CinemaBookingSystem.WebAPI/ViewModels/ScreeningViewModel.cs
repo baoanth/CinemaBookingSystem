@@ -10,8 +10,8 @@
         public int EmptySeats { get; set; }
         public int TheatreID { get; set; }
         public int MovieID { get; set; }
-        public virtual TheatreViewModel Theatre { get; set; }
-        public virtual MovieViewModel Movie { get; set; }
-        public IEnumerable<ScreeningPositionViewModel> ScreeningPositions { get; set; }
+        public virtual TheatreViewModel? Theatre { get; set; }
+        public virtual MovieViewModel? Movie { get; set; }
+        public IEnumerable<ScreeningPositionViewModel>? ScreeningPositions { get; set; }
     }
 }
