@@ -2,9 +2,11 @@
 using CinemaBookingSystem.Model.Models;
 using CinemaBookingSystem.Service;
 using CinemaBookingSystem.WebAPI.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
+using System.Diagnostics;
 
 namespace CinemaBookingSystem.WebAPI.Controllers
 {
@@ -13,6 +15,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
     public class MovieController : ControllerBase
     {
         private readonly IMovieService _movieService;
+        private readonly IErrorService _errorService;
         private readonly IMapper _mapper;
 
         public MovieController(IMovieService movieService, IMapper mapper)
@@ -20,6 +23,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
             _movieService = movieService;
             _mapper = mapper;
         }
+
         [HttpGet]
         [Route("getall")]
         public ActionResult Get([FromHeader, Required] string CinemaBookingSystemToken)
@@ -34,7 +38,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         public ActionResult GetSingle([FromHeader, Required] string CinemaBookingSystemToken, int id)
         {
             var movie = _movieService.GetById(id);
-            if (movie == null) return NotFound();
+            if (movie == null) return BadRequest("The input Id doesn't exist");
             else
             {
                 var movieVm = _mapper.Map<MovieViewModel>(movie);
@@ -46,13 +50,39 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         [Route("create")]
         public ActionResult Post([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] MovieViewModel movieVm)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
             {
-                var movie = _mapper.Map<Movie>(movieVm);
-                _movieService.Add(movie);
-                _movieService.SaveChanges();
-                return Created("Create successfully", movieVm);
+                try
+                {
+                    var movie = _mapper.Map<Movie>(movieVm);
+                    _movieService.Add(movie);
+                    _movieService.SaveChanges();
+                    return Created("Create successfully", movieVm);
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (var eve in ex.EntityValidationErrors)
+                    {
+                        Trace.WriteLine($"Entity of type \"{eve.Entry.Entity.GetType().Name}\" in state \"{eve.Entry.State}\" has the following validation errors:");
+                        foreach (var ve in eve.ValidationErrors)
+                        {
+                            Trace.WriteLine($"- Property: \"{ve.PropertyName}\", Error \"{ve.ErrorMessage}\"");
+                        }
+                    }
+                    _errorService.LogError(ex);
+                    return BadRequest(ex.InnerException.Message);
+                }
+                catch (DbUpdateException dbEx)
+                {
+                    _errorService.LogError(dbEx);
+                    return BadRequest(dbEx.InnerException.Message);
+                }
+                catch (Exception ex)
+                {
+                    _errorService.LogError(ex);
+                    return BadRequest(ex.Message);
+                }
             }
         }
 
@@ -60,13 +90,39 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         [Route("update")]
         public ActionResult Put([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] MovieViewModel movieVm)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
             {
-                var movie = _mapper.Map<Movie>(movieVm);
-                _movieService.Update(movie);
-                _movieService.SaveChanges();
-                return Ok(movieVm);
+                try
+                {
+                    var movie = _mapper.Map<Movie>(movieVm);
+                    _movieService.Update(movie);
+                    _movieService.SaveChanges();
+                    return Ok(movieVm);
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (var eve in ex.EntityValidationErrors)
+                    {
+                        Trace.WriteLine($"Entity of type \"{eve.Entry.Entity.GetType().Name}\" in state \"{eve.Entry.State}\" has the following validation errors:");
+                        foreach (var ve in eve.ValidationErrors)
+                        {
+                            Trace.WriteLine($"- Property: \"{ve.PropertyName}\", Error \"{ve.ErrorMessage}\"");
+                        }
+                    }
+                    _errorService.LogError(ex);
+                    return BadRequest(ex.InnerException.Message);
+                }
+                catch (DbUpdateException dbEx)
+                {
+                    _errorService.LogError(dbEx);
+                    return BadRequest(dbEx.InnerException.Message);
+                }
+                catch (Exception ex)
+                {
+                    _errorService.LogError(ex);
+                    return BadRequest(ex.Message);
+                }
             }
         }
 
@@ -79,9 +135,16 @@ namespace CinemaBookingSystem.WebAPI.Controllers
             if (!IsValid) return BadRequest();
             else
             {
-                _movieService.Delete(id);
-                _movieService.SaveChanges();
-                return Ok();
+                try
+                {
+                    _movieService.Delete(id);
+                    _movieService.SaveChanges();
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.Message);
+                }
             }
         }
     }

@@ -21,7 +21,7 @@ namespace CinemaBookingSystem.Service
 
         bool Login(string username, string password);
 
-        bool Signup(User user);
+        void Signup(User user);
 
         void SaveChanges();
     }
@@ -82,16 +82,14 @@ namespace CinemaBookingSystem.Service
             return _userRepository.Search(keywords);
         }
 
-        public bool Signup(User user)
+        public void Signup(User user)
         {
             bool isValidUser = _userRepository.UsernameCheck(user.Username);
             if (isValidUser)
             {
                 user.Password = _userRepository.PasswordHashing(user.Password);
                 _userRepository.Add(user);
-                return true;
             }
-            else return false;
         }
 
         public void Update(User user)

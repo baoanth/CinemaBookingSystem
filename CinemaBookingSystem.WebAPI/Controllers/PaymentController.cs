@@ -10,17 +10,17 @@ using System.Diagnostics;
 
 namespace CinemaBookingSystem.WebAPI.Controllers
 {
-    [Route("api/province")]
+    [Route("api/payment")]
     [ApiController]
-    public class ProvinceController : ControllerBase
+    public class PaymentController : ControllerBase
     {
-        private readonly IProvinceService _provinceService;
+        private readonly IPaymentService _paymentService;
         private readonly IErrorService _errorService;
         private readonly IMapper _mapper;
 
-        public ProvinceController(IProvinceService provinceService, IMapper mapper, IErrorService errorService)
+        public PaymentController(IPaymentService paymentService, IMapper mapper, IErrorService errorService)
         {
-            _provinceService = provinceService;
+            _paymentService = paymentService;
             _mapper = mapper;
             _errorService = errorService;
         }
@@ -29,50 +29,37 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         [Route("getall")]
         public ActionResult Get([FromHeader, Required] string CinemaBookingSystemToken)
         {
-            var listProvince = _provinceService.GetAll();
-            var provinceVm = _mapper.Map<IEnumerable<ProvinceViewModel>>(listProvince);
-            return Ok(provinceVm);
+            var listPayment = _paymentService.GetAll();
+            var listPaymentVm = _mapper.Map<IEnumerable<PaymentViewModel>>(listPayment);
+            return Ok(listPaymentVm);
         }
 
         [HttpGet]
         [Route("getsingle/{id}")]
         public ActionResult GetSingle([FromHeader, Required] string CinemaBookingSystemToken, int id)
         {
-            var province = _provinceService.GetById(id);
-            if (province == null) return NotFound();
+            var payment = _paymentService.GetById(id);
+            if (payment == null) return NotFound();
             else
             {
-                var provinceVm = _mapper.Map<ProvinceViewModel>(province);
-                return Ok(provinceVm);
-            }
-        }
-
-        [HttpGet]
-        [Route("getbyregion")]
-        public ActionResult GetByRegion([FromHeader, Required] string CinemaBookingSystemToken, string region)
-        {
-            var listProvince = _provinceService.GetByRegion(region);
-            if (listProvince.Count() <= 0) return NotFound();
-            else
-            {
-                var listProvinceVm = _mapper.Map<IEnumerable<ProvinceViewModel>>(listProvince);
-                return Ok(listProvinceVm);
+                var paymentVm = _mapper.Map<PaymentViewModel>(payment);
+                return Ok(paymentVm);
             }
         }
 
         [HttpPost]
         [Route("create")]
-        public ActionResult Post([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] ProvinceViewModel provinceVm)
+        public ActionResult Post([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] PaymentViewModel paymentVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
             {
                 try
                 {
-                    var province = _mapper.Map<Province>(provinceVm);
-                    _provinceService.Add(province);
-                    _provinceService.SaveChanges();
-                    return Created("Create successfully", provinceVm);
+                    var payment = _mapper.Map<Payment>(paymentVm);
+                    _paymentService.Add(payment);
+                    _paymentService.SaveChanges();
+                    return Created("Create successfully", paymentVm);
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -102,17 +89,17 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("update")]
-        public ActionResult Put([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] ProvinceViewModel provinceVm)
+        public ActionResult Put([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] PaymentViewModel paymentVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
             {
                 try
                 {
-                    var province = _mapper.Map<Province>(provinceVm);
-                    _provinceService.Update(province);
-                    _provinceService.SaveChanges();
-                    return Ok(provinceVm);
+                    var payment = _mapper.Map<Payment>(paymentVm);
+                    _paymentService.Update(payment);
+                    _paymentService.SaveChanges();
+                    return Ok(paymentVm);
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -144,19 +131,20 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         [Route("delete/{id}")]
         public ActionResult Delete([FromHeader, Required] string CinemaBookingSystemToken, int id)
         {
-            var province = _provinceService.GetById(id);
-            bool IsValid = province != null;
-            if (!IsValid) return BadRequest();
+            var payment = _paymentService.GetById(id);
+            bool IsValid = payment != null;
+            if (!IsValid) return BadRequest("The input ID is not exist!");
             else
             {
                 try
                 {
-                    _provinceService.Delete(id);
-                    _provinceService.SaveChanges();
+                    _paymentService.Delete(id);
+                    _paymentService.SaveChanges();
                     return Ok();
                 }
                 catch (Exception ex)
                 {
+                    _errorService.LogError(ex);
                     return BadRequest(ex.Message);
                 }
             }

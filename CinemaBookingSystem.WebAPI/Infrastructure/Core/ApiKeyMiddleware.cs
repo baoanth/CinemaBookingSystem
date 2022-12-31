@@ -17,7 +17,7 @@ namespace CinemaBookingSystem.WebAPI.Infrastructure.Core
             if (!context.Request.Headers.TryGetValue(APIKEY, out
                     var extractedApiKey))
             {
-                context.Response.StatusCode = 401;
+                context.Response.StatusCode = 403;
                 await context.Response.WriteAsync("Token không đúng hoặc đã hết hạn!");
                 return;
             }
@@ -25,7 +25,7 @@ namespace CinemaBookingSystem.WebAPI.Infrastructure.Core
             var apiKey = appSettings.GetValue<string>(APIKEY);
             if (!apiKey.Equals(extractedApiKey))
             {
-                context.Response.StatusCode = 401;
+                context.Response.StatusCode = 403;
                 await context.Response.WriteAsync("Token không đúng hoặc đã hết hạn!");
                 return;
             }
