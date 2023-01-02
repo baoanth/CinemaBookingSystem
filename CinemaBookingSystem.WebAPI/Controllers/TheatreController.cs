@@ -2,7 +2,6 @@
 using CinemaBookingSystem.Model.Models;
 using CinemaBookingSystem.Service;
 using CinemaBookingSystem.WebAPI.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Infrastructure;
@@ -25,6 +24,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
             _mapper = mapper;
             _errorService = errorService;
         }
+
         [HttpGet]
         [Route("getall")]
         public ActionResult Get([FromHeader, Required] string CinemaBookingSystemToken)
