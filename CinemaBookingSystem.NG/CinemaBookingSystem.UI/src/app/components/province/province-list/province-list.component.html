@@ -1,0 +1,16 @@
+<table class="table">
+<thead>
+<tr class="">
+    <th>ID</th>
+    <th>Tên tỉnh thành</th>
+    <th>Miền</th> 
+</tr>
+</thead>
+<tbody>
+    <tr *ngFor="let province of provinceList">
+        <td>{{province.provinceId}}</td>
+        <td>{{province.provinceName}}</td>
+        <td>{{province.region}}</td>
+    </tr>
+</tbody>
+</table>

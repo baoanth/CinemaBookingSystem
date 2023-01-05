@@ -27,7 +27,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpGet]
         [Route("getall")]
-        public ActionResult Get([FromHeader, Required] string CinemaBookingSystemToken, int movieId)
+        public ActionResult Get([FromHeader, Required] string CBSToken, int movieId)
         {
             //use movie Id to get all the comment of the Movie
             var listComment = _commentService.GetAll(movieId);
@@ -37,7 +37,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpGet]
         [Route("getsingle/{id}")]
-        public ActionResult GetSingle([FromHeader, Required] string CinemaBookingSystemToken, int id)
+        public ActionResult GetSingle([FromHeader, Required] string CBSToken, int id)
         {
             var comment = _commentService.GetById(id);
             if (comment == null) return NotFound();
@@ -50,7 +50,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("create")]
-        public ActionResult Post([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] CommentViewModel commentVm)
+        public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] CommentViewModel commentVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
@@ -90,7 +90,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("update")]
-        public ActionResult Put([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] CommentViewModel commentVm)
+        public ActionResult Put([FromHeader, Required] string CBSToken, [FromBody] CommentViewModel commentVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
@@ -130,7 +130,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpDelete]
         [Route("delete/{id}")]
-        public ActionResult Delete([FromHeader, Required] string CinemaBookingSystemToken, int id)
+        public ActionResult Delete([FromHeader, Required] string CBSToken, int id)
         {
             var comment = _commentService.GetById(id);
             bool IsValid = comment != null;

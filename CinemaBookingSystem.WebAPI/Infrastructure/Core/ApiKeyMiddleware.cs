@@ -5,7 +5,7 @@ namespace CinemaBookingSystem.WebAPI.Infrastructure.Core
     public class ApiKeyMiddleware
     {
         private readonly RequestDelegate _next;
-        private const string APIKEY = "CinemaBookingSystemToken";
+        private const string APIKEY = "CBSToken";
 
         public ApiKeyMiddleware(RequestDelegate next)
         {

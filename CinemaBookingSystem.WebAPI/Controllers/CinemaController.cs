@@ -27,7 +27,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpGet]
         [Route("getall")]
-        public ActionResult Get([FromHeader, Required] string CinemaBookingSystemToken)
+        public ActionResult Get([FromHeader, Required] string CBSToken)
         {
             var listCinema = _cinemaService.GetAll();
             var listCinemaVm = _mapper.Map<IEnumerable<CinemaViewModel>>(listCinema);
@@ -36,7 +36,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpGet]
         [Route("getsingle/{id}")]
-        public ActionResult GetSingle([FromHeader, Required] string CinemaBookingSystemToken, int id)
+        public ActionResult GetSingle([FromHeader, Required] string CBSToken, int id)
         {
             var cinema = _cinemaService.GetById(id);
             if (cinema == null) return BadRequest("The input Id doesn't exist!");
@@ -49,7 +49,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("create")]
-        public ActionResult Post([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] CinemaViewModel cinemaVm)
+        public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] CinemaViewModel cinemaVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
@@ -89,7 +89,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("update")]
-        public ActionResult Put([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] CinemaViewModel cinemaVm)
+        public ActionResult Put([FromHeader, Required] string CBSToken, [FromBody] CinemaViewModel cinemaVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
@@ -129,7 +129,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpDelete]
         [Route("delete/{id}")]
-        public ActionResult Delete([FromHeader, Required] string CinemaBookingSystemToken, int id)
+        public ActionResult Delete([FromHeader, Required] string CBSToken, int id)
         {
             var cinema = _cinemaService.GetById(id);
             bool IsValid = cinema != null;

@@ -27,7 +27,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpGet]
         [Route("getall")]
-        public ActionResult Get([FromHeader, Required] string CinemaBookingSystemToken)
+        public ActionResult Get([FromHeader, Required] string CBSToken)
         {
             var listProvince = _provinceService.GetAll();
             var provinceVm = _mapper.Map<IEnumerable<ProvinceViewModel>>(listProvince);
@@ -36,7 +36,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpGet]
         [Route("getsingle/{id}")]
-        public ActionResult GetSingle([FromHeader, Required] string CinemaBookingSystemToken, int id)
+        public ActionResult GetSingle([FromHeader, Required] string CBSToken, int id)
         {
             var province = _provinceService.GetById(id);
             if (province == null) return NotFound();
@@ -49,7 +49,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpGet]
         [Route("getbyregion")]
-        public ActionResult GetByRegion([FromHeader, Required] string CinemaBookingSystemToken, string region)
+        public ActionResult GetByRegion([FromHeader, Required] string CBSToken, string region)
         {
             var listProvince = _provinceService.GetByRegion(region);
             if (listProvince.Count() <= 0) return NotFound();
@@ -62,7 +62,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("create")]
-        public ActionResult Post([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] ProvinceViewModel provinceVm)
+        public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] ProvinceViewModel provinceVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
@@ -102,7 +102,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("update")]
-        public ActionResult Put([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] ProvinceViewModel provinceVm)
+        public ActionResult Put([FromHeader, Required] string CBSToken, [FromBody] ProvinceViewModel provinceVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
@@ -142,7 +142,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpDelete]
         [Route("delete/{id}")]
-        public ActionResult Delete([FromHeader, Required] string CinemaBookingSystemToken, int id)
+        public ActionResult Delete([FromHeader, Required] string CBSToken, int id)
         {
             var province = _provinceService.GetById(id);
             bool IsValid = province != null;

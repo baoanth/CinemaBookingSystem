@@ -27,7 +27,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpGet]
         [Route("getall")]
-        public ActionResult Get([FromHeader, Required] string CinemaBookingSystemToken)
+        public ActionResult Get([FromHeader, Required] string CBSToken)
         {
             var listRole = _roleService.GetAll();
             var listRoleVm = _mapper.Map<IEnumerable<RoleViewModel>>(listRole);
@@ -36,7 +36,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpGet]
         [Route("getsingle/{id}")]
-        public ActionResult GetSingle([FromHeader, Required] string CinemaBookingSystemToken, int id)
+        public ActionResult GetSingle([FromHeader, Required] string CBSToken, int id)
         {
             var role = _roleService.GetById(id);
             if (role == null) return NotFound();
@@ -49,7 +49,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("create")]
-        public ActionResult Post([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] RoleViewModel roleVm)
+        public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] RoleViewModel roleVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
@@ -89,7 +89,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("update")]
-        public ActionResult Put([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] RoleViewModel roleVm)
+        public ActionResult Put([FromHeader, Required] string CBSToken, [FromBody] RoleViewModel roleVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
@@ -129,7 +129,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpDelete]
         [Route("delete/{id}")]
-        public ActionResult Delete([FromHeader, Required] string CinemaBookingSystemToken, int id)
+        public ActionResult Delete([FromHeader, Required] string CBSToken, int id)
         {
             var role = _roleService.GetById(id);
             bool IsValid = role != null;

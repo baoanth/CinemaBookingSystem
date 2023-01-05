@@ -27,7 +27,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpGet]
         [Route("getall")]
-        public ActionResult Get([FromHeader, Required] string CinemaBookingSystemToken)
+        public ActionResult Get([FromHeader, Required] string CBSToken)
         {
             var listScreeningPosition = _screeningPositionService.GetAll();
             var listScreeningPositionVm = _mapper.Map<IEnumerable<ScreeningPositionViewModel>>(listScreeningPosition);
@@ -36,7 +36,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpGet]
         [Route("getsingle/{id}")]
-        public ActionResult GetSingle([FromHeader, Required] string CinemaBookingSystemToken, int id)
+        public ActionResult GetSingle([FromHeader, Required] string CBSToken, int id)
         {
             var screeningPosition = _screeningPositionService.GetById(id);
             if (screeningPosition == null) return BadRequest("The input Id doesn't exist!");
@@ -49,7 +49,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("create")]
-        public ActionResult Post([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] ScreeningPositionViewModel screeningPositionVm)
+        public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] ScreeningPositionViewModel screeningPositionVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
@@ -88,7 +88,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         }
         [HttpPost]
         [Route("createmulti")]
-        public ActionResult PostMulti([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] IEnumerable<ScreeningPositionViewModel> screeningPositionVms)
+        public ActionResult PostMulti([FromHeader, Required] string CBSToken, [FromBody] IEnumerable<ScreeningPositionViewModel> screeningPositionVms)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
@@ -131,7 +131,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("update")]
-        public ActionResult Put([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] ScreeningPositionViewModel screeningPositionVm)
+        public ActionResult Put([FromHeader, Required] string CBSToken, [FromBody] ScreeningPositionViewModel screeningPositionVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
@@ -171,7 +171,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpDelete]
         [Route("delete/{id}")]
-        public ActionResult Delete([FromHeader, Required] string CinemaBookingSystemToken, int id)
+        public ActionResult Delete([FromHeader, Required] string CBSToken, int id)
         {
             var screeningPosition = _screeningPositionService.GetById(id);
             bool IsValid = screeningPosition != null;

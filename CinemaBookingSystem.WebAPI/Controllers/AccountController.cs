@@ -26,27 +26,48 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
-        public ActionResult Login([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] LoginViewModel login)
+        [Route("systemlogin")]
+        public ActionResult SystemLogin([FromHeader, Required] string CBSToken, [FromBody] LoginViewModel login)
         {
+            const int ADMIN_ROLE = 2;
             bool IsValid = _userService.Login(login.Username, login.Password);
-            if (!IsValid) return BadRequest("Username or Password is incorrect!");
+            if (!IsValid) return BadRequest();
             else
             {
-                return Ok("Account verified!");
+                var user = _userService.GetByUsername(login.Username);
+                if (user.RoleID != ADMIN_ROLE)
+                {
+                    return BadRequest();
+                }
+                else
+                {
+                    return Ok(login);
+                }
+            }
+        }
+
+        [HttpPost]
+        [Route("login")]
+        public ActionResult Login([FromHeader, Required] string CBSToken, [FromBody] LoginViewModel login)
+        {
+            bool IsValid = _userService.Login(login.Username, login.Password);
+            if (!IsValid) return BadRequest();
+            else
+            {
+                return Ok(login);
             }
         }
 
         [HttpPost]
         [Route("signin")]
-        public ActionResult Signin([FromHeader, Required] string CinemaBookingSystemToken, [FromBody] UserViewModel userViewModel)
+        public ActionResult Signin([FromHeader, Required] string CBSToken, [FromBody] SignupViewModel signup)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
             {
                 try
                 {
-                    var user = _mapper.Map<User>(userViewModel);
+                    var user = _mapper.Map<User>(signup);
                     _userService.Signup(user);
                     _userService.SaveChanges();
                     return Ok("Sign-in successful!");

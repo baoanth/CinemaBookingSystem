@@ -16,7 +16,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMvc(option => option.EnableEndpointRouting = false)
     .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Latest)
     .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
+//CORS
+builder.Services.AddCors(options =>
+{
+    // this defines a CORS policy called "default"
+    options.AddPolicy("default", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 //Dependency Injection
 
 //UnitOfWork & DbFactory
@@ -82,6 +92,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors("default");
 
 app.UseMiddleware<ApiKeyMiddleware>();
 
