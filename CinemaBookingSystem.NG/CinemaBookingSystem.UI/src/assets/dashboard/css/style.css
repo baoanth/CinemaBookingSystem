@@ -9,6 +9,7 @@ h1, h2, h3 {margin: 0;}
 ul, ol {margin: 0;}
 p {margin: 0;}
 
+
 html, body{
 	font-family: 'Roboto', sans-serif;
     font-size: 100%;
@@ -36,6 +37,10 @@ ul,label{
 }
 body a:hover{
 	text-decoration:none;
+}
+span{
+    font-family: 'Unica77LLWeb', sans-serif;
+    font-size: 14px;
 }
 	/*sidebar navigation*/
 #sidebar {
@@ -779,12 +784,11 @@ ul.top-menu>li>a:hover,ul.top-menu>li>a:focus {
     line-height: 57px;
     letter-spacing: 0.2px;
     color: #000;
-    font-size: 18px;
-    font-weight: 400;
+    font-weight: 500;
     padding: 0 16px;
     background:#ddede0;
-   border-top-right-radius: 2px;
-   border-top-left-radius: 2px; 
+    -top-right-radius: 2px;
+    border-top-left-radius: 2px; 
     text-transform: uppercase;
     text-align: center;
 }

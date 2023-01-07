@@ -5,7 +5,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  {path:'province-list' , component: ProvinceListComponent}, 
+  {path:'province' , component: ProvinceListComponent}, 
   {path:'login' , component: LoginComponent},
   {path:'home' , component: HomeComponent},
   { path: '',   redirectTo: '/home', pathMatch: 'full' }

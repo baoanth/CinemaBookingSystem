@@ -2,9 +2,10 @@
 <!--header start-->
 <header class="header fixed-top clearfix">
 <!--logo start-->
+<app-root></app-root>
 <div class="brand">
     <a href="index.html" class="logo">
-        VISITORS
+        CBS PANEL
     </a>
     <div class="sidebar-toggle-box">
         <div class="fa fa-bars"></div>
@@ -95,7 +96,7 @@
                 </li>
                 <li>
                     <a href="#">
-                        <span class="photo"><img alt="avatar" src="images/3.png"></span>
+                        <span class="photo"><img alt="avatar" src="assets/dashboard/images/3.png"></span>
                                 <span class="subject">
                                 <span class="from">Jonathan Smith</span>
                                 <span class="time">Just now</span>
@@ -107,7 +108,7 @@
                 </li>
                 <li>
                     <a href="#">
-                        <span class="photo"><img alt="avatar" src="images/1.png"></span>
+                        <span class="photo"><img alt="avatar" src="assets/dashboard/images/1.png"></span>
                                 <span class="subject">
                                 <span class="from">Jane Doe</span>
                                 <span class="time">2 min ago</span>
@@ -119,7 +120,7 @@
                 </li>
                 <li>
                     <a href="#">
-                        <span class="photo"><img alt="avatar" src="images/3.png"></span>
+                        <span class="photo"><img alt="avatar" src="assets/dashboard/images/3.png"></span>
                                 <span class="subject">
                                 <span class="from">Tasi sam</span>
                                 <span class="time">2 days ago</span>
@@ -131,7 +132,7 @@
                 </li>
                 <li>
                     <a href="#">
-                        <span class="photo"><img alt="avatar" src="images/2.png"></span>
+                        <span class="photo"><img alt="avatar" src="assets/dashboard/images/2.png"></span>
                                 <span class="subject">
                                 <span class="from">Mr. Perfect</span>
                                 <span class="time">2 hour ago</span>
@@ -198,14 +199,14 @@
         <!-- user login dropdown start-->
         <li class="dropdown">
             <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                <img alt="" src="images/2.png">
-                <span class="username">John Doe</span>
+                <img alt="" src="assets/dashboard/images/2.png">
+                <span class="username">Administrator</span>
                 <b class="caret"></b>
             </a>
             <ul class="dropdown-menu extended logout">
-                <!-- <li><a href="#"><i class=" fa fa-suitcase"></i>Profile</a></li>
-                <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li> -->
-                <li><button (click)="logout()"><i class="fa fa-key"></i> Log Out</button></li>
+                <li><a href="#"><i class=" fa fa-suitcase"></i>Profile</a></li>
+                <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
+                <li><a href="#" (click)="logout()"><i class="fa fa-key"></i>Log Out</a></li>
             </ul>
         </li>
         <!-- user login dropdown end -->
@@ -226,93 +227,56 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                
-                <li class="sub-menu">
-                    <a href="javascript:;">
-                        <i class="fa fa-book"></i>
-                        <span>UI Elements</span>
-                    </a>
-                    <ul class="sub">
-						<li><a href="typography.html">Typography</a></li>
-						<li><a href="glyphicon.html">glyphicon</a></li>
-                        <li><a href="grids.html">Grids</a></li>
-                    </ul>
-                </li>
                 <li>
                     <a href="fontawesome.html">
                         <i class="fa fa-bullhorn"></i>
-                        <span>Font awesome </span>
+                        <span>Quản lý khách hàng</span>
                     </a>
                 </li>
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-th"></i>
-                        <span>Data Tables</span>
+                        <span>Quản lý phim</span>
                     </a>
-                    <ul class="sub">
-                        <li><a href="basic_table.html">Basic Table</a></li>
-                        <li><a href="responsive_table.html">Responsive Table</a></li>
-                    </ul>
                 </li>
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-tasks"></i>
-                        <span>Form Components</span>
+                        <span>Quản lý lịch chiếu</span>
                     </a>
-                    <ul class="sub">
-                        <li><a href="form_component.html">Form Elements</a></li>
-                        <li><a href="form_validation.html">Form Validation</a></li>
-						<li><a href="dropzone.html">Dropzone</a></li>
-                    </ul>
                 </li>
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-envelope"></i>
-                        <span>Mail </span>
+                        <span>Nhận vé</span>
                     </a>
-                    <ul class="sub">
-                        <li><a href="mail.html">Inbox</a></li>
-                        <li><a href="mail_compose.html">Compose Mail</a></li>
-                    </ul>
                 </li>
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class=" fa fa-bar-chart-o"></i>
-                        <span>Charts</span>
+                        <span>Quản lý nhân viên</span>
                     </a>
-                    <ul class="sub">
-                        <li><a href="chartjs.html">Chart js</a></li>
-                        <li><a href="flot_chart.html">Flot Charts</a></li>
-                    </ul>
                 </li>
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class=" fa fa-bar-chart-o"></i>
-                        <span>Maps</span>
+                        <span>Quản lý cụm rạp</span>
                     </a>
-                    <ul class="sub">
-                        <li><a href="google_map.html">Google Map</a></li>
-                        <li><a href="vector_map.html">Vector Map</a></li>
-                    </ul>
                 </li>
-                <li class="sub-menu">
+				<li class="sub-menu">
+                    <a href="/province">
+                        <i class="fa fa-map"></i>
+                        <span>Tỉnh thành</span>
+                    </a>
+                </li>
+				<li class="sub-menu">
                     <a href="javascript:;">
                         <i class="fa fa-glass"></i>
-                        <span>Extra</span>
-                    </a>
-                    <ul class="sub">
-                        <li><a href="gallery.html">Gallery</a></li>
-						<li><a href="404.html">404 Error</a></li>
-                        <li><a href="registration.html">Registration</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="login.html">
-                        <i class="fa fa-user"></i>
-                        <span>Login Page</span>
+                        <span>Thông tin hỗ trợ</span>
                     </a>
                 </li>
-            </ul>            </div>
+            </ul>            
+		</div>
         <!-- sidebar menu end-->
     </div>
 </aside>
@@ -694,7 +658,7 @@
  <!-- footer -->
 		  <div class="footer">
 			<div class="wthree-copyright">
-			  <p>© 2017 Visitors. All rights reserved | Design by <a href="http://w3layouts.com">W3layouts</a></p>
+			  <p>© 2022 Cinema Booking System. All rights reserved | Template design by <a href="http://w3layouts.com">W3layouts</a> | Made by <a href="http://github.com/huynhhung13">Huynh Cong Hung</a></p>
 			</div>
 		  </div>
   <!-- / footer -->
