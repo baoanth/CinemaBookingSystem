@@ -28,7 +28,7 @@ export class ApiService {
       referrerPolicy: 'no-referrer', 
       body: JSON.stringify(account)
     });
-    return response;
+    return response.json();
   }
 
   public getProvinces(): Observable<any>{
@@ -39,6 +39,7 @@ export class ApiService {
       .set('CBSToken', 'movienew');
     return this.httpClient.get<Province[]>(apiUrl,{'headers':headers});
   }
+  
   public async addProvince(province:Province): Promise<any>{
     const apiUrl = `${this.baseUrl}/province/create`;
     const response = await fetch(apiUrl, {

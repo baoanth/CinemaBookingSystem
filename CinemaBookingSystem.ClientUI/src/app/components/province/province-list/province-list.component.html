@@ -17,7 +17,7 @@ id="layout-navbar"
     <input
         type="text"
         class="form-control border-0 shadow-none"
-        placeholder="Search..."
+        placeholder="Bạn cần tìm gì?"
         aria-label="Search..."
     />
     </div>
@@ -39,7 +39,7 @@ id="layout-navbar"
         <li>
         <a class="dropdown-item" href="#">
             <i class="bx bx-user me-2"></i>
-            <span class="align-middle">My Profile</span>
+            <span class="align-middle">Xem Profile</span>
         </a>
         </li>
         <li>
@@ -49,21 +49,12 @@ id="layout-navbar"
         </a>
         </li>
         <li>
-        <a class="dropdown-item" href="#">
-            <span class="d-flex align-items-center align-middle">
-            <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-            <span class="flex-grow-1 align-middle">Billing</span>
-            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-            </span>
-        </a>
-        </li>
-        <li>
         <div class="dropdown-divider"></div>
         </li>
         <li>
         <a class="dropdown-item" href="#" (click)="logout()">
             <i class="bx bx-power-off me-2"></i>
-            <span class="align-middle">Log Out</span>
+            <span class="align-middle">Đăng xuất</span>
         </a>
         </li>
     </ul>
@@ -76,7 +67,7 @@ id="layout-navbar"
 <!-- Basic Bootstrap Table -->
 <div class="card">
 <h4 class="card-header">Quản lý thông tin tỉnh thành</h4>
-<button class="btn btn-primary" style="width:200px; text-align: center;" (click)="add()">Thêm tỉnh thành</button><br>
+<button class="btn btn-primary d-grid" style="width: 200px; text-align: center; margin-left: 1.5rem;" (click)="add()">Thêm tỉnh thành</button><br>
 <div class="table-responsive text-nowrap">
     <table class="table">
     <thead>
@@ -97,9 +88,11 @@ id="layout-navbar"
             </button>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="#"
-                ><i class="bx bx-edit-alt me-1"></i> Chỉnh sửa</a
-                >
+                [routerLink]="['edit', province.provinceID]" routerLinkActive="active" ariaCurrentWhenActive="page">
+                    <i class="bx bx-edit-alt me-1"></i> Chỉnh sửa
+                </a>
                 <a class="dropdown-item" href="#"
+                (click)="delete(province)"
                 ><i class="bx bx-trash me-1"></i> Xóa</a
                 >
             </div>

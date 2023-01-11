@@ -10,6 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ProvinceAddComponent } from './components/province/province-add/province-add.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { ProvinceEditComponent } from './components/province/province-edit/province-edit.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
     HomeComponent,
     LoginComponent,
     ProvinceListComponent,
-    ProvinceAddComponent
+    ProvinceAddComponent,
+    ProvinceEditComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

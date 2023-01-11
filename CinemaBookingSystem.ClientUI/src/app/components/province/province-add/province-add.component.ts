@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Province } from 'src/app/model/province';
 import { ApiService } from 'src/app/services/api/api.service';
+import { ProvinceService } from 'src/app/services/api/province.service';
 
 @Component({
   selector: 'app-province-add',
@@ -10,7 +11,7 @@ import { ApiService } from 'src/app/services/api/api.service';
 })
 export class ProvinceAddComponent {
   province : Province = new Province();
-  constructor(private apiService: ApiService, private router: Router) { }
+  constructor(private provinceService: ProvinceService, private router: Router) { }
   ngOnInit() : void {
     let token = localStorage.getItem("auth");
     if(token == null){
@@ -19,13 +20,13 @@ export class ProvinceAddComponent {
   }
 
   addProvince(){
-    this.apiService.addProvince(this.province).then((data)=>{
+    this.provinceService.addProvince(this.province).then((data)=>{
       console.log(data);
       if(data.status === 201){
         alert("Thêm thành công!");
         this.router.navigate(['/province']);
       }else{
-        alert("Không hợp lệ!");
+        alert("Hãy nhập đầy đủ thông tin!");
       }
       });
   }

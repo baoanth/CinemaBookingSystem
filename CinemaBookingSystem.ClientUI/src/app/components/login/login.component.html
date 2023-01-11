@@ -72,7 +72,7 @@
 
             <form id="formAuthentication" class="mb-3" method="POST">
             <div class="mb-3">
-                <label for="email" class="form-label">Username</label>
+                <label for="email" class="form-label">Tài khoản</label>
                 <input
                 [(ngModel)]="account.username"
                 type="text"
@@ -85,7 +85,7 @@
             </div>
             <div class="mb-3 form-password-toggle">
                 <div class="d-flex justify-content-between">
-                <label class="form-label" for="password">Password</label>
+                <label class="form-label" for="password">Mật khẩu</label>
                 </div>
                 <div class="input-group input-group-merge">
                 <input
@@ -97,7 +97,7 @@
                     placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                     aria-describedby="password"
                 />
-                <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                <span class="input-group-text cursor-pointer"><i class="bx bx-hide" id="togglePass" onclick="togglePassword()"></i></span>
                 </div>
             </div>
             <div class="mb-3">
@@ -110,6 +110,7 @@
                 <button 
                 class="btn btn-primary d-grid w-100" 
                 type="submit"
+                onclick="rememberMe()"
                 (click)="login()" *ngIf="account"> Đăng nhập </button>
             </div>
             </form>

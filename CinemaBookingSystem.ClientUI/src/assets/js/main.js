@@ -4,6 +4,26 @@
 
 'use strict';
 
+function togglePassword(){
+  var pass = document.getElementById('password');
+  var icon = document.getElementById('togglePass');
+  if(pass.type === "password"){
+      pass.type = "text";
+      icon.className = "bx bx-show";
+  }else{
+      pass.type = "password";
+      icon.className = "bx bx-hide";
+  }
+}
+
+function rememberMe(){
+  var remember = document.getElementById("remember-me");
+  var username = document.getElementById("username").value;
+  if(remember.checked == true){
+    localStorage.setItem('remember', username);
+  }
+}
+
 let menu, animate;
 
 (function () {

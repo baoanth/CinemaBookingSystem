@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Account } from 'src/app/model/account';
-import { ApiService } from 'src/app/services/api/api.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -9,19 +9,20 @@ import { ApiService } from 'src/app/services/api/api.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  constructor(private apiService: ApiService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router) {
+  }
   ;
   account: Account = new Account();
   ngOnInit() {
   }
 
   login(){
-    this.apiService.login(this.account).then((data)=>{
-      if(data.status === 200){
-        localStorage.setItem('auth', 'loggedIn');
+    this.authService.login(this.account).then((data)=>{
+      if(data.username != ""){
+        localStorage.setItem('auth', data.username);
         this.router.navigate(['/home']);
       }else{
-        alert("Tài khoản hoặc mật khẩu không đúng!");
+        alert("Thông tin xác thực tài khoản của bạn không chính xác!");
       }
       });
   }

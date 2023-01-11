@@ -1,7 +1,7 @@
+import { ProvinceService } from 'src/app/services/api/province.service';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Province } from 'src/app/model/province';
-import { ApiService } from 'src/app/services/api/api.service';
 
 @Component({
   selector: 'app-province-list',
@@ -9,20 +9,37 @@ import { ApiService } from 'src/app/services/api/api.service';
   styleUrls: ['./province-list.component.css']
 })
 export class ProvinceListComponent {
-  constructor(private apiService: ApiService, private router: Router) { }
+  constructor(private provinceService: ProvinceService, private router: Router) { }
   provinceList: Province[] = [];
   ngOnInit() : void {
     let token = localStorage.getItem("auth");
     if(token == null){
       this.router.navigate(['/login']);
     }
-    this.apiService.getProvinces().subscribe((data)=>{
+    this.provinceService.getProvinces().subscribe((data)=>{
       this.provinceList = data;
     });
   }
 
   add(){
-    this.router.navigate(['/province-add']);
+    this.router.navigate(['/province/add']);
+  }
+
+  delete(province : Province){
+    let confirmAction = confirm(`Sau khi xóa sẽ không thể hoàn tác, bạn có chắc chắn muốn xóa ${province.provinceName} ra khỏi danh sách?`);
+    if(confirmAction){
+      let id = province.provinceID;
+      this.provinceService.deleteProvince(id).then((data)=>{
+        if(data.status === 200){
+          alert("Xóa thành công");
+          location.reload();
+          console.log(province);
+        }
+      });
+    }else{
+      alert("Đã hủy thao tác!");
+    }
+    
   }
 
   logout(){
