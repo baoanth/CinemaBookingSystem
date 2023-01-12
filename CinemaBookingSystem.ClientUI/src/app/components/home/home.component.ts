@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from 'src/app/services/api/api.service';
 
 @Component({
   selector: 'app-home',
@@ -8,7 +7,7 @@ import { ApiService } from 'src/app/services/api/api.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  constructor(private apiService: ApiService, private router: Router) { }
+  constructor(private router: Router) { }
   ngOnInit() {
     let token = localStorage.getItem("auth");
     if(token == null){

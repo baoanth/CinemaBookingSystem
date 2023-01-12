@@ -12,6 +12,9 @@ import { ProvinceAddComponent } from './components/province/province-add/provinc
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ProvinceEditComponent } from './components/province/province-edit/province-edit.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { SupportOnlineListComponent } from './components/support-online/support-online-list/support-online-list.component';
+import { SupportOnlineAddComponent } from './components/support-online/support-online-add/support-online-add.component';
+import { SupportOnlineEditComponent } from './components/support-online/support-online-edit/support-online-edit.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +24,10 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     ProvinceListComponent,
     ProvinceAddComponent,
     ProvinceEditComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    SupportOnlineListComponent,
+    SupportOnlineAddComponent,
+    SupportOnlineEditComponent
   ],
   imports: [
     BrowserModule,

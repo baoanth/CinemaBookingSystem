@@ -66,21 +66,29 @@ id="layout-navbar"
 <br>
 <!-- Basic Bootstrap Table -->
 <div class="card">
-<h4 class="card-header">Quản lý thông tin tỉnh thành</h4>
-<button class="btn btn-primary d-grid" style="width: 200px; text-align: center; margin-left: 1.5rem;" (click)="add()">Thêm tỉnh thành</button><br>
+<h4 class="card-header">Quản lý thông tin hỗ trợ</h4>
+<button class="btn btn-primary d-grid" style="width: 200px; text-align: center; margin-left: 1.5rem;"
+    [routerLink]="['add']" routerLinkActive="active" ariaCurrentWhenActive="page">Thêm thông tin</button><br>
 <div class="table-responsive text-nowrap" style="min-height: 400px !important;">
     <table class="table">
     <thead>
         <tr>
-        <th>Tên tỉnh thành</th>
-        <th>Thuộc</th>
+        <th>Tên</th>
+        <th>Địa chỉ email</th>
+        <th>Số điện thoại</th>
+        <th>Trạng thái</th>
         <th>Hoạt động</th>
         </tr>
     </thead>
     <tbody class="table-border-bottom-0">
-        <tr *ngFor="let province of provinceList">
-        <td><i class="fab fa-angular fa-lg text-danger me-3"></i><strong>{{province.provinceName}}</strong></td>
-        <td>{{province.region}}</td>
+        <tr *ngFor="let support of supportList">
+        <td><i class="fab fa-angular fa-lg text-danger me-3"></i><strong>{{support.supportName}}</strong></td>
+        <td>{{support.supportEmail}}</td>
+        <td>{{support.mobile}}</td>
+        <td>{{support.facebookURL}}</td>
+        <td [ngSwitch]="support.isWorking">
+            <span *ngSwitchCase="true" class="badge bg-label-success me-1">Đang hoạt động </span>
+            <span *ngSwitchCase="false" class="badge bg-label-warning me-1">Đang tạm ngưng</span>
         <td>
             <div class="dropdown">
             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
@@ -88,11 +96,11 @@ id="layout-navbar"
             </button>
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="#"
-                [routerLink]="['edit', province.provinceID]" routerLinkActive="active" ariaCurrentWhenActive="page">
+                [routerLink]="['edit', support.supportID]" routerLinkActive="active" ariaCurrentWhenActive="page">
                     <i class="bx bx-edit-alt me-1"></i> Chỉnh sửa
                 </a>
                 <a class="dropdown-item" href="#"
-                (click)="delete(province)"
+                (click)="delete(support)"
                 ><i class="bx bx-trash me-1"></i> Xóa</a
                 >
             </div>
@@ -102,10 +110,12 @@ id="layout-navbar"
     </tbody>
     <tfoot>
         <tr>
-        <th>Tên tỉnh thành</th>
-        <th>Thuộc</th>
-        <th>Hoạt động</th>
-        </tr>
+            <th>Tên</th>
+            <th>Địa chỉ email</th>
+            <th>Số điện thoại</th>
+            <th>Trạng thái</th>
+            <th>Hoạt động</th>
+            </tr>
     </tfoot>
     </table>
 </div>

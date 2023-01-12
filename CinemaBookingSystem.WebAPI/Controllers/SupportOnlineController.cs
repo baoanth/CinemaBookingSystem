@@ -30,7 +30,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         public ActionResult Get([FromHeader, Required] string CBSToken)
         {
             var listSupport = _supportOnlineService.GetAll();
-            var listSupportVm = _mapper.Map<IEnumerable<CarouselViewModel>>(listSupport);
+            var listSupportVm = _mapper.Map<IEnumerable<SupportOnlineViewModel>>(listSupport);
             return Ok(listSupportVm);
         }
 

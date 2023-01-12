@@ -20,11 +20,23 @@ export class ProvinceEditComponent {
     else{
       this.route.params.subscribe(params=>{
         let id = params['id'];
-        this.provinceService.getProvinceById(id).then((data)=>{
+        this.provinceService.getById(id).then((data)=>{
           this.province = data;
         });
       })
     }
+  }
+
+  update(){
+    this.provinceService.updateProvince(this.province).then((data)=>{
+      console.log(data);
+      if(data.status === 200){
+        alert("Chỉnh sửa thành công!");
+        this.router.navigate(['/province']);
+      }else{
+        alert("Thông tin trống hoặc không hợp lệ!");
+      }
+      });
   }
 
   logout(){

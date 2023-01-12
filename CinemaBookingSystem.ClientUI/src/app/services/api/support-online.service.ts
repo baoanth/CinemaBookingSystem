@@ -1,28 +1,27 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/internal/Observable';
-import { Account } from 'src/app/model/account';
-import { Province } from 'src/app/model/province';
+import { Observable } from 'rxjs';
+import { SupportOnline } from 'src/app/model/support-online';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProvinceService {
+export class SupportOnlineService {
   private baseUrl = 'https://localhost:44322/api';
   private authKey = "movienew";
   constructor(private httpClient : HttpClient) { }
 
-  public getProvinces(): Observable<any>{
-    const apiUrl = `${this.baseUrl}/province/getall`;
+  public getSupports(): Observable<any>{
+    const apiUrl = `${this.baseUrl}/support/getall`;
     const headers = new HttpHeaders()
       .set('content-type', 'application/json')
       .set('Access-Control-Allow-Origin', '*')
       .set('CBSToken', this.authKey);
-    return this.httpClient.get<Province[]>(apiUrl,{'headers':headers});
+    return this.httpClient.get<SupportOnline[]>(apiUrl,{'headers':headers});
   }
 
-  public async getById(id? : number): Promise<Province>{
-    const apiUrl = `${this.baseUrl}/province/getsingle/${id}`;
+  public async getById(id? : number): Promise<SupportOnline>{
+    const apiUrl = `${this.baseUrl}/support/getsingle/${id}`;
     const response = await fetch(apiUrl, {
       method: 'GET',
       mode: 'cors', 
@@ -39,8 +38,8 @@ export class ProvinceService {
     return response.json();
   }
   
-  public async addProvince(province:Province): Promise<any>{
-    const apiUrl = `${this.baseUrl}/province/create`;
+  public async addSupport(support:SupportOnline): Promise<any>{
+    const apiUrl = `${this.baseUrl}/support/create`;
     const response = await fetch(apiUrl, {
       method: 'POST',
       mode: 'cors', 
@@ -53,14 +52,14 @@ export class ProvinceService {
       },
       redirect: 'follow', 
       referrerPolicy: 'no-referrer', 
-      body: JSON.stringify(province)
+      body: JSON.stringify(support)
     });
-    console.log(JSON.stringify(province));
+    console.log(JSON.stringify(support));
     return response;
   }
 
-  public async updateProvince(province:Province): Promise<any>{
-    const apiUrl = `${this.baseUrl}/province/update`;
+  public async updateSupport(support:SupportOnline): Promise<any>{
+    const apiUrl = `${this.baseUrl}/support/update`;
     const response = await fetch(apiUrl, {
       method: 'POST',
       mode: 'cors', 
@@ -73,14 +72,14 @@ export class ProvinceService {
       },
       redirect: 'follow', 
       referrerPolicy: 'no-referrer', 
-      body: JSON.stringify(province)
+      body: JSON.stringify(support)
     });
-    console.log(JSON.stringify(province));
+    console.log(JSON.stringify(support));
     return response;
   }
 
-  public async deleteProvince(provinceId? : number): Promise<any>{
-    const apiUrl = `${this.baseUrl}/province/delete/${provinceId}`;
+  public async deleteSupport(id? : number): Promise<any>{
+    const apiUrl = `${this.baseUrl}/support/delete/${id}`;
     const response = await fetch(apiUrl, {
       method: 'DELETE',
       mode: 'cors', 

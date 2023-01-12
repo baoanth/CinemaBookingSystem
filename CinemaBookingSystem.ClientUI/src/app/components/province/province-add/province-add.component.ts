@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Province } from 'src/app/model/province';
-import { ApiService } from 'src/app/services/api/api.service';
 import { ProvinceService } from 'src/app/services/api/province.service';
 
 @Component({
@@ -19,7 +18,7 @@ export class ProvinceAddComponent {
     }
   }
 
-  addProvince(){
+  add(){
     this.provinceService.addProvince(this.province).then((data)=>{
       console.log(data);
       if(data.status === 201){

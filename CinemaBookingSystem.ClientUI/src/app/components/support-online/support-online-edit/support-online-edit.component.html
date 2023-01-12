@@ -29,7 +29,7 @@ id="layout-navbar"
         <li class="nav-item navbar-dropdown dropdown-user dropdown">
         <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
             <div class="avatar avatar-online">
-            <img src="assets/img/avatars/user.png" alt class="w-px-40 h-auto rounded-circle" />
+                <img src="./assets/img/avatars/user.png" alt="avatar" class="w-px-40 h-auto rounded-circle" />
             </div>
         </a>
         <ul class="dropdown-menu dropdown-menu-end">
@@ -70,30 +70,53 @@ id="layout-navbar"
 <div class="col-xxl">
     <div class="card mb-4">
     <div class="card-header d-flex align-items-center justify-content-between">
-        <h5 class="mb-0">Thêm tỉnh thành</h5>
+        <h5 class="mb-0">Chỉnh sửa thông tin hỗ trợ</h5>
         <label class="col-form-label">* là thông tin bắt buộc</label>
     </div>
     <div class="card-body">
-        <form class="mb-3" method="POST">
+        <form class="mb-3" method="POST" >
         <div class="row mb-3">
-            <label class="col-sm-2 col-form-label" for="basic-default-name">Tên tỉnh thành <span style="color:red">*</span></label>
+            <label class="col-sm-2 col-form-label" for="basic-default-name">Tên: <span style="color:red">*</span></label>
             <div class="col-sm-10">
-            <input type="text" class="form-control" id="basic-default-name" [(ngModel)]="province.provinceName" [ngModelOptions]="{standalone: true}" placeholder="Trà Vinh..." />
+            <input type="text" class="form-control" id="basic-default-name" [(ngModel)]="support.supportName" [ngModelOptions]="{standalone: true}" placeholder="Tên cụm rạp..." />
             </div>
         </div>
         <div class="row mb-3">
-            <label class="col-sm-2 col-form-label" for="basic-default-company">Thuộc miền <span style="color:red">*</span></label>
+            <label class="col-sm-2 col-form-label" for="basic-default-name">Địa chỉ email: <span style="color:red">*</span></label>
             <div class="col-sm-10">
-                <select id="defaultSelect" class="form-select" [(ngModel)]="province.region" [ngModelOptions]="{standalone: true}">
-                    <option value="Miền Nam">Miền Nam</option>
-                    <option value="Miền Bắc">Miền Bắc</option>
-                    <option value="Miền Trung">Miền Trung</option>
+            <input type="text" class="form-control" id="basic-default-name" [(ngModel)]="support.supportEmail" [ngModelOptions]="{standalone: true}" placeholder="Địa chỉ email..." />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-default-name">Số điện thoại: <span style="color:red">*</span></label>
+            <div class="col-sm-10">
+            <input type="text" class="form-control" id="basic-default-name" [(ngModel)]="support.mobile" [ngModelOptions]="{standalone: true}" placeholder="Số hotline..." />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-default-name">Link Facebook: <span style="color:red">*</span></label>
+            <div class="col-sm-10">
+            <input type="text" class="form-control" id="basic-default-name" [(ngModel)]="support.facebookURL" [ngModelOptions]="{standalone: true}" placeholder="Link Facebook..." />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-default-name">Địa chỉ: <span style="color:red">*</span></label>
+            <div class="col-sm-10">
+            <input type="text" class="form-control" id="basic-default-name" [(ngModel)]="support.department" [ngModelOptions]="{standalone: true}" placeholder="Địa chỉ..." />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label" for="basic-default-company">Trạng thái hoạt động: <span style="color:red">*</span></label>
+            <div class="col-sm-10">
+                <select id="defaultSelect" class="form-select" [(ngModel)]="support.isWorking" [ngModelOptions]="{standalone: true}">
+                    <option [ngValue]="true">Hoạt động</option>
+                    <option [ngValue]="false">Tạm ngưng</option>
                 </select>
             </div>
         </div>
         <div class="row justify-content-end">
             <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary" (click)="add()" *ngIf="province">Thêm</button>
+            <button type="submit" class="btn btn-primary" (click)="update()" *ngIf="support">Chỉnh sửa</button>
             </div>
         </div>
         </form>
