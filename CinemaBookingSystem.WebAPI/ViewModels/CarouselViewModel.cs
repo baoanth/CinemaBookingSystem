@@ -5,7 +5,7 @@
         public int CarouselID { get; set; }
         public string CarouselName { get; set; }
         public string? CarouselDescription { get; set; }
-        public string? ImageURL { get; set; }
+        public string? CarouselImage { get; set; }
         public int? DisplayOrder { get; set; }
     }
 }

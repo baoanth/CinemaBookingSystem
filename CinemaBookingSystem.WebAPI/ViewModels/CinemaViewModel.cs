@@ -7,7 +7,7 @@
         public string Location { get; set; }
         public string FAX { get; set; }
         public string Hotline { get; set; }
-        public int ProvinceID { get; set; }
+        public string ProvinceID { get; set; }
         public virtual ProvinceViewModel Province { get; set; }
         public IEnumerable<TheatreViewModel> Theatres { get; set; }
     }

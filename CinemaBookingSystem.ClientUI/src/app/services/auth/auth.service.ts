@@ -26,6 +26,6 @@ export class AuthService {
       referrerPolicy: 'no-referrer', 
       body: JSON.stringify(account)
     });
-    return response.json();
+    return response;
   }
 }

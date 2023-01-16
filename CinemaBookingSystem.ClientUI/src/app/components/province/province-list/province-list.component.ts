@@ -15,6 +15,7 @@ export class ProvinceListComponent {
     let token = localStorage.getItem("auth");
     if(token == null){
       this.router.navigate(['/login']);
+      alert("Không đủ quyền truy cập");
     }
     this.provinceService.getProvinces().subscribe((data)=>{
       this.provinceList = data;
@@ -26,8 +27,8 @@ export class ProvinceListComponent {
   }
 
   delete(province : Province){
-    let confirmAction = confirm(`Sau khi xóa sẽ không thể hoàn tác, bạn có chắc chắn muốn xóa ${province.provinceName} ra khỏi danh sách?`);
-    if(confirmAction){
+    let confirmAction = prompt(`Sau khi xóa sẽ không thể hoàn tác, hãy nhập ${province.provinceName} để xóa ra khỏi danh sách?`);
+    if(confirmAction == `${province.provinceName}`){
       let id = province.provinceID;
       this.provinceService.deleteProvince(id).then((data)=>{
         if(data.status === 200){

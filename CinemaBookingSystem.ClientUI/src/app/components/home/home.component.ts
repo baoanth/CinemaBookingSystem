@@ -12,6 +12,7 @@ export class HomeComponent {
     let token = localStorage.getItem("auth");
     if(token == null){
       this.router.navigate(['/login']);
+      alert("Không đủ quyền truy cập");
     }
   }
 

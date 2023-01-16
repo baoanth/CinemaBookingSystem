@@ -15,6 +15,13 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
 import { SupportOnlineListComponent } from './components/support-online/support-online-list/support-online-list.component';
 import { SupportOnlineAddComponent } from './components/support-online/support-online-add/support-online-add.component';
 import { SupportOnlineEditComponent } from './components/support-online/support-online-edit/support-online-edit.component';
+import { MovieListComponent } from './components/movie/movie-list/movie-list.component';
+import { MovieAddComponent } from './components/movie/movie-add/movie-add.component';
+import { MovieDetailComponent } from './components/movie/movie-detail/movie-detail.component';
+import { MovieEditComponent } from './components/movie/movie-edit/movie-edit.component';
+import { CarouselListComponent } from './components/carousel/carousel-list/carousel-list.component';
+import { CarouselAddComponent } from './components/carousel/carousel-add/carousel-add.component';
+import { CarouselEditComponent } from './components/carousel/carousel-edit/carousel-edit.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +34,14 @@ import { SupportOnlineEditComponent } from './components/support-online/support-
     PageNotFoundComponent,
     SupportOnlineListComponent,
     SupportOnlineAddComponent,
-    SupportOnlineEditComponent
+    SupportOnlineEditComponent,
+    MovieListComponent,
+    MovieAddComponent,
+    MovieDetailComponent,
+    MovieEditComponent,
+    CarouselListComponent,
+    CarouselAddComponent,
+    CarouselEditComponent,
   ],
   imports: [
     BrowserModule,

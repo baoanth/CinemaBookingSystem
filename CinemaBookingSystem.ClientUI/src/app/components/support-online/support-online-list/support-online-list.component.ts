@@ -15,6 +15,7 @@ export class SupportOnlineListComponent {
     let token = localStorage.getItem("auth");
     if(token == null){
       this.router.navigate(['/login']);
+      alert("Không đủ quyền truy cập");
     }
     this.supportService.getSupports().subscribe((data)=>{
       this.supportList = data;
@@ -26,8 +27,8 @@ export class SupportOnlineListComponent {
   }
 
   delete(support : SupportOnline){
-    let confirmAction = confirm(`Sau khi xóa sẽ không thể hoàn tác, bạn có chắc chắn muốn xóa ${support.supportName} ra khỏi danh sách?`);
-    if(confirmAction){
+    let confirmAction = prompt(`Sau khi xóa sẽ không thể hoàn tác, hãy nhập ${support.supportName} để xóa ra khỏi danh sách?`);
+    if(confirmAction == `${support.supportName}`){
       let id = support.supportID;
       this.supportService.deleteSupport(id).then((data)=>{
         if(data.status === 200){

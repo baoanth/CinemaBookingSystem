@@ -16,7 +16,7 @@ namespace CinemaBookingSystem.Model.Models
         [MaxLength(256)]
         public string? CarouselDescription { get; set; }
         [MaxLength(256)]
-        public string? ImageURL { get; set; }
+        public string? CarouselImage { get; set; }
         public int? DisplayOrder { get; set; }
     }
 }

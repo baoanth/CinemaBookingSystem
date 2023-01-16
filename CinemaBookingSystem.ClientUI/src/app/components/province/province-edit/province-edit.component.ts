@@ -16,6 +16,7 @@ export class ProvinceEditComponent {
     let token = localStorage.getItem("auth");
     if(token == null){
       this.router.navigate(['/login']);
+      alert("Không đủ quyền truy cập");
     }
     else{
       this.route.params.subscribe(params=>{
