@@ -8,7 +8,7 @@ namespace CinemaBookingSystem.Model.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int RoleID { get; set; }
+        public int RoleId { get; set; }
         [Required]
         [MaxLength(100)]
         public string RoleName { get; set; }

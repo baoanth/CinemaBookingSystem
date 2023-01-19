@@ -7,7 +7,7 @@ namespace CinemaBookingSystem.Model.Models
     public class Error
     {
         [Key]
-        public int ErrorID { get; set; }
+        public int ErrorId { get; set; }
         public string Message { get; set; }
         public string StackTrace { get; set; }
         public DateTime CreatedDate { get; set; }

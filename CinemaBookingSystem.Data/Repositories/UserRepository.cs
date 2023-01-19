@@ -62,17 +62,8 @@ namespace CinemaBookingSystem.Data.Repositories
         public IEnumerable<User> Search(string keyworks)
         {
             var key = LowerTrim(keyworks);
-            var user = DbContext.Users.Where(x => key.Contains(x.LastName.ToLower().Trim())).ToList();
-            if (user.Count() == 0)
-            {
-                user = DbContext.Users.Where(x => key.Contains(x.FirstName.ToLower().Trim())).ToList();
-            }
+            var user = DbContext.Users.Where(x => key.Contains(x.FullName.ToLower().Trim())).ToList();
             return user;
-        }
-
-        public string GetFullName(string firstName, string lastName)
-        {
-            return LowerTrim(firstName + lastName);
         }
         public string LowerTrim(string str)
         {

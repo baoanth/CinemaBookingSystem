@@ -5,8 +5,7 @@ namespace CinemaBookingSystem.Data.Repositories
 {
     public interface ICommentRepository : IRepository<Comment>
     {
-        IEnumerable<Comment> GetAll(int id);
-        void RateTheMovie(int id, int starRated);
+        IEnumerable<Comment> GetAllByMovie(int movieId);
     }
     public class CommentRepository : RepositoryBase<Comment>, ICommentRepository
     {
@@ -15,16 +14,9 @@ namespace CinemaBookingSystem.Data.Repositories
 
         }
 
-        public IEnumerable<Comment> GetAll(int id)
+        public IEnumerable<Comment> GetAllByMovie(int movieId)
         {
-            return DbContext.Comments.Where(x => x.MovieID == id).ToList();
-        }
-
-        public void RateTheMovie(int id, int starRated)
-        {
-            var comment = GetSingleById(id);
-            comment.StarRated = starRated;
-            Update(comment);
+            return DbContext.Comments.Where(x => x.MovieId == movieId);
         }
     }
 }

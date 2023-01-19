@@ -8,10 +8,10 @@ namespace CinemaBookingSystem.WebAPI.Infrastructure.Mappings
     {
         public AutoMapperConfiguration()
         {
-            CreateMap<Province, ProvinceViewModel>().ReverseMap();
+            CreateMap<Location, LocationViewModel>().ReverseMap();
             CreateMap<BookingDetail, BookingDetailViewModel>().ReverseMap();
             CreateMap<Booking, BookingViewModel>().ReverseMap();
-            CreateMap<Carousel, CarouselViewModel>().ReverseMap();
+            CreateMap<Slide, SlideViewModel>().ReverseMap();
             CreateMap<Cinema, CinemaViewModel>().ReverseMap();
             CreateMap<Comment, CommentViewModel>().ReverseMap();
             CreateMap<Error, ErrorViewModel>().ReverseMap();
@@ -20,7 +20,7 @@ namespace CinemaBookingSystem.WebAPI.Infrastructure.Mappings
             CreateMap<Role, RoleViewModel>().ReverseMap();
             CreateMap<Screening, ScreeningViewModel>().ReverseMap();
             CreateMap<ScreeningPosition, ScreeningPositionViewModel>().ReverseMap();
-            CreateMap<SupportOnline, SupportOnlineViewModel>().ReverseMap();
+            CreateMap<Contact, ContactViewModel>().ReverseMap();
             CreateMap<Theatre, TheatreViewModel>().ReverseMap();
             CreateMap<VisitorStatistic, VisitorStatisticViewModel>().ReverseMap();
             CreateMap<User, SignupViewModel>().ReverseMap();

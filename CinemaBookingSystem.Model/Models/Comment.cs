@@ -8,7 +8,7 @@ namespace CinemaBookingSystem.Model.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CommentID { get; set; }
+        public int CommentId { get; set; }
         [Required]
         [MaxLength(500)]
         public string Content { get; set; }
@@ -17,11 +17,10 @@ namespace CinemaBookingSystem.Model.Models
         [Required]
         public int CommentedBy { get; set; }
         [Required]
-        public int MovieID { get; set; }
-        [ForeignKey("MovieID")]
+        public int MovieId { get; set; }
+        [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
         [ForeignKey("CommentedBy")]
         public virtual User CommentedUser { get; set; }
-        public int? StarRated { get; set; }
     }
 }

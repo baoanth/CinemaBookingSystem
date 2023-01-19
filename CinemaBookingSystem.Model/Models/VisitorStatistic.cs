@@ -8,7 +8,7 @@ namespace CinemaBookingSystem.Model.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
         [Required]
         public DateTime VisitedDate { get; set; }
         [MaxLength(50)]

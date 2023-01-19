@@ -10,57 +10,56 @@ using System.Diagnostics;
 
 namespace CinemaBookingSystem.WebAPI.Controllers
 {
-    [Route("api/comment")]
+    [Route("api/contact")]
     [ApiController]
-    public class CommentController : ControllerBase
+    public class ContactController : ControllerBase
     {
-        private readonly ICommentService _commentService;
+        private readonly IContactService _contactService;
         private readonly IErrorService _errorService;
         private readonly IMapper _mapper;
 
-        public CommentController(ICommentService commentService, IMapper mapper, IErrorService errorService)
+        public ContactController(IContactService contactService, IMapper mapper, IErrorService errorService)
         {
-            _commentService = commentService;
-            _errorService = errorService;
+            _contactService = contactService;
             _mapper = mapper;
+            _errorService = errorService;
         }
 
         [HttpGet]
         [Route("getall")]
-        public ActionResult Get([FromHeader, Required] string CBSToken, int movieId)
+        public ActionResult Get([FromHeader, Required] string CBSToken)
         {
-            //use movie Id to get all the comment of the Movie
-            var listComment = _commentService.GetAllByMovie(movieId);
-            var listCommentVm = _mapper.Map<IEnumerable<MovieViewModel>>(listComment);
-            return Ok(listCommentVm);
+            var contactList = _contactService.GetAll();
+            var contactListVm = _mapper.Map<IEnumerable<ContactViewModel>>(contactList);
+            return Ok(contactListVm);
         }
 
         [HttpGet]
         [Route("getsingle/{id}")]
         public ActionResult GetSingle([FromHeader, Required] string CBSToken, int id)
         {
-            var comment = _commentService.GetById(id);
-            if (comment == null) return NotFound();
+            var contact = _contactService.GetById(id);
+            if (contact == null) return BadRequest("The input Id doesn't exist!");
             else
             {
-                var movieVm = _mapper.Map<MovieViewModel>(comment);
-                return Ok(movieVm);
+                var contactVm = _mapper.Map<ContactViewModel>(contact);
+                return Ok(contactVm);
             }
         }
 
         [HttpPost]
         [Route("create")]
-        public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] CommentViewModel commentVm)
+        public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] ContactViewModel contactVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
             {
                 try
                 {
-                    var comment = _mapper.Map<Comment>(commentVm);
-                    _commentService.Add(comment);
-                    _commentService.SaveChanges();
-                    return Created("Create successfully", commentVm);
+                    var contact = _mapper.Map<Contact>(contactVm);
+                    _contactService.Add(contact);
+                    _contactService.SaveChanges();
+                    return Created("Create successfully", contactVm);
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -90,17 +89,17 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("update")]
-        public ActionResult Put([FromHeader, Required] string CBSToken, [FromBody] CommentViewModel commentVm)
+        public ActionResult Put([FromHeader, Required] string CBSToken, [FromBody] ContactViewModel contactVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
             {
                 try
                 {
-                    var comment = _mapper.Map<Comment>(commentVm);
-                    _commentService.Update(comment);
-                    _commentService.SaveChanges();
-                    return Ok(commentVm);
+                    var contact = _mapper.Map<Contact>(contactVm);
+                    _contactService.Update(contact);
+                    _contactService.SaveChanges();
+                    return Ok(contactVm);
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -132,16 +131,16 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         [Route("delete/{id}")]
         public ActionResult Delete([FromHeader, Required] string CBSToken, int id)
         {
-            var comment = _commentService.GetById(id);
-            bool IsValid = comment != null;
+            var contact = _contactService.GetById(id);
+            bool IsValid = contact != null;
             if (!IsValid) return BadRequest();
             else
             {
                 try
                 {
-                    _commentService.Delete(id);
-                    _commentService.SaveChanges();
-                    return Ok();
+                    _contactService.Delete(id);
+                    _contactService.SaveChanges();
+                    return Ok("Deleted");
                 }
                 catch (Exception ex)
                 {

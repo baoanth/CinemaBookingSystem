@@ -8,24 +8,22 @@ namespace CinemaBookingSystem.Model.Models
     {   
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ScreeningID { get; set; }
-        [Required]
-        public DateOnly ShowDate { get; set; }
+        public int ScreeningId { get; set; }
         [Required]
         public DateTime ShowTime { get; set; }
         [Required]
-        public bool ShowStatus { get; set; }
+        public bool IsShowed { get; set; }
         [Required]
         public bool IsFull { get; set; }
         [Required]
         public int EmptySeats { get; set; }
         [Required]
-        public int TheatreID { get; set; }
+        public int TheatreId { get; set; }
         [Required]
-        public int MovieID { get; set; }
-        [ForeignKey("TheatreID")]
+        public int MovieId { get; set; }
+        [ForeignKey("TheatreId")]
         public virtual Theatre Theatre { get; set; }
-        [ForeignKey("MovieID")]
+        [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
         public IEnumerable<ScreeningPosition> ScreeningPositions { get; set; }
     }

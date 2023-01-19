@@ -23,14 +23,13 @@ namespace CinemaBookingSystem.Model.Models
         [Column(TypeName = "varchar")]
         public string Password { get; set; }
         [Required]
-        [MaxLength(50)]
-        public string FirstName { get; set; }
+        [MaxLength(80)]
+        public string FullName { get; set; }
         [Required]
-        [MaxLength(50)]
-        public string LastName { get; set; }
+        public DateTime DOB { get; set; }
         [Required]
         [MaxLength(100)]
-        public string EmailAddress { get; set; }
+        public string Email { get; set; }
         [Required]
         [MaxLength(10)]
         public string PhoneNumber { get; set; }

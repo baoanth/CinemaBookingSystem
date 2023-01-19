@@ -8,14 +8,14 @@ namespace CinemaBookingSystem.Model.Models
     {
         [Key]
         [Column(Order = 1)]
-        public int BookingID { get; set; }
+        public int BookingId { get; set; }
         [Key]
         [Column(Order = 2)]
-        public int PositionID { get; set; }
+        public int PositionId { get; set; }
 
-        [ForeignKey("BookingID")]
+        [ForeignKey("BookingId")]
         public virtual Booking Booking { get; set; }
-        [ForeignKey("PositionID")]
+        [ForeignKey("PositionId")]
         public virtual ScreeningPosition ScreeningPosition { get; set; }
     }
 }

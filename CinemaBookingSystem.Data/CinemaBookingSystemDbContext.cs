@@ -11,15 +11,15 @@ namespace CinemaBookingSystem.Data
         }
 
         public DbSet<Booking> Bookings { get; set; }
-        public DbSet<Carousel> Carousels { get; set; }
+        public DbSet<Slide> Slides { get; set; }
         public DbSet<Cinema> Cinemas { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Payment> Payments { get; set; }
-        public DbSet<Province> Provinces { get; set; }
+        public DbSet<Location> Locations { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Screening> Screenings { get; set; }
-        public DbSet<SupportOnline> SupportOnlines { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
         public DbSet<Theatre> Theatres { get; set; }
         public DbSet<ScreeningPosition> ScreeningPositions { get; set; }
         public DbSet<User> Users { get; set; }

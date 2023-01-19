@@ -8,15 +8,15 @@ namespace CinemaBookingSystem.Model.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int TheatreID { get; set; }
+        public int TheatreId { get; set; }
         [Required]
         [MaxLength(256)]
         public string TheatreName { get; set; }
         [Required]
         public int Capacity { get; set; }
         [Required]
-        public int CinemaID { get; set; }
-        [ForeignKey("CinemaID")]
+        public int CinemaId { get; set; }
+        [ForeignKey("CinemaId")]
         public virtual Cinema Cinema { get; set; }
         public IEnumerable<Screening> Screenings { get; set; }
     }

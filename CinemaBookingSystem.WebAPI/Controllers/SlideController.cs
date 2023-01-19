@@ -10,57 +10,56 @@ using System.Diagnostics;
 
 namespace CinemaBookingSystem.WebAPI.Controllers
 {
-    [Route("api/comment")]
+    [Route("api/slide")]
     [ApiController]
-    public class CommentController : ControllerBase
+    public class SlideController : ControllerBase
     {
-        private readonly ICommentService _commentService;
+        private readonly ISlideService _slideService;
         private readonly IErrorService _errorService;
         private readonly IMapper _mapper;
 
-        public CommentController(ICommentService commentService, IMapper mapper, IErrorService errorService)
+        public SlideController(ISlideService slideService, IMapper mapper, IErrorService errorService)
         {
-            _commentService = commentService;
-            _errorService = errorService;
+            _slideService = slideService;
             _mapper = mapper;
+            _errorService = errorService;
         }
 
         [HttpGet]
         [Route("getall")]
-        public ActionResult Get([FromHeader, Required] string CBSToken, int movieId)
+        public ActionResult Get([FromHeader, Required] string CBSToken)
         {
-            //use movie Id to get all the comment of the Movie
-            var listComment = _commentService.GetAllByMovie(movieId);
-            var listCommentVm = _mapper.Map<IEnumerable<MovieViewModel>>(listComment);
-            return Ok(listCommentVm);
+            var slideList = _slideService.GetAll();
+            var slideListVm = _mapper.Map<IEnumerable<SlideViewModel>>(slideList);
+            return Ok(slideListVm);
         }
 
         [HttpGet]
         [Route("getsingle/{id}")]
         public ActionResult GetSingle([FromHeader, Required] string CBSToken, int id)
         {
-            var comment = _commentService.GetById(id);
-            if (comment == null) return NotFound();
+            var slide = _slideService.GetById(id);
+            if (slide == null) return BadRequest("The input Id doesn't exist!");
             else
             {
-                var movieVm = _mapper.Map<MovieViewModel>(comment);
-                return Ok(movieVm);
+                var slideVm = _mapper.Map<SlideViewModel>(slide);
+                return Ok(slideVm);
             }
         }
 
         [HttpPost]
         [Route("create")]
-        public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] CommentViewModel commentVm)
+        public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] SlideViewModel slideVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
             {
                 try
                 {
-                    var comment = _mapper.Map<Comment>(commentVm);
-                    _commentService.Add(comment);
-                    _commentService.SaveChanges();
-                    return Created("Create successfully", commentVm);
+                    var slide = _mapper.Map<Slide>(slideVm);
+                    _slideService.Add(slide);
+                    _slideService.SaveChanges();
+                    return Created("Create successfully", slideVm);
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -90,17 +89,17 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("update")]
-        public ActionResult Put([FromHeader, Required] string CBSToken, [FromBody] CommentViewModel commentVm)
+        public ActionResult Put([FromHeader, Required] string CBSToken, [FromBody] SlideViewModel slideVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
             {
                 try
                 {
-                    var comment = _mapper.Map<Comment>(commentVm);
-                    _commentService.Update(comment);
-                    _commentService.SaveChanges();
-                    return Ok(commentVm);
+                    var slide = _mapper.Map<Slide>(slideVm);
+                    _slideService.Update(slide);
+                    _slideService.SaveChanges();
+                    return Ok(slideVm);
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -132,16 +131,16 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         [Route("delete/{id}")]
         public ActionResult Delete([FromHeader, Required] string CBSToken, int id)
         {
-            var comment = _commentService.GetById(id);
-            bool IsValid = comment != null;
+            var slide = _slideService.GetById(id);
+            bool IsValid = slide != null;
             if (!IsValid) return BadRequest();
             else
             {
                 try
                 {
-                    _commentService.Delete(id);
-                    _commentService.SaveChanges();
-                    return Ok();
+                    _slideService.Delete(id);
+                    _slideService.SaveChanges();
+                    return Ok("Deleted");
                 }
                 catch (Exception ex)
                 {

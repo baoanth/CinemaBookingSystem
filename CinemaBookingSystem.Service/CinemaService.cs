@@ -50,10 +50,6 @@ namespace CinemaBookingSystem.Service
             return _cinemaRepository.GetSingleById(id);
         }
 
-        public IEnumerable<Cinema> GetByProvince(int provinceId)
-        {
-            return _cinemaRepository.GetByProvince(provinceId);
-        }
 
         public void SaveChanges()
         {
