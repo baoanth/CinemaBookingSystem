@@ -1,4 +1,4 @@
-﻿using CinemaBookingSystem.WebAPI.ViewModels;
+﻿using CinemaBookingSystem.ViewModels;
 
 namespace CinemaBookingSystem.WebAPI.Infrastructure.Core
 {

@@ -9,6 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="RepositoryTest\**" />
+    <EmbeddedResource Remove="RepositoryTest\**" />
+    <None Remove="RepositoryTest\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="Moq" Version="4.18.3" />
@@ -22,10 +28,6 @@
     <ProjectReference Include="..\CinemaBookingSystem.Data\CinemaBookingSystem.Data.csproj" />
     <ProjectReference Include="..\CinemaBookingSystem.Model\CinemaBookingSystem.Model.csproj" />
     <ProjectReference Include="..\CinemaBookingSystem.Service\CinemaBookingSystem.Service.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="RepositoryTest\" />
   </ItemGroup>
 
 </Project>

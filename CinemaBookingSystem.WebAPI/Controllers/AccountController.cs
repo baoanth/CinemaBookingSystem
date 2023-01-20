@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CinemaBookingSystem.Model.Models;
 using CinemaBookingSystem.Service;
-using CinemaBookingSystem.WebAPI.ViewModels;
+using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Infrastructure;
@@ -29,7 +29,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         [Route("systemlogin")]
         public ActionResult SystemLogin([FromHeader, Required] string CBSToken, [FromBody] LoginViewModel login)
         {
-            const int ADMIN_ROLE = 2;
+            const int ADMIN_ROLE = 1;
             bool IsValid = _userService.Login(login.Username, login.Password);
             if (!IsValid) return BadRequest();
             else
@@ -59,15 +59,15 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("signin")]
-        public ActionResult Signin([FromHeader, Required] string CBSToken, [FromBody] SignupViewModel signup)
+        [Route("signup")]
+        public ActionResult Signup([FromHeader, Required] string CBSToken, [FromBody] UserViewModel userVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
             {
                 try
                 {
-                    var user = _mapper.Map<User>(signup);
+                    var user = _mapper.Map<User>(userVm);
                     _userService.Signup(user);
                     _userService.SaveChanges();
                     return Ok("Sign-in successful!");

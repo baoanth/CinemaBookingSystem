@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CinemaBookingSystem.Model.Models;
-using CinemaBookingSystem.WebAPI.ViewModels;
+using CinemaBookingSystem.ViewModels;
 
 namespace CinemaBookingSystem.WebAPI.Infrastructure.Mappings
 {
