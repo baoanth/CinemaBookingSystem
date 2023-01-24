@@ -2,8 +2,8 @@
 {
     public class BookingDetailViewModel
     {
-        public int BookingID { get; set; }
-        public int PositionID { get; set; }
+        public int BookingId { get; set; }
+        public int PositionId { get; set; }
         public virtual BookingViewModel Booking { get; set; }
         public virtual ScreeningPositionViewModel ScreeningPosition { get; set; }
     }

@@ -8,7 +8,7 @@ namespace CinemaBookingSystem.Model.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CinemaID { get; set; }
+        public int CinemaId { get; set; }
         [Required]
         [MaxLength(256)]
         public string CinemaName { get; set; }
@@ -19,9 +19,14 @@ namespace CinemaBookingSystem.Model.Models
         [MaxLength(50)]
         public string Hotline { get; set; }
         [Required]
-        public int LocationID { get; set; }
-        [ForeignKey("LocationID")]
-        public virtual Location Location { get; set; }
+        [MaxLength(100)]
+        public string Address { get; set; }
+        [Required]
+        [MaxLength(100)]
+        public string City { get; set; }
+        [Required]
+        [MaxLength(100)]
+        public string Region { get; set; }
         public IEnumerable<Theatre> Theatres { get; set; }
 
     }

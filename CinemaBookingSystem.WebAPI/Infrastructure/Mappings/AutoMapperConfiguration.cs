@@ -8,7 +8,6 @@ namespace CinemaBookingSystem.WebAPI.Infrastructure.Mappings
     {
         public AutoMapperConfiguration()
         {
-            CreateMap<Location, LocationViewModel>().ReverseMap();
             CreateMap<BookingDetail, BookingDetailViewModel>().ReverseMap();
             CreateMap<Booking, BookingViewModel>().ReverseMap();
             CreateMap<Slide, SlideViewModel>().ReverseMap();

@@ -2,11 +2,11 @@
 {
     public class ScreeningPositionViewModel
     {
-        public int PositionID { get; set; }
+        public int PositionId { get; set; }
         public string Row { get; set; }
         public string Column { get; set; }
         public bool IsBooked { get; set; }
-        public int ScreeningID { get; set; }
+        public int ScreeningId { get; set; }
         public virtual ScreeningViewModel Screening { get; set; }
     }
 }

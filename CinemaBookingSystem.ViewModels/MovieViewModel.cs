@@ -2,7 +2,7 @@
 {
     public class MovieViewModel
     {
-        public int MovieID { get; set; }
+        public int MovieId { get; set; }
         public string MovieName { get; set; }
         public string Director { get; set; }
         public string Cast { get; set; }
