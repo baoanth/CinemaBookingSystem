@@ -4,44 +4,56 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CinemaName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FAX)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Hotline)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.CinemaId"> @Html.DisplayFor(modelItem => item.CinemaName)</a>       
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FAX)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Hotline)
-            </td>
-            <td>
-                    <a asp-action="Edit" asp-route-id="@item.CinemaId"> <input type="submit" value="Chỉnh sửa" class="btn btn-warning" /></a> 
-                    &nbsp&nbsp
-                    <a asp-action="Delete" asp-route-id="@item.CinemaId"> <input type="submit" value="Xóa" class="btn btn-danger" /></a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="card">
+    <h5 class="card-header">Rạp phim hiện có</h5>
+    <a asp-action="Create"> <input type="submit" class="btn btn-primary w-100" value="Thêm mới"/></a>
+    <div class="table-responsive text-nowrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tên rạp</th>
+                    <th>Hotline</th>
+                    <th>FAX</th>
+                    <th>Địa chỉ</th>
+                    <th>Thành phố</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.CinemaId"> @Html.DisplayFor(modelItem => item.CinemaName)</a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Hotline)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FAX)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.CinemaId"> <input type="submit" value="Chỉnh sửa" class="btn btn-warning" /></a>
+                            &nbsp&nbsp
+                            <a asp-action="Delete" asp-route-id="@item.CinemaId"> <input type="submit" value="Xóa" class="btn btn-danger" /></a>
+                        </td>
+                    </tr>
+                } 
+            </tbody>
+            <tfoot class="table-border-bottom-0">
+                <tr>
+                    <th>Tên rạp</th>
+                    <th>Hotline</th>
+                    <th>FAX</th>
+                    <th>Địa chỉ</th>
+                    <th>Thành phố</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

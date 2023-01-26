@@ -15,10 +15,6 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         public IActionResult Index()
         {
-            if (HttpContext.Session.GetString("_name") == null)
-            {
-                return RedirectToAction("Login", "Login");
-            }
             return View();
         }
 
@@ -39,6 +35,10 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        public IActionResult NotFound()
+        {
+            return View();
         }
     }
 }

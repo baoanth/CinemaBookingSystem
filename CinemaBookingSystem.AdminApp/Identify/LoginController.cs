@@ -4,6 +4,7 @@ using System.Text;
 using System;
 using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace CinemaBookingSystem.AdminApp.Identify
 {
@@ -14,12 +15,14 @@ namespace CinemaBookingSystem.AdminApp.Identify
         HttpClient _client;
         private const string APIKEY = "movienew";
         public const string SessionKeyName = "_name";
+        private INotyfService _notyf;
 
-        public LoginController()
+        public LoginController(INotyfService notyf)
         {
             _client = new HttpClient();
             _client.BaseAddress = _baseUrl;
             _client.DefaultRequestHeaders.Add("CBSToken", APIKEY);
+            _notyf = notyf;
         }
 
         public IActionResult Login()
@@ -28,7 +31,7 @@ namespace CinemaBookingSystem.AdminApp.Identify
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login([Bind("Username,Password")] LoginViewModel login)
+        public IActionResult Login([Bind("Username,Password")] LoginViewModel login)
         {
             string data = JsonConvert.SerializeObject(login);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
@@ -43,12 +46,13 @@ namespace CinemaBookingSystem.AdminApp.Identify
 
             if (response.IsSuccessStatusCode)
             {
+                _notyf.Success($"Chào mừng quay trở lại, {login.Username}", 4);
                 HttpContext.Session.SetString(SessionKeyName, login.Username);
                 return RedirectToAction("Index", "Home");
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Thông tin không hợp lệ!");
+                _notyf.Error("Tài khoản hoặc mật khẩu không khớp với xác thực hệ thống!", 4);
             }
             return View(login);
         }

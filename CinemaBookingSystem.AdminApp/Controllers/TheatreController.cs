@@ -1,20 +1,20 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
+using CinemaBookingSystem.ViewModels;
 
-namespace CinemaBookingSystem.AdminApp.Controllers
+namespace TheatreBookingSystem.AdminApp.Controllers
 {
-    public class CinemaController : Controller
+    public class TheatreController : Controller
     {
-        private Uri _baseUrl = new Uri("https://localhost:44322/api/cinema");
+        private Uri _baseUrl = new Uri("https://localhost:44322/api/theatre");
         private HttpClient _client;
         private const string APIKEY = "movienew";
         private readonly INotyfService _notyf;
 
-        public CinemaController(INotyfService notyf)
+        public TheatreController(INotyfService notyf)
         {
             _client = new HttpClient();
             _client.BaseAddress = _baseUrl;
@@ -24,12 +24,12 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         public ActionResult Index()
         {
-            IEnumerable<CinemaViewModel> list = null;
-            HttpResponseMessage response = GetCinemaList();
+            IEnumerable<TheatreViewModel> list = null;
+            HttpResponseMessage response = GetTheatreList();
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
-                list = JsonConvert.DeserializeObject<IEnumerable<CinemaViewModel>>(body);
+                list = JsonConvert.DeserializeObject<IEnumerable<TheatreViewModel>>(body);
             }
             else
             {
@@ -42,12 +42,12 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         public IActionResult Details(int? id)
         {
-            CinemaViewModel cinema = null;
-            HttpResponseMessage response = GetCinemaDetails(id);
+            TheatreViewModel theatre = null;
+            HttpResponseMessage response = GetTheatreDetails(id);
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
-                cinema = JsonConvert.DeserializeObject<CinemaViewModel>(body);
+                theatre = JsonConvert.DeserializeObject<TheatreViewModel>(body);
             }
             else
             {
@@ -56,7 +56,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
                 return RedirectToAction("NotFound", "Home");
             }
-            return View(cinema);
+            return View(theatre);
         }
 
         public ActionResult Create()
@@ -66,12 +66,12 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("CinemaId,CinemaName,FAX,Hotline,Address,City,Region")] CinemaViewModel cinema)
+        public IActionResult Create([Bind("TheatreId,TheatreName,Capacity,CinemaId")] TheatreViewModel theatre)
         {
-            HttpResponseMessage response = CreateCinema(cinema);
+            HttpResponseMessage response = CreateTheatre(theatre);
             if (response.IsSuccessStatusCode)
             {
-                _notyf.Success($"Thêm mới thành công: {cinema.CinemaName}", 3);
+                _notyf.Success($"Thêm mới thành công: {theatre.TheatreName}", 3);
                 return RedirectToAction("Index");
             }
             else
@@ -85,12 +85,12 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         public ActionResult Edit(int id)
         {
-            CinemaViewModel cinema = null;
-            HttpResponseMessage response = GetCinemaDetails(id);
+            TheatreViewModel theatre = null;
+            HttpResponseMessage response = GetTheatreDetails(id);
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
-                cinema = JsonConvert.DeserializeObject<CinemaViewModel>(body);
+                theatre = JsonConvert.DeserializeObject<TheatreViewModel>(body);
             }
             else
             {
@@ -99,17 +99,17 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
                 return RedirectToAction("NotFound", "Home");
             }
-            return View(cinema);
+            return View(theatre);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(CinemaViewModel cinema)
+        public IActionResult Edit(TheatreViewModel theatre)
         {
-            HttpResponseMessage response = UpdateCinema(cinema);
+            HttpResponseMessage response = UpdateTheatre(theatre);
             if (response.IsSuccessStatusCode)
             {
-                _notyf.Success($"Chỉnh sửa thành công: {cinema.CinemaName}", 3);
+                _notyf.Success($"Chỉnh sửa thành công: {theatre.TheatreName}", 3);
                 return RedirectToAction("Index");
             }
             else
@@ -118,17 +118,17 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
-            return View(cinema);
+            return View(theatre);
         }
 
         public ActionResult Delete(int? id)
         {
-            CinemaViewModel cinema = null;
-            HttpResponseMessage response = GetCinemaDetails(id);
+            TheatreViewModel theatre = null;
+            HttpResponseMessage response = GetTheatreDetails(id);
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
-                cinema = JsonConvert.DeserializeObject<CinemaViewModel>(body);
+                theatre = JsonConvert.DeserializeObject<TheatreViewModel>(body);
             }
             else
             {
@@ -137,14 +137,14 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
                 return RedirectToAction("NotFound", "Home");
             }
-            return View(cinema);
+            return View(theatre);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            HttpResponseMessage response = DeleteCinema(id);
+            HttpResponseMessage response = DeleteTheatre(id);
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Xóa thành công khỏi danh sách!", 4);
@@ -160,7 +160,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         }
 
         //Response message
-        public HttpResponseMessage GetCinemaList()
+        public HttpResponseMessage GetTheatreList()
         {
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "/getall");
@@ -169,8 +169,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
             return _client.SendAsync(request).Result;
         }
-
-        public HttpResponseMessage GetCinemaDetails(int? id)
+        public HttpResponseMessage GetTheatreDetails(int? id)
         {
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/getsingle/{id}");
@@ -178,10 +177,9 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             request.Headers.Add("CBSToken", APIKEY);
             return _client.SendAsync(request).Result;
         }
-
-        public HttpResponseMessage CreateCinema(CinemaViewModel cinema)
+        public HttpResponseMessage CreateTheatre(TheatreViewModel theatre)
         {
-            string data = JsonConvert.SerializeObject(cinema);
+            string data = JsonConvert.SerializeObject(theatre);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
             HttpRequestMessage request = new HttpRequestMessage();
@@ -192,10 +190,9 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
             return _client.SendAsync(request).Result;
         }
-
-        public HttpResponseMessage UpdateCinema(CinemaViewModel cinema)
+        public HttpResponseMessage UpdateTheatre(TheatreViewModel theatre)
         {
-            string data = JsonConvert.SerializeObject(cinema);
+            string data = JsonConvert.SerializeObject(theatre);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
             HttpRequestMessage request = new HttpRequestMessage();
@@ -206,8 +203,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
             return _client.SendAsync(request).Result;
         }
-
-        public HttpResponseMessage DeleteCinema(int id)
+        public HttpResponseMessage DeleteTheatre(int id)
         {
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/delete/{id}");

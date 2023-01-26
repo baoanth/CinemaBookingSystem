@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@{
+    string sessionName = Context.Session.GetString("_name");
+    if (String.IsNullOrEmpty(sessionName))
+    {
+        Context.Response.Redirect("/Login");
+    }
+}
+<!DOCTYPE html>
 <html lang="en"
       class="light-style layout-menu-fixed"
       dir="ltr"
@@ -193,7 +200,7 @@
                     <li class="nav-item navbar-dropdown dropdown-user dropdown">
                     <a class="nav-link dropdown-toggle hide-arrow" href="#" data-bs-toggle="dropdown">
                         <div class="avatar avatar-online">
-                                            <img src="~/assets/img/avatars/1.png" alt="avatar" class="w-px-40 h-auto rounded-circle" />
+                                            <img src="~/assets/img/avatars/OIP.png" alt="avatar" class="w-px-40 h-auto rounded-circle" />
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
@@ -201,7 +208,7 @@
                         <div class="dropdown-divider"></div>
                         </li>
                         <li>
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" asp-action="Index" asp-controller="Profile">
                             <i class="bx bx-user me-2"></i>
                             <span class="align-middle">Xem profile</span>
                         </a>
@@ -235,7 +242,11 @@
                     <footer class="content-footer footer bg-footer-theme">
                         <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
                             <div class="mb-2 mb-md-0">
-                                ©2023, Huỳnh Công Hưng
+                                ©
+                                <script>
+                                    document.write(new Date().getFullYear());
+                                </script>
+                                , made with ❤️ by Huynh Cong Hung.
                             </div>
                         </div>
                     </footer>
@@ -263,12 +274,13 @@
     <script src="~/assets/vendor/libs/apex-charts/apexcharts.js"></script>
 
     <!-- Main JS -->
-    <script src="~/assets/js/main.js"></script>
+    <script src="~/assets/js/main.js" asp-append-version="true"></script>
 
     <!-- Page JS -->
-    <script src="~/assets/js/dashboards-analytics.js"></script>
+    <script src="~/assets/js/dashboards-analytics.js" asp-append-version="true"></script>
 
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    @await Component.InvokeAsync("Notyf")
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

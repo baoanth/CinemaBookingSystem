@@ -179,6 +179,7 @@
     <!-- Page JS -->
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    @await Component.InvokeAsync("Notyf")
     @section Scripts {
         @{
             await Html.RenderPartialAsync("_ValidationScriptsPartial");
