@@ -1,9 +1,48 @@
 ﻿@model IEnumerable<CinemaBookingSystem.ViewModels.TheatreViewModel>;
-
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "TheatreList";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<div class="card">
+    <br />
+    <a asp-action="Index" asp-controller="Cinema"> <input type="submit" class="btn btn-primary" value="Trở về danh sách rạp" /></a>
+    <h5 class="card-header">Danh sách phòng chiếu</h5>
+    <a asp-action="Create"> <input type="submit" class="btn btn-primary" value="Thêm mới" /></a>
+    <hr />
+    <div class="table-responsive text-nowrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tên phòng chiếu</th>
+                    <th>Số chỗ ngồi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.TheatreId"> @Html.DisplayFor(modelItem => item.TheatreName)</a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Capacity)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.TheatreId"> <input type="submit" value="Chỉnh sửa" class="btn btn-warning" /></a>
+                            &nbsp&nbsp
+                            <a asp-action="Delete" asp-route-id="@item.TheatreId"> <input type="submit" value="Xóa" class="btn btn-danger" /></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot class="table-border-bottom-0">
+                <tr>
+                    <th>Tên phòng chiếu</th>
+                    <th>Số chỗ ngồi</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
 

@@ -5,5 +5,69 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Theatre/</span> Edit</h4>
+    <!-- Basic Layout & Basic with Icons -->
+    <div class="row">
+        <!-- Basic Layout -->
+        <div class="col-xxl">
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">Chỉnh sửa phòng chiếu</h5>
+                    <small class="text-muted float-end text-danger">* là thông tin bắt buộc</small>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="Edit">
+                        <div class="row mb-3" hidden="hidden">
+                            <label class="col-sm-2 col-form-label" for="theatre-id">TheatreId<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" asp-for=TheatreId class="form-control" id="theatre-id" readonly="readonly" />
+                                <span asp-validation-for="TheatreId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="theatre-name">Tên phòng chiếu<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" asp-for=TheatreName class="form-control" id="theatre-name" />
+                                <span asp-validation-for="TheatreName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="capacity">Số chỗ ngồi<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" asp-for=Capacity class="form-control" id="capacity" />
+                                <span asp-validation-for="Capacity" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="cinema-select">Thuộc rạp<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <select id="cinema-select" class="form-select" asp-for="CinemaId">
+                                    @{
+                                        foreach (var item in ViewBag.CinemaList as IEnumerable<CinemaBookingSystem.ViewModels.CinemaViewModel>)
+                                        {
+                                            <option value="@item.CinemaId">@item.CinemaName</option>
+                                        }
+                                    }
+
+                                </select>
+                                <span asp-validation-for="CinemaId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row justify-content-end">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-warning w-100" value="Lưu thông tin">Lưu thông tin</button> &ensp;
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row justify-content-end">
+                        <div class="col-sm-10">
+                            <a asp-action="Index"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 

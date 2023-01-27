@@ -47,6 +47,19 @@ namespace CinemaBookingSystem.WebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("getallbycinema/{id}")]
+        public ActionResult GetAllByCinema([FromHeader, Required] string CBSToken, int id)
+        {
+            var theatreList = _theatreService.GetAllByCinema(id);
+            if (theatreList == null) return NotFound("There's no theatre!");
+            else
+            {
+                var theatreListVm = _mapper.Map<IEnumerable<TheatreViewModel>>(theatreList);
+                return Ok(theatreListVm);
+            }
+        }
+
         [HttpPost]
         [Route("create")]
         public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] TheatreViewModel theatreVm)

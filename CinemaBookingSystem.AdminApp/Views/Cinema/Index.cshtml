@@ -6,7 +6,7 @@
 
 <div class="card">
     <h5 class="card-header">Rạp phim hiện có</h5>
-    <a asp-action="Create"> <input type="submit" class="btn btn-primary w-100" value="Thêm mới"/></a>
+    <a asp-action="Create"> <input type="submit" class="btn btn-primary" value="Thêm mới"/></a>
     <div class="table-responsive text-nowrap">
         <table class="table">
             <thead>
@@ -41,6 +41,8 @@
                             <a asp-action="Edit" asp-route-id="@item.CinemaId"> <input type="submit" value="Chỉnh sửa" class="btn btn-warning" /></a>
                             &nbsp&nbsp
                             <a asp-action="Delete" asp-route-id="@item.CinemaId"> <input type="submit" value="Xóa" class="btn btn-danger" /></a>
+                            &nbsp&nbsp
+                            <a asp-action="Index" asp-controller="Theatre" asp-route-id="@item.CinemaId"> <input type="submit" value="Danh sách phòng chiếu" class="btn btn-primary" /></a>
                         </td>
                     </tr>
                 } 

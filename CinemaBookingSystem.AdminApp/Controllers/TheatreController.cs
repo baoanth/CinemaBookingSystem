@@ -22,10 +22,11 @@ namespace TheatreBookingSystem.AdminApp.Controllers
             _notyf = notyf;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int id)
         {
+            HttpContext.Session.SetInt32("currentCinemaId", id);
             IEnumerable<TheatreViewModel> list = null;
-            HttpResponseMessage response = GetTheatreList();
+            HttpResponseMessage response = GetTheatreList(id);
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
@@ -39,7 +40,6 @@ namespace TheatreBookingSystem.AdminApp.Controllers
             }
             return View(list);
         }
-
         public IActionResult Details(int? id)
         {
             TheatreViewModel theatre = null;
@@ -61,6 +61,20 @@ namespace TheatreBookingSystem.AdminApp.Controllers
 
         public ActionResult Create()
         {
+            IEnumerable<CinemaViewModel> cinemaList = null;
+            HttpResponseMessage response = GetCinemaList();
+            if (response.IsSuccessStatusCode)
+            {
+                string body = response.Content.ReadAsStringAsync().Result;
+                cinemaList = JsonConvert.DeserializeObject<IEnumerable<CinemaViewModel>>(body);
+            }
+            else
+            {
+                _notyf.Error("Không thể tìm thấy thông tin rạp từ server");
+                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
+                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+            }
+            ViewBag.CinemaList = cinemaList;
             return View();
         }
 
@@ -72,7 +86,7 @@ namespace TheatreBookingSystem.AdminApp.Controllers
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Thêm mới thành công: {theatre.TheatreName}", 3);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentCinemaId") });
             }
             else
             {
@@ -99,6 +113,20 @@ namespace TheatreBookingSystem.AdminApp.Controllers
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
                 return RedirectToAction("NotFound", "Home");
             }
+            IEnumerable<CinemaViewModel> cinemaList = null;
+            HttpResponseMessage cinemaResponse = GetCinemaList();
+            if (cinemaResponse.IsSuccessStatusCode)
+            {
+                string body = cinemaResponse.Content.ReadAsStringAsync().Result;
+                cinemaList = JsonConvert.DeserializeObject<IEnumerable<CinemaViewModel>>(body);
+            }
+            else
+            {
+                _notyf.Error("Không thể tìm thấy thông tin rạp từ server");
+                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
+                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+            }
+            ViewBag.CinemaList = cinemaList;
             return View(theatre);
         }
 
@@ -110,7 +138,7 @@ namespace TheatreBookingSystem.AdminApp.Controllers
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Chỉnh sửa thành công: {theatre.TheatreName}", 3);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentCinemaId") });
             }
             else
             {
@@ -148,7 +176,7 @@ namespace TheatreBookingSystem.AdminApp.Controllers
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Xóa thành công khỏi danh sách!", 4);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index",new {id = HttpContext.Session.GetInt32("currentCinemaId")} );
             }
             else
             {
@@ -158,12 +186,20 @@ namespace TheatreBookingSystem.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
         }
-
-        //Response message
-        public HttpResponseMessage GetTheatreList()
+        public HttpResponseMessage GetCinemaList()
         {
             HttpRequestMessage request = new HttpRequestMessage();
-            request.RequestUri = new Uri(_baseUrl + "/getall");
+            request.RequestUri = new Uri("https://localhost:44322/api/cinema/getall");
+            request.Method = HttpMethod.Get;
+            request.Headers.Add("CBSToken", APIKEY);
+
+            return _client.SendAsync(request).Result;
+        }
+        //Response message
+        public HttpResponseMessage GetTheatreList(int cinemaId)
+        {
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + $"/getallbycinema/{cinemaId}");
             request.Method = HttpMethod.Get;
             request.Headers.Add("CBSToken", APIKEY);
 

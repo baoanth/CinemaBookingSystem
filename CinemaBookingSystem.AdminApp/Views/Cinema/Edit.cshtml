@@ -5,6 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@{
+    int? currentId = Context.Session.GetInt32("currentCinemaId");
+}
+
 <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Cinema/</span> Edit</h4>
     <!-- Basic Layout & Basic with Icons -->
@@ -17,7 +21,14 @@
                     <small class="text-muted float-end text-danger">* là thông tin bắt buộc</small>
                 </div>
                 <div class="card-body">
-                    <form>
+                    <form method="post" asp-action="Edit">
+                        <div class="row mb-3" hidden="hidden">
+                            <label class="col-sm-2 col-form-label" for="cinema-id">CinemaId<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" asp-for=CinemaId class="form-control" id="cinema-id" readonly="readonly" />
+                                <span asp-validation-for="CinemaId" class="text-danger"></span>
+                            </div>
+                        </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="cinema-name">Tên rạp<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
@@ -138,7 +149,7 @@
                     </form>
                     <div class="row justify-content-end">
                         <div class="col-sm-10">
-                            <a asp-action="Index"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
+                            <a asp-action="Index" asp-route-id="@currentId"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
                         </div>
                     </div>
                 </div>

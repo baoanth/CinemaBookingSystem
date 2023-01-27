@@ -6,6 +6,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@{
+    int? currentId = Context.Session.GetInt32("currentCinemaId");
+}
+
 <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Cinema/</span> Delete</h4>
     <!-- Basic Layout & Basic with Icons -->
@@ -23,7 +27,7 @@
                         </div>
                     </form>
                     <hr />
-                    <a asp-action="Index"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
+                    <a asp-action="Index" asp-route-id="@currentId"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
                 </div>
             </div>
         </div>
