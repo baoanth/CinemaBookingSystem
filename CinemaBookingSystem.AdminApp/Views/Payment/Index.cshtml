@@ -1,0 +1,54 @@
+﻿@model IEnumerable<CinemaBookingSystem.ViewModels.PaymentViewModel>;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    int num = 0;
+    int totalMethod = Model.Count();
+}
+<div class="card">
+    <br />
+    <h4 class="card-header">DANH SÁCH PHƯƠNG THỨC THANH TOÁN</h4>
+    <hr />
+    <h5 class="card-header">Rạp phim hiện có : @totalMethod</h5>
+    <a asp-action="Create" style="padding-left:30px !important"> <input type="submit" class="btn btn-primary" value="Thêm mới" /></a>
+    <hr />
+    <div class="table-responsive text-nowrap">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên phương thức</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    num++;
+                    <tr>
+                        <td>
+                            <span>@num</span>
+                        </td>
+                        <td>
+                             @Html.DisplayFor(modelItem => item.PaymentMethod)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.PaymentId"> <input type="submit" value="Chỉnh sửa" class="btn btn-warning" /></a>
+                            &nbsp&nbsp
+                            <a asp-action="Delete" asp-route-id="@item.PaymentId"> <input type="submit" value="Xóa" class="btn btn-danger" /></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot class="table-border-bottom-0">
+                <tr>
+                    <th>Tên phương thức</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+

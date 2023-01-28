@@ -2,18 +2,23 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int num = 0;
+    int totalCinema = Model.Count();
 }
 
 <div class="card">
-    <h5 class="card-header">Rạp phim hiện có</h5>
-    <a asp-action="Create"> <input type="submit" class="btn btn-primary" value="Thêm mới"/></a>
+    <br />
+    <h4 class="card-header text-center">DANH SÁCH RẠP PHIM</h4>
+    <hr />
+    <h5 class="card-header">Rạp phim hiện có : @totalCinema</h5>
+    <a asp-action="Create" style="padding-left:30px !important"> <input type="submit" class="btn btn-primary" value="Thêm mới" /></a>
+    <hr />
     <div class="table-responsive text-nowrap">
         <table class="table">
             <thead>
                 <tr>
+                    <th>STT</th>
                     <th>Tên rạp</th>
-                    <th>Hotline</th>
-                    <th>FAX</th>
                     <th>Địa chỉ</th>
                     <th>Thành phố</th>
                 </tr>
@@ -21,15 +26,13 @@
             <tbody>
                 @foreach (var item in Model)
                 {
+                    num++;
                     <tr>
                         <td>
+                            <span>@num</span>
+                        </td>
+                        <td>
                             <a asp-action="Details" asp-route-id="@item.CinemaId"> @Html.DisplayFor(modelItem => item.CinemaName)</a>
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Hotline)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FAX)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Address)
@@ -49,9 +52,8 @@
             </tbody>
             <tfoot class="table-border-bottom-0">
                 <tr>
+                    <th>STT</th>
                     <th>Tên rạp</th>
-                    <th>Hotline</th>
-                    <th>FAX</th>
                     <th>Địa chỉ</th>
                     <th>Thành phố</th>
                 </tr>

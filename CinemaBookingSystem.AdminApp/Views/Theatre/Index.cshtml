@@ -2,13 +2,19 @@
 @{
     ViewData["Title"] = "TheatreList";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    int num = 0;
+    int totalTheatre = Model.Count();
 }
 
 <div class="card">
     <br />
-    <a asp-action="Index" asp-controller="Cinema"> <input type="submit" class="btn btn-primary" value="Trở về danh sách rạp" /></a>
-    <h5 class="card-header">Danh sách phòng chiếu</h5>
-    <a asp-action="Create"> <input type="submit" class="btn btn-primary" value="Thêm mới" /></a>
+    <h4 class="card-header text-center">DANH SÁCH PHÒNG CHIẾU RẠP @Model.First().Cinema.CinemaName</h4>
+    <hr />
+    <h5 class="card-header">Phòng chiếu hiện có : @totalTheatre phòng</h5>
+    <div style="display:flex;">
+        <a asp-action="Index" asp-controller="Cinema" style="padding-left:30px !important"> <input type="submit" class="btn btn-primary" value="Trở về danh sách rạp" /></a>
+        <a asp-action="Create" style="padding-left:30px !important"> <input type="submit" class="btn btn-primary" value="Thêm mới" /></a>
+    </div>
     <hr />
     <div class="table-responsive text-nowrap">
         <table class="table">
