@@ -24,7 +24,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         public ActionResult Index()
         {
-            IEnumerable<CinemaViewModel> list = null;
+            IEnumerable<CinemaViewModel>? list = null;
             HttpResponseMessage response = GetCinemaList();
             if (response.IsSuccessStatusCode)
             {
@@ -42,7 +42,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         public IActionResult Details(int? id)
         {
-            CinemaViewModel cinema = null;
+            CinemaViewModel? cinema = null;
             HttpResponseMessage response = GetCinemaDetails(id);
             if (response.IsSuccessStatusCode)
             {
@@ -85,7 +85,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         public ActionResult Edit(int id)
         {
-            CinemaViewModel cinema = null;
+            CinemaViewModel? cinema = null;
             HttpResponseMessage response = GetCinemaDetails(id);
             if (response.IsSuccessStatusCode)
             {

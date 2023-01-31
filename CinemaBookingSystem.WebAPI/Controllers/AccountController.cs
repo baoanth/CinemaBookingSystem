@@ -30,18 +30,20 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         public ActionResult SystemLogin([FromHeader, Required] string CBSToken, [FromBody] LoginViewModel login)
         {
             const int ADMIN_ROLE = 1;
+            const int STAFF_ROLE = 2;
             bool IsValid = _userService.Login(login.Username, login.Password);
-            if (!IsValid) return BadRequest();
+            if (!IsValid) return NotFound();
             else
             {
                 var user = _userService.GetByUsername(login.Username);
-                if (user.RoleID != ADMIN_ROLE)
+                switch (user.RoleID)
                 {
-                    return BadRequest();
-                }
-                else
-                {
-                    return Ok(login);
+                    case ADMIN_ROLE:
+                        return Ok(user);
+                    case STAFF_ROLE:
+                        return Ok(user);
+                    default:
+                        return BadRequest();
                 }
             }
         }
@@ -54,7 +56,8 @@ namespace CinemaBookingSystem.WebAPI.Controllers
             if (!IsValid) return BadRequest();
             else
             {
-                return Ok(login);
+                var user = _userService.GetByUsername(login.Username);
+                return Ok(user);
             }
         }
 

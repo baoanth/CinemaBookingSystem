@@ -6,4 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CinemaBookingSystem.AdminApp\CinemaBookingSystem.AdminApp.csproj" />
+    <ProjectReference Include="..\CinemaBookingSystem.ViewModels\CinemaBookingSystem.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>

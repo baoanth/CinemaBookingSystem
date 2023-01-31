@@ -1,7 +1,5 @@
 ﻿using CinemaBookingSystem.Data.Infrastructure;
 using CinemaBookingSystem.Model.Models;
-using System.Linq;
-using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -10,18 +8,26 @@ namespace CinemaBookingSystem.Data.Repositories
     public interface IUserRepository : IRepository<User>
     {
         bool Login(string username, string password);
+
         bool UsernameCheck(string username);
+
         string PasswordHashing(string password);
+
         IEnumerable<User> GetByRole(int roleId);
+
         IEnumerable<User> Search(string keyworks);
+
+        IEnumerable<User> GetAllStaff();
+
         User GetByUsername(string username);
     }
+
     public class UserRepository : RepositoryBase<User>, IUserRepository
     {
         public UserRepository(IDbFactory dbFactory) : base(dbFactory)
         {
-            
         }
+
         [Obsolete]
         public string PasswordHashing(string password)
         {
@@ -65,9 +71,15 @@ namespace CinemaBookingSystem.Data.Repositories
             var user = DbContext.Users.Where(x => key.Contains(x.FullName.ToLower().Trim())).ToList();
             return user;
         }
+
         public string LowerTrim(string str)
         {
             return str.ToLower().Trim();
+        }
+
+        public IEnumerable<User> GetAllStaff()
+        {
+            return DbContext.Users.Where(x => x.RoleID == 1 || x.RoleID == 2).ToList();
         }
     }
 }

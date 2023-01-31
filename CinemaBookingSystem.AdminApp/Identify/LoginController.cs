@@ -5,6 +5,7 @@ using System;
 using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using System.Diagnostics;
 
 namespace CinemaBookingSystem.AdminApp.Identify
 {
@@ -15,6 +16,9 @@ namespace CinemaBookingSystem.AdminApp.Identify
         HttpClient _client;
         private const string APIKEY = "movienew";
         public const string SessionKeyName = "_name";
+        public const string SessionFullName = "_fullname";
+        public const string SessionKeyRole = "_role";
+        public const string SessionRoleName = "_rolename";
         private INotyfService _notyf;
 
         public LoginController(INotyfService notyf)
@@ -46,8 +50,14 @@ namespace CinemaBookingSystem.AdminApp.Identify
 
             if (response.IsSuccessStatusCode)
             {
-                _notyf.Success($"Chào mừng quay trở lại, {login.Username}", 4);
-                HttpContext.Session.SetString(SessionKeyName, login.Username);
+                UserViewModel user = null;
+                string body = response.Content.ReadAsStringAsync().Result;
+                user = JsonConvert.DeserializeObject<UserViewModel>(body);
+                _notyf.Success($"Chào mừng quay trở lại, {user.FullName}", 4);
+                HttpContext.Session.SetString(SessionKeyName, user.Username);
+                HttpContext.Session.SetString(SessionFullName, user.FullName);
+                HttpContext.Session.SetInt32(SessionKeyRole, user.RoleId);
+                HttpContext.Session.SetString(SessionRoleName, user.Role.RoleName);
                 return RedirectToAction("Index", "Home");
             }
             else

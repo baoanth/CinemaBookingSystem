@@ -1,4 +1,5 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using CinemaBookingSystem.AdminApp.Models;
 using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -48,34 +49,45 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Cập nhật thành công", 3);
+                HttpContext.Session.SetString("_fullname", user.FullName);
                 return RedirectToAction("Index");
             }
             else
             {
                 _notyf.Error("Không thể thực hiện do lỗi server", 4);
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
                 return RedirectToAction("Index");
             }
         }
         public IActionResult ChangePassword()
         {
-            UserViewModel user = null;
             string sessionName = HttpContext.Session.GetString("_name");
-            HttpResponseMessage response = GetUserDetails(sessionName);
-            if (response.IsSuccessStatusCode)
+            ViewBag.Username = sessionName;
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChangePassword([Bind("Username,OldPassword,ConfirmPassword,NewPassword")] ChangePasswordViewModel changes)
+        {
+            if(changes.OldPassword != changes.ConfirmPassword)
             {
-                string body = response.Content.ReadAsStringAsync().Result;
-                user = JsonConvert.DeserializeObject<UserViewModel>(body);
+                _notyf.Warning("Nhập lại mật khẩu không trùng khớp", 4);
             }
             else
             {
-                _notyf.Error("Không thể tìm thấy thông tin từ server");
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                return RedirectToAction("NotFound", "Home");
+                HttpResponseMessage response = UpdateUserPassword(changes);
+                if (response.IsSuccessStatusCode)
+                {
+                    _notyf.Success($"Cập nhật thành công, hãy tiến hành đăng nhập lại bằng mật khẩu mới", 3);
+                    return RedirectToAction("Logout", "Home");
+                }
+                else
+                {
+                    _notyf.Error("Mật khẩu cũ không chính xác", 4);
+                    Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+                }
             }
-            return View(user);
+            return View();
         }
         private HttpResponseMessage GetUserDetails(string name)
         {
@@ -92,6 +104,19 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "/update");
+            request.Method = HttpMethod.Post;
+            request.Headers.Add("CBSToken", APIKEY);
+            request.Content = content;
+
+            return _client.SendAsync(request).Result;
+        }
+        public HttpResponseMessage UpdateUserPassword(ChangePasswordViewModel changes)
+        {
+            string data = JsonConvert.SerializeObject(changes);
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + "/changepassword");
             request.Method = HttpMethod.Post;
             request.Headers.Add("CBSToken", APIKEY);
             request.Content = content;

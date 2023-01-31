@@ -35,6 +35,28 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("getsingle/{id}")]
+        public ActionResult GetSingle([FromHeader, Required] string CBSToken, int id)
+        {
+            var user = _userService.GetById(id);
+            if (user == null) return BadRequest("There is no user!");
+            else
+            {
+                var userVm = _mapper.Map<UserViewModel>(user);
+                return Ok(user);
+            }
+        }
+
+        [HttpGet]
+        [Route("getallstaff")]
+        public ActionResult GetAllStaff([FromHeader, Required] string CBSToken)
+        {
+            var listUser = _userService.GetAllStaff();
+            var listUserVm = _mapper.Map<IEnumerable<UserViewModel>>(listUser);
+            return Ok(listUserVm);
+        }
+
+        [HttpGet]
         [Route("getbyrole")]
         public ActionResult GetByRole([FromHeader, Required] string CBSToken, int roleId)
         {
@@ -70,6 +92,46 @@ namespace CinemaBookingSystem.WebAPI.Controllers
             {
                 var listUserVm = _mapper.Map<IEnumerable<UserViewModel>>(listUser);
                 return Ok(listUserVm);
+            }
+        }
+
+        [HttpPost]
+        [Route("changepassword")]
+        public ActionResult ChangePassword([FromHeader, Required] string CBSToken, ChangePasswordViewModel changes)
+        {
+            try
+            {
+                var user = _userService.GetByUsername(changes.Username);
+                if (_userService.ChangePassword(user, changes.OldPassword, changes.NewPassword))
+                {
+                    _userService.SaveChanges();
+                    return Ok();
+                }
+                return BadRequest();
+
+            }
+            catch (DbEntityValidationException ex)
+            {
+                foreach (var eve in ex.EntityValidationErrors)
+                {
+                    Trace.WriteLine($"Entity of type \"{eve.Entry.Entity.GetType().Name}\" in state \"{eve.Entry.State}\" has the following validation errors:");
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Trace.WriteLine($"- Property: \"{ve.PropertyName}\", Error \"{ve.ErrorMessage}\"");
+                    }
+                }
+                _errorService.LogError(ex);
+                return BadRequest(ex.InnerException.Message);
+            }
+            catch (DbUpdateException dbEx)
+            {
+                _errorService.LogError(dbEx);
+                return BadRequest(dbEx.InnerException.Message);
+            }
+            catch (Exception ex)
+            {
+                _errorService.LogError(ex);
+                return BadRequest(ex.Message);
             }
         }
 

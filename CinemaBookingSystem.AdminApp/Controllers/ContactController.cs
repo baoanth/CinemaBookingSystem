@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
-using System.Xml.Linq;
 
 namespace CinemaBookingSystem.AdminApp.Controllers
 {
@@ -22,6 +21,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             _client.DefaultRequestHeaders.Add("CBSToken", APIKEY);
             _notyf = notyf;
         }
+
         public IActionResult Index()
         {
             IEnumerable<ContactViewModel> contact = null;
@@ -69,6 +69,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             request.Headers.Add("CBSToken", APIKEY);
             return _client.SendAsync(request).Result;
         }
+
         private HttpResponseMessage UpdateContact(ContactViewModel contact)
         {
             string data = JsonConvert.SerializeObject(contact);

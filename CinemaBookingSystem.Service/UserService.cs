@@ -1,6 +1,7 @@
 ﻿using CinemaBookingSystem.Data.Infrastructure;
 using CinemaBookingSystem.Data.Repositories;
 using CinemaBookingSystem.Model.Models;
+using System.Net.WebSockets;
 
 namespace CinemaBookingSystem.Service
 {
@@ -13,8 +14,13 @@ namespace CinemaBookingSystem.Service
         void Delete(int id);
 
         IEnumerable<User> GetAll();
+
         IEnumerable<User> GetByRole(int roleId);
+
         IEnumerable<User> Search(string keywords);
+
+        IEnumerable<User> GetAllStaff();
+
         User GetByUsername(string username);
 
         User GetById(int id);
@@ -22,6 +28,8 @@ namespace CinemaBookingSystem.Service
         bool Login(string username, string password);
 
         void Signup(User user);
+
+        bool ChangePassword(User user, string oldPassword, string newPassword);
 
         void SaveChanges();
     }
@@ -42,6 +50,18 @@ namespace CinemaBookingSystem.Service
             _userRepository.Add(user);
         }
 
+        public bool ChangePassword(User user, string oldPassword, string newPassword)
+        {
+            bool isValid = _userRepository.PasswordHashing(oldPassword) == user.Password;
+            if (isValid)
+            {
+                user.Password = _userRepository.PasswordHashing(newPassword);
+                _userRepository.Update(user);
+                return true;
+            }
+            return false;
+        }
+
         public void Delete(int id)
         {
             _userRepository.Delete(id);
@@ -50,6 +70,11 @@ namespace CinemaBookingSystem.Service
         public IEnumerable<User> GetAll()
         {
             return _userRepository.GetAll();
+        }
+
+        public IEnumerable<User> GetAllStaff()
+        {
+            return _userRepository.GetAllStaff();
         }
 
         public User GetById(int id)
