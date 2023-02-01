@@ -1,0 +1,117 @@
+﻿@model CinemaBookingSystem.ViewModels.MovieViewModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Movie/</span> Edit</h4>
+    <!-- Basic Layout & Basic with Icons -->
+    <div class="row">
+        <!-- Basic Layout -->
+        <div class="col-xxl">
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">Thêm mới phim</h5>
+                    <small class="text-muted float-end text-danger">* là thông tin bắt buộc</small>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="Edit" enctype="multipart/form-data">
+                        <div class="row mb-3" hidden="hidden">
+                            <label class="col-sm-2 col-form-label" for="movie-name">MovieId<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" asp-for=MovieId class="form-control" id="movie-name" />
+                                <span asp-validation-for="MovieId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="movie-name">Tên phim<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" asp-for=MovieName class="form-control" id="movie-name" />
+                                <span asp-validation-for="MovieName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="director-name">Đạo diễn<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" asp-for=Director class="form-control" id="director-name" />
+                                <span asp-validation-for="Director" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="cast-name">Diễn viên<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" asp-for=Cast class="form-control" id="cast-name" />
+                                <span asp-validation-for="Cast" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="genre-name">Thể loại<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" asp-for=Genres class="form-control" id="genre-name" />
+                                <span asp-validation-for="Genres" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="running-time">Thời lượng<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input type="number" asp-for=RunningTime class="form-control" id="running-time" />
+                                <span asp-validation-for="RunningTime" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="release-date">Ngày khởi chiếu<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input type="date" asp-for=ReleaseDate class="form-control" id="release-date" />
+                                <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="rated-select">Đánh giá<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <select id="rated-select" class="form-select" asp-for="Rated">
+                                    <option value="18+">18+ - Cấm người xem dưới 18 tuổi</option>
+                                    <option value="16+">16+ - Cấm người xem dưới 16 tuổi</option>
+                                    <option value="13+">13+ - Cấm người xem dưới 13 tuổi</option>
+                                </select>
+                                <span asp-validation-for="Rated" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="trailer-link">Link trailer<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" asp-for="TrailerURL" class="form-control" id="trailer-link" />
+                                <span asp-validation-for="TrailerURL" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="thump-img">Ảnh thumpnail<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" asp-for="ThumpnailImg" class="form-control" id="trailer-link" hidden="hidden" />
+                                <input type="file" name="postedFile" class="form-control" id="thump-img" accept="image/png, image/jpg, image/jpeg" />
+                                <span asp-validation-for="ThumpnailImg" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="description">Mô tả phim<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <textarea asp-for=Description class="form-control" id="description" cols="4"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row justify-content-end">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-warning w-100" value="Thêm mới">Chỉnh sửa</button> &ensp;
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row justify-content-end">
+                        <div class="col-sm-10">
+                            <a asp-action="Index"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

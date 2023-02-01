@@ -16,10 +16,10 @@ namespace CinemaBookingSystem.Model.Models
         [MaxLength(50)]
         public string Director { get; set; }
         [Required]
-        [MaxLength(256)]
+        [MaxLength(1000)]
         public string Cast { get; set; }
         [Required]
-        public DateOnly ReleaseDate { get; set; }
+        public DateTime ReleaseDate { get; set; }
         [Required]
         [MaxLength(256)]
         public string Genres { get; set; }
@@ -32,7 +32,7 @@ namespace CinemaBookingSystem.Model.Models
         [MaxLength(256)]
         public string? ThumpnailImg { get; set; }
         [Required]
-        [MaxLength(1000)]
+        [MaxLength(5000)]
         public string Description { get; set; }
         public IEnumerable<Screening> Screenings { get; set; }
         public IEnumerable<Comment> Comments { get; set; }

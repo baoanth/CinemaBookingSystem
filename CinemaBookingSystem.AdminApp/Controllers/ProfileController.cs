@@ -78,7 +78,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 HttpResponseMessage response = UpdateUserPassword(changes);
                 if (response.IsSuccessStatusCode)
                 {
-                    _notyf.Success($"Cập nhật thành công, hãy tiến hành đăng nhập lại bằng mật khẩu mới", 3);
+                    _notyf.Success($"Đổi mật khẩu thành công, hãy tiến hành đăng nhập lại bằng mật khẩu mới", 3);
                     return RedirectToAction("Logout", "Home");
                 }
                 else

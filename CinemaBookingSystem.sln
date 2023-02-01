@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CinemaBookingSystem.AdminAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CinemaBookingSystem.ViewModels", "CinemaBookingSystem.ViewModels\CinemaBookingSystem.ViewModels.csproj", "{059CEF43-3BB6-4448-A55C-D9DBFA8480A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaBookingSystem.ClientApp", "CinemaBookingSystem.ClientApp\CinemaBookingSystem.ClientApp.csproj", "{89619296-C3ED-4FD6-8C44-EB1B5FC90187}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CinemaBookingSystem.ClientApp", "CinemaBookingSystem.ClientApp\CinemaBookingSystem.ClientApp.csproj", "{89619296-C3ED-4FD6-8C44-EB1B5FC90187}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

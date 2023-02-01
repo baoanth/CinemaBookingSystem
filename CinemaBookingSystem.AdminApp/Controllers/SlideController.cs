@@ -1,22 +1,22 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using CinemaBookingSystem.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
 
 namespace CinemaBookingSystem.AdminApp.Controllers
 {
-    public class MovieController : Controller
+    public class SlideController : Controller
     {
-        private Uri _baseUrl = new Uri("https://localhost:44322/api/movie");
+        private Uri _baseUrl = new Uri("https://localhost:44322/api/slide");
         private HttpClient _client;
         private const string APIKEY = "movienew";
         private readonly INotyfService _notyf;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public MovieController(INotyfService notyf, IWebHostEnvironment webHostEnvironment)
+        public SlideController(INotyfService notyf, IWebHostEnvironment webHostEnvironment)
         {
             _client = new HttpClient();
             _client.BaseAddress = _baseUrl;
@@ -27,12 +27,12 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         public ActionResult Index()
         {
-            IEnumerable<MovieViewModel>? list = null;
-            HttpResponseMessage response = GetMovieList();
+            IEnumerable<SlideViewModel> list = null;
+            HttpResponseMessage response = GetSlideList();
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
-                list = JsonConvert.DeserializeObject<IEnumerable<MovieViewModel>>(body);
+                list = JsonConvert.DeserializeObject<IEnumerable<SlideViewModel>>(body);
             }
             else
             {
@@ -43,25 +43,6 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             return View(list);
         }
 
-        public IActionResult Details(int? id)
-        {
-            MovieViewModel? movie = null;
-            HttpResponseMessage response = GetMovieDetails(id);
-            if (response.IsSuccessStatusCode)
-            {
-                string body = response.Content.ReadAsStringAsync().Result;
-                movie = JsonConvert.DeserializeObject<MovieViewModel>(body);
-            }
-            else
-            {
-                _notyf.Error("Không thể tìm thấy thông tin từ server");
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                return RedirectToAction("NotFound", "Home");
-            }
-            return View(movie);
-        }
-
         public ActionResult Create()
         {
             return View();
@@ -69,10 +50,10 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(IFormFile postedFile, [Bind("MovieId,MovieName,Director,Cast,ReleaseDate,Genres,RunningTime,Rated,TrailerURL,ThumpnailImg,Description")] MovieViewModel movie)
+        public IActionResult Create([Bind("SlideId,Name,Image,Description")] SlideViewModel slide, IFormFile postedFile)
         {
             string wwwPath = _webHostEnvironment.WebRootPath;
-            string path = Path.Combine(wwwPath, "assets/img/thumpnails");
+            string path = Path.Combine(wwwPath, "assets/img/slides");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -81,17 +62,17 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             {
                 string fileName = Path.GetFileName(postedFile.FileName);
                 fileName = Guid.NewGuid().ToString() + fileName;
-                movie.ThumpnailImg = fileName;
+                slide.Image = fileName;
                 using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
                 {
                     postedFile.CopyTo(stream);
-                    _notyf.Success($"Upload ảnh thành công: {movie.ThumpnailImg}", 3);
+                    _notyf.Success($"Upload ảnh thành công: {slide.Image}", 3);
                 }
             }
-            HttpResponseMessage response = CreateMovie(movie);
+            HttpResponseMessage response = Createslide(slide);
             if (response.IsSuccessStatusCode)
             {
-                _notyf.Success($"Thêm mới phim thành công: {movie.MovieName}", 3);
+                _notyf.Success($"Thêm mới thành công: {slide.Name}", 3);
                 return RedirectToAction("Index");
             }
             else
@@ -100,17 +81,17 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
-            return View();
+            return View(slide);
         }
 
         public ActionResult Edit(int id)
         {
-            MovieViewModel? movie = null;
-            HttpResponseMessage response = GetMovieDetails(id);
+            SlideViewModel slide = null;
+            HttpResponseMessage response = GetslideDetails(id);
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
-                movie = JsonConvert.DeserializeObject<MovieViewModel>(body);
+                slide = JsonConvert.DeserializeObject<SlideViewModel>(body);
             }
             else
             {
@@ -119,15 +100,15 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
                 return RedirectToAction("NotFound", "Home");
             }
-            return View(movie);
+            return View(slide);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(MovieViewModel movie, IFormFile postedFile)
+        public IActionResult Edit(SlideViewModel slide, IFormFile postedFile)
         {
             string wwwPath = _webHostEnvironment.WebRootPath;
-            string path = Path.Combine(wwwPath, "assets/img/thumpnails");
+            string path = Path.Combine(wwwPath, "assets/img/slides");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -136,18 +117,18 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             {
                 string fileName = Path.GetFileName(postedFile.FileName);
                 fileName = Guid.NewGuid().ToString() + fileName;
-                movie.ThumpnailImg = fileName;
+                slide.Image = fileName;
                 using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
                 {
                     postedFile.CopyTo(stream);
-                    _notyf.Success($"Upload ảnh thành công: {movie.ThumpnailImg}", 3);
+                    _notyf.Success($"Upload ảnh thành công: {slide.Image}", 3);
                 }
             }
-            HttpResponseMessage response = UpdateMovie(movie);
+            HttpResponseMessage response = Updateslide(slide);
             if (response.IsSuccessStatusCode)
             {
-                _notyf.Success($"Chỉnh sửa thành công: {movie.MovieName}", 3);
-                return RedirectToAction("Index");
+                _notyf.Success($"Chỉnh sửa thành công: {slide.Name}", 3);
+                return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentCinemaId") });
             }
             else
             {
@@ -155,17 +136,17 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
-            return View(movie);
+            return View(slide);
         }
 
         public ActionResult Delete(int? id)
         {
-            MovieViewModel? movie = null;
-            HttpResponseMessage response = GetMovieDetails(id);
+            SlideViewModel slide = null;
+            HttpResponseMessage response = GetslideDetails(id);
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
-                movie = JsonConvert.DeserializeObject<MovieViewModel>(body);
+                slide = JsonConvert.DeserializeObject<SlideViewModel>(body);
             }
             else
             {
@@ -174,18 +155,18 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
                 return RedirectToAction("NotFound", "Home");
             }
-            return View(movie);
+            return View(slide);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            HttpResponseMessage response = DeleteMovie(id);
+            HttpResponseMessage response = Deleteslide(id);
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Xóa thành công khỏi danh sách!", 4);
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentCinemaId") });
             }
             else
             {
@@ -195,19 +176,17 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
         }
-
         //Response message
-        public HttpResponseMessage GetMovieList()
+        public HttpResponseMessage GetSlideList()
         {
             HttpRequestMessage request = new HttpRequestMessage();
-            request.RequestUri = new Uri(_baseUrl + "/getall");
+            request.RequestUri = new Uri(_baseUrl + $"/getall");
             request.Method = HttpMethod.Get;
             request.Headers.Add("CBSToken", APIKEY);
 
             return _client.SendAsync(request).Result;
         }
-
-        public HttpResponseMessage GetMovieDetails(int? id)
+        public HttpResponseMessage GetslideDetails(int? id)
         {
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/getsingle/{id}");
@@ -215,10 +194,9 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             request.Headers.Add("CBSToken", APIKEY);
             return _client.SendAsync(request).Result;
         }
-
-        public HttpResponseMessage CreateMovie(MovieViewModel movie)
+        public HttpResponseMessage Createslide(SlideViewModel slide)
         {
-            string data = JsonConvert.SerializeObject(movie);
+            string data = JsonConvert.SerializeObject(slide);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
             HttpRequestMessage request = new HttpRequestMessage();
@@ -229,10 +207,9 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
             return _client.SendAsync(request).Result;
         }
-
-        public HttpResponseMessage UpdateMovie(MovieViewModel movie)
+        public HttpResponseMessage Updateslide(SlideViewModel slide)
         {
-            string data = JsonConvert.SerializeObject(movie);
+            string data = JsonConvert.SerializeObject(slide);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
             HttpRequestMessage request = new HttpRequestMessage();
@@ -243,8 +220,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
             return _client.SendAsync(request).Result;
         }
-
-        public HttpResponseMessage DeleteMovie(int id)
+        public HttpResponseMessage Deleteslide(int id)
         {
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/delete/{id}");

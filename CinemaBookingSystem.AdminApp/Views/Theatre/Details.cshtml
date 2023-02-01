@@ -20,19 +20,19 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="theatre-name">Tên phòng chiếu<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for=TheatreName class="form-control" id="theatre-name" readonly="readonly" />
+                                @Html.DisplayFor(model => model.TheatreName)
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="hotline">Số chỗ ngồi<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for=Capacity class="form-control" id="hotline" readonly="readonly" />
+                                @Html.DisplayFor(model => model.Capacity)
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="cinema-name">Thuộc rạp<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for=Cinema.CinemaName class="form-control" id="cinema-name" readonly="readonly"/>
+                                @Html.DisplayFor(model => model.Cinema.CinemaName)
                             </div>
                         </div>
                     </form>

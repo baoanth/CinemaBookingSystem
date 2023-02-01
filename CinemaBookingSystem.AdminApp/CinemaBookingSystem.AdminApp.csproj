@@ -16,4 +16,9 @@
     <ProjectReference Include="..\CinemaBookingSystem.ViewModels\CinemaBookingSystem.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\assets\img\slides\" />
+    <Folder Include="wwwroot\assets\img\thumpnails\" />
+  </ItemGroup>
+
 </Project>

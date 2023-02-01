@@ -1,0 +1,30 @@
+﻿@model CinemaBookingSystem.ViewModels.SlideViewModel;
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Slide/</span> Delete</h4>
+    <!-- Basic Layout & Basic with Icons -->
+    <div class="row">
+        <!-- Basic Layout -->
+        <div class="col-xxl">
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">Mọi thao tác không thể hoàn tác, bạn có chắc chắn muốn xóa @Html.DisplayFor(model => model.Name) ra khỏi danh sách?</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="Delete" asp-route-id="@Model.SlideId">
+                        <div class="row justify-content-end">
+                            <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+                        </div>
+                    </form>
+                    <hr />
+                    <a asp-action="Index"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
