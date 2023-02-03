@@ -47,6 +47,19 @@ namespace CinemaBookingSystem.WebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("getallbytheatre/{id}")]
+        public ActionResult GetAllByTheatre([FromHeader, Required] string CBSToken, int id)
+        {
+            var screening = _screeningService.GetAllByTheatre(id);
+            if (screening == null) return NotFound("There's no screening schedule!");
+            else
+            {
+                var screeningVm = _mapper.Map<IEnumerable<ScreeningViewModel>>(screening);
+                return Ok(screeningVm);
+            }
+        }
+
         [HttpPost]
         [Route("create")]
         public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] ScreeningViewModel screeningVm)
@@ -59,7 +72,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                     var screening = _mapper.Map<Screening>(screeningVm);
                     _screeningService.Add(screening);
                     _screeningService.SaveChanges();
-                    return Created("Create successfully", screeningVm);
+                    return Created("Create successfully", screening);
                 }
                 catch (DbEntityValidationException ex)
                 {

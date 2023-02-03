@@ -25,7 +25,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         public ActionResult Index()
         {
             IEnumerable<PaymentViewModel> list = null;
-            HttpResponseMessage response = GetPaymentList();
+            HttpResponseMessage response = GetPaymentListRequest();
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
@@ -49,7 +49,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("PaymentId,PaymentMethod")] PaymentViewModel payment)
         {
-            HttpResponseMessage response = CreatePayment(payment);
+            HttpResponseMessage response = CreatePaymentRequest(payment);
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Thêm mới thành công: {payment.PaymentMethod}", 3);
@@ -67,7 +67,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         public ActionResult Edit(int id)
         {
             PaymentViewModel payment = null;
-            HttpResponseMessage response = GetPaymentDetails(id);
+            HttpResponseMessage response = GetPaymentDetailsRequest(id);
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
@@ -87,11 +87,11 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(PaymentViewModel payment)
         {
-            HttpResponseMessage response = UpdatePayment(payment);
+            HttpResponseMessage response = UpdatePaymentRequest(payment);
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Chỉnh sửa thành công: {payment.PaymentMethod}", 3);
-                return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentCinemaId") });
+                return RedirectToAction("Index");
             }
             else
             {
@@ -105,7 +105,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         public ActionResult Delete(int? id)
         {
             PaymentViewModel payment = null;
-            HttpResponseMessage response = GetPaymentDetails(id);
+            HttpResponseMessage response = GetPaymentDetailsRequest(id);
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
@@ -125,11 +125,11 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            HttpResponseMessage response = DeletePayment(id);
+            HttpResponseMessage response = DeletePaymentRequest(id);
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Xóa thành công khỏi danh sách!", 4);
-                return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentCinemaId") });
+                return RedirectToAction("Index");
             }
             else
             {
@@ -139,8 +139,9 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
         }
+
         //Response message
-        public HttpResponseMessage GetPaymentList()
+        public HttpResponseMessage GetPaymentListRequest()
         {
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/getall");
@@ -149,7 +150,8 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
             return _client.SendAsync(request).Result;
         }
-        public HttpResponseMessage GetPaymentDetails(int? id)
+
+        public HttpResponseMessage GetPaymentDetailsRequest(int? id)
         {
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/getsingle/{id}");
@@ -157,7 +159,8 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             request.Headers.Add("CBSToken", APIKEY);
             return _client.SendAsync(request).Result;
         }
-        public HttpResponseMessage CreatePayment(PaymentViewModel payment)
+
+        public HttpResponseMessage CreatePaymentRequest(PaymentViewModel payment)
         {
             string data = JsonConvert.SerializeObject(payment);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
@@ -170,7 +173,8 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
             return _client.SendAsync(request).Result;
         }
-        public HttpResponseMessage UpdatePayment(PaymentViewModel payment)
+
+        public HttpResponseMessage UpdatePaymentRequest(PaymentViewModel payment)
         {
             string data = JsonConvert.SerializeObject(payment);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
@@ -183,7 +187,8 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
             return _client.SendAsync(request).Result;
         }
-        public HttpResponseMessage DeletePayment(int id)
+
+        public HttpResponseMessage DeletePaymentRequest(int id)
         {
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/delete/{id}");

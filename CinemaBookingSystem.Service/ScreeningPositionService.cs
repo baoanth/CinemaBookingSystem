@@ -12,6 +12,8 @@ namespace CinemaBookingSystem.Service
 
         void Delete(int id);
 
+        void DeleteByScreening(int screeningId);
+
         IEnumerable<ScreeningPosition> GetAll();
 
         ScreeningPosition GetById(int id);
@@ -38,6 +40,11 @@ namespace CinemaBookingSystem.Service
         public void Delete(int id)
         {
             _screeningPositionRepository.Delete(id);
+        }
+
+        public void DeleteByScreening(int screeningId)
+        {
+            _screeningPositionRepository.DeleteByScreening(screeningId);
         }
 
         public IEnumerable<ScreeningPosition> GetAll()

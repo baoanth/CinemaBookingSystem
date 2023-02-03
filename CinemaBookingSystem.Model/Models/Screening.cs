@@ -12,11 +12,7 @@ namespace CinemaBookingSystem.Model.Models
         [Required]
         public DateTime ShowTime { get; set; }
         [Required]
-        public bool IsShowed { get; set; }
-        [Required]
-        public bool IsFull { get; set; }
-        [Required]
-        public int EmptySeats { get; set; }
+        public bool ShowStatus { get; set; }
         [Required]
         public int TheatreId { get; set; }
         [Required]

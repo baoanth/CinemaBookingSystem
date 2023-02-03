@@ -1,0 +1,52 @@
+﻿@model IEnumerable<CinemaBookingSystem.ViewModels.CinemaViewModel>;
+@{
+    ViewData["Title"] = "LandingPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int num = 0;
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Screening/</span> Choose Cinema</h4>
+    <!-- Basic Layout & Basic with Icons -->
+    <div class="row">
+        <!-- Basic Layout -->
+        <div class="col-xxl">
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <a asp-action="Index" asp-controller="Home"> <input type="submit" class="btn btn-primary" value="Trở về trang chủ" /></a>
+                    <br />
+                    <h5 class="mb-0">Hãy chọn rạp bạn muốn xem lịch chiếu</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên rạp</th>
+                                <th>Thành phố</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                num++;
+                                <tr>
+                                    <td>
+                                        <span>@num</span>
+                                    </td>
+                                    <td>
+                                        <a asp-action="TheatreChoose" asp-controller="Screening" asp-route-id="@item.CinemaId"> @item.CinemaName</a>
+                                    </td>
+                                    <td>
+                                         @item.City
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

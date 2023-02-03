@@ -6,6 +6,7 @@ using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace CinemaBookingSystem.AdminApp.Identify
 {

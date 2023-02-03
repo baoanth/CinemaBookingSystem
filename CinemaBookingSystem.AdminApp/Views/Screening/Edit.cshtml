@@ -1,0 +1,90 @@
+﻿@model CinemaBookingSystem.ViewModels.ScreeningViewModel;
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int? currentTheatreId = Context.Session.GetInt32("currentTheatreId");
+    bool IsShowed = false;
+    if (Model.ShowTime < DateTime.Now)
+    {
+        IsShowed = true;
+    }
+    else
+    {
+        IsShowed = false;   
+    }
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Screening/</span> Edit</h4>
+    <!-- Basic Layout & Basic with Icons -->
+    <div class="row">
+        <!-- Basic Layout -->
+        <div class="col-xxl">
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">Chỉnh sửa lịch chiếu</h5>
+                    <small class="text-muted float-end text-danger">* là thông tin bắt buộc</small>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="Edit">
+                        <div class="row mb-3" hidden="hidden">
+                            <label class="col-sm-2 col-form-label" for="screening-id">ScreeningId<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input asp-for="ScreeningId" type="text" class="form-control" id="screening-id" />
+                                <span asp-validation-for="ScreeningId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3" hidden="hidden">
+                            <label class="col-sm-2 col-form-label" for="theatre-id">TheatreId<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input asp-for="TheatreId" type="text" class="form-control" id="theatre-id" />
+                                <span asp-validation-for="TheatreId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3" hidden="hidden">
+                            <label class="col-sm-2 col-form-label" for="theatre-id">ShowStatus<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input asp-for="ShowStatus" type="text" class="form-control" id="theatre-id" value="@IsShowed" />
+                                <span asp-validation-for="ShowStatus" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="movie-select">Phim<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <select id="movie-select" class="form-select" asp-for="MovieId">
+                                    @{
+                                        foreach (var item in ViewBag.MovieList as IEnumerable<CinemaBookingSystem.ViewModels.MovieViewModel>)
+                                        {
+                                            <option value="@item.MovieId">@item.MovieName</option>
+                                        }
+                                    }
+
+                                </select>
+                                <span asp-validation-for="MovieId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="show-time">Ngày giờ chiếu<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input asp-for="ShowTime" type="datetime-local" class="form-control" id="show-time" />
+                                <span asp-validation-for="ShowTime" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-end">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary w-100">Chỉnh sửa</button> &ensp;
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row justify-content-end">
+                        <div class="col-sm-10">
+                            <a asp-action="Index" asp-route-id="@currentTheatreId"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

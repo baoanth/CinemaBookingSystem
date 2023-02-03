@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace CinemaBookingSystem.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/screeningposition")]
     [ApiController]
     public class ScreeningPositionController : ControllerBase
     {
@@ -188,6 +188,21 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                 {
                     return BadRequest(ex.Message);
                 }
+            }
+        }
+        [HttpDelete]
+        [Route("deletebyscreening/{id}")]
+        public ActionResult DeleteByScreening([FromHeader, Required] string CBSToken, int id)
+        {
+            try
+            {
+                _screeningPositionService.DeleteByScreening(id);
+                _screeningPositionService.SaveChanges();
+                return Ok("Deleted");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

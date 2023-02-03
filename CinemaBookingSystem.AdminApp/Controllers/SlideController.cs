@@ -128,7 +128,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Chỉnh sửa thành công: {slide.Name}", 3);
-                return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentCinemaId") });
+                return RedirectToAction("Index");
             }
             else
             {
@@ -166,7 +166,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Xóa thành công khỏi danh sách!", 4);
-                return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentCinemaId") });
+                return RedirectToAction("Index");
             }
             else
             {
