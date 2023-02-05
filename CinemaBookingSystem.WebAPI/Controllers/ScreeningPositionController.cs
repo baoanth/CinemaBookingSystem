@@ -47,6 +47,19 @@ namespace CinemaBookingSystem.WebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("getallbyscreening/{id}")]
+        public ActionResult GetAllByScreening([FromHeader, Required] string CBSToken, int id)
+        {
+            var screeningPositions = _screeningPositionService.GetAllByScreening(id);
+            if (screeningPositions == null) return BadRequest("The input Id doesn't exist!");
+            else
+            {
+                var screeningPositionsVm = _mapper.Map<IEnumerable<ScreeningPositionViewModel>>(screeningPositions);
+                return Ok(screeningPositionsVm);
+            }
+        }
+
         [HttpPost]
         [Route("create")]
         public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] ScreeningPositionViewModel screeningPositionVm)

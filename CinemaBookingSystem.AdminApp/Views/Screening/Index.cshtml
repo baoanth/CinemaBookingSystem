@@ -57,6 +57,8 @@
                                             @(item.Theatre.Capacity - item.ScreeningPositions.Where(x => x.IsBooked == true).Count())
                                         </td>
                                         <td>
+                                            <a asp-action="ScreeningPositionsDetails" asp-route-id="@item.ScreeningId"> <input type="submit" value="Xem thông tin chỗ ngồi" class="btn btn-primary" /></a>
+                                            &nbsp&nbsp
                                             <a asp-action="Details" asp-route-id="@item.ScreeningId"> <input type="submit" value="Xem chi tiết" class="btn btn-primary" /></a>
                                             &nbsp&nbsp
                                             <a asp-action="Edit" asp-route-id="@item.ScreeningId"> <input type="submit" value="Chỉnh sửa" class="btn btn-warning" /></a>

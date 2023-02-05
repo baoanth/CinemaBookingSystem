@@ -16,6 +16,8 @@ namespace CinemaBookingSystem.Service
 
         IEnumerable<ScreeningPosition> GetAll();
 
+        IEnumerable<ScreeningPosition> GetAllByScreening(int screeningId);
+
         ScreeningPosition GetById(int id);
 
         void SaveChanges();
@@ -50,6 +52,11 @@ namespace CinemaBookingSystem.Service
         public IEnumerable<ScreeningPosition> GetAll()
         {
             return _screeningPositionRepository.GetAll();
+        }
+
+        public IEnumerable<ScreeningPosition> GetAllByScreening(int screeningId)
+        {
+            return _screeningPositionRepository.GetAllByScreening(screeningId);
         }
 
         public ScreeningPosition GetById(int id)

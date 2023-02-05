@@ -3,6 +3,7 @@ using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.IO.Pipelines;
 using System.Text;
 
 namespace CinemaBookingSystem.AdminApp.Controllers
@@ -46,6 +47,11 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             ScreeningViewModel screening = GetScreeningDetailsRequest(id);
             return View(screening);
         }
+        public ActionResult ScreeningPositionsDetails(int id)
+        {
+            IEnumerable<ScreeningPositionViewModel> screeningPositions = GetScreeningPositionsDetailsRequest(id);
+            return View(screeningPositions);
+        }
 
         public ActionResult Create()
         {
@@ -73,7 +79,10 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             HttpResponseMessage response = CreateScreeningRequest(screening);
             if (response.IsSuccessStatusCode)
             {
-                _notyf.Success($"Thêm mới thành công lịch chiếu tại phòng chiếu {theatre.TheatreName}", 3);
+                _notyf.Success($"Thêm mới thành công lịch chiếu", 3);
+                string body = response.Content.ReadAsStringAsync().Result;
+                screening = JsonConvert.DeserializeObject<ScreeningViewModel>(body);
+                CreateScreeningPositions(theatre.Capacity, screening.ScreeningId, positionPrice);
                 return RedirectToAction("Index", new { id = currentTheatreId });
             }
             else
@@ -154,8 +163,15 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            DeleteScreeningPositionsRequest(id);
             _notyf.Warning($"Đang tiến hành xóa các chỗ ngồi của lịch chiếu!", 4);
+            if (DeleteScreeningPositionsRequest(id).IsSuccessStatusCode)
+            {
+                _notyf.Success($"Đã xóa tất cả chỗ ngồi thuộc lịch chiếu!", 4);
+            }
+            else
+            {
+                _notyf.Error("Không thể xóa chỗ ngồi do lỗi server", 4);
+            }
             HttpResponseMessage response = DeleteScreeningRequest(id);
             if (response.IsSuccessStatusCode)
             {
@@ -165,7 +181,6 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể thực hiện do lỗi server", 4);
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
                 return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentTheatreId") });
             }
@@ -366,6 +381,28 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             request.Headers.Add("CBSToken", APIKEY);
 
             return _client.SendAsync(request).Result;
+        }
+
+        public IEnumerable<ScreeningPositionViewModel> GetScreeningPositionsDetailsRequest(int? id)
+        {
+            IEnumerable<ScreeningPositionViewModel>? screeningPositions = null;
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri($"https://localhost:44322/api/screeningposition/getallbyscreening/{id}");
+            request.Method = HttpMethod.Get;
+            request.Headers.Add("CBSToken", APIKEY);
+            HttpResponseMessage response = _client.SendAsync(request).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                string body = response.Content.ReadAsStringAsync().Result;
+                screeningPositions = JsonConvert.DeserializeObject<IEnumerable<ScreeningPositionViewModel>>(body);
+            }
+            else
+            {
+                _notyf.Error("Không thể tìm thấy thông tin từ server");
+                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
+                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+            }
+            return screeningPositions;
         }
     }
 }

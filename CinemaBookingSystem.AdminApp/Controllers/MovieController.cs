@@ -2,6 +2,7 @@
 using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -27,38 +28,13 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         public ActionResult Index()
         {
-            IEnumerable<MovieViewModel>? list = null;
-            HttpResponseMessage response = GetMovieList();
-            if (response.IsSuccessStatusCode)
-            {
-                string body = response.Content.ReadAsStringAsync().Result;
-                list = JsonConvert.DeserializeObject<IEnumerable<MovieViewModel>>(body);
-            }
-            else
-            {
-                _notyf.Error("Không thể lấy thông tin do lỗi server");
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-            }
+            IEnumerable<MovieViewModel>? list = GetMovieList();
             return View(list);
         }
 
         public IActionResult Details(int? id)
         {
-            MovieViewModel? movie = null;
-            HttpResponseMessage response = GetMovieDetails(id);
-            if (response.IsSuccessStatusCode)
-            {
-                string body = response.Content.ReadAsStringAsync().Result;
-                movie = JsonConvert.DeserializeObject<MovieViewModel>(body);
-            }
-            else
-            {
-                _notyf.Error("Không thể tìm thấy thông tin từ server");
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                return RedirectToAction("NotFound", "Home");
-            }
+            MovieViewModel? movie = GetMovieDetails(id);
             return View(movie);
         }
 
@@ -71,8 +47,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(IFormFile postedFile, [Bind("MovieId,MovieName,Director,Cast,ReleaseDate,Genres,RunningTime,Rated,TrailerURL,ThumpnailImg,Description")] MovieViewModel movie)
         {
-            string wwwPath = _webHostEnvironment.WebRootPath;
-            string path = Path.Combine(wwwPath, "assets/img/thumpnails");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "..\\sharedmedia\\images\\thumpnails");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -105,20 +80,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         public ActionResult Edit(int id)
         {
-            MovieViewModel? movie = null;
-            HttpResponseMessage response = GetMovieDetails(id);
-            if (response.IsSuccessStatusCode)
-            {
-                string body = response.Content.ReadAsStringAsync().Result;
-                movie = JsonConvert.DeserializeObject<MovieViewModel>(body);
-            }
-            else
-            {
-                _notyf.Error("Không thể tìm thấy thông tin từ server", 4);
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
-                Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                return RedirectToAction("NotFound", "Home");
-            }
+            MovieViewModel? movie = GetMovieDetails(id);
             return View(movie);
         }
 
@@ -126,14 +88,18 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(MovieViewModel movie, IFormFile postedFile)
         {
-            string wwwPath = _webHostEnvironment.WebRootPath;
-            string path = Path.Combine(wwwPath, "assets/img/thumpnails");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "..\\sharedmedia\\images\\thumpnails");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
             if (postedFile != null && postedFile.Length > 0)
             {
+                var oldFilePath = Path.Combine(path,movie.ThumpnailImg);
+                if (Directory.Exists(oldFilePath))
+                {
+                    Directory.Delete(oldFilePath);
+                }
                 string fileName = Path.GetFileName(postedFile.FileName);
                 fileName = Guid.NewGuid().ToString() + fileName;
                 movie.ThumpnailImg = fileName;
@@ -160,20 +126,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         public ActionResult Delete(int? id)
         {
-            MovieViewModel? movie = null;
-            HttpResponseMessage response = GetMovieDetails(id);
-            if (response.IsSuccessStatusCode)
-            {
-                string body = response.Content.ReadAsStringAsync().Result;
-                movie = JsonConvert.DeserializeObject<MovieViewModel>(body);
-            }
-            else
-            {
-                _notyf.Error("Không thể tìm thấy thông tin từ server", 4);
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                return RedirectToAction("NotFound", "Home");
-            }
+            MovieViewModel? movie = GetMovieDetails(id);
             return View(movie);
         }
 
@@ -197,23 +150,50 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         }
 
         //Response message
-        public HttpResponseMessage GetMovieList()
+        public IEnumerable<MovieViewModel> GetMovieList()
         {
+            IEnumerable<MovieViewModel> list = null;
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "/getall");
             request.Method = HttpMethod.Get;
             request.Headers.Add("CBSToken", APIKEY);
-
-            return _client.SendAsync(request).Result;
+            HttpResponseMessage response = _client.SendAsync(request).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                string body = response.Content.ReadAsStringAsync().Result;
+                list = JsonConvert.DeserializeObject<IEnumerable<MovieViewModel>>(body);
+                
+            }
+            else
+            {
+                _notyf.Error("Không thể lấy thông tin do lỗi server");
+                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
+                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+            }
+            return list;
         }
 
-        public HttpResponseMessage GetMovieDetails(int? id)
+        public MovieViewModel GetMovieDetails(int? id)
         {
+            MovieViewModel movie = null;
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/getsingle/{id}");
             request.Method = HttpMethod.Get;
             request.Headers.Add("CBSToken", APIKEY);
-            return _client.SendAsync(request).Result;
+            HttpResponseMessage response = _client.SendAsync(request).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                string body = response.Content.ReadAsStringAsync().Result;
+                movie = JsonConvert.DeserializeObject<MovieViewModel>(body);
+            }
+            else
+            {
+                _notyf.Error("Không thể tìm thấy thông tin từ server");
+                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
+                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+                RedirectToAction("NotFound", "Home");
+            }
+            return movie;
         }
 
         public HttpResponseMessage CreateMovie(MovieViewModel movie)

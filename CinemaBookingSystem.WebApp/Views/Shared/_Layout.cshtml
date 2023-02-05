@@ -1,0 +1,336 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>One Movies an Entertainment Category Flat Bootstrap Responsive Website Template | Home :: w3layouts</title>
+	<!-- for-mobile-apps -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="application/x-javascript">
+		addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+			   function hideURLbar(){ window.scrollTo(0,1); } </script>
+	<!-- //for-mobile-apps -->
+	<link href="~/assets/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="~/assets/css/style.css" rel="stylesheet" type="text/css" media="all" />
+	<link rel="stylesheet" href="~/assets/css/contactstyle.css" type="text/css" media="all" />
+	<link rel="stylesheet" href="~/assets/css/faqstyle.css" type="text/css" media="all" />
+	<link href="~/assets/css/single.css" rel='stylesheet' type='text/css' />
+	<link href="~/assets/css/medile.css" rel='stylesheet' type='text/css' />
+	<!-- banner-slider -->
+	<link href="~/assets/css/jquery.slidey.min.css" rel="stylesheet">
+	<!-- //banner-slider -->
+	<!-- pop-up -->
+	<link href="~/assets/css/popuo-box.css" rel="stylesheet" type="text/css" media="all" />
+	<!-- //pop-up -->
+	<!-- font-awesome icons -->
+	<link rel="stylesheet" href="~/assets/css/font-awesome.min.css" />
+	<!-- //font-awesome icons -->
+	<!-- js -->
+	<script type="text/javascript" src="~/assets/js/jquery-2.1.4.min.js"></script>
+	<!-- //js -->
+	<!-- banner-bottom-plugin -->
+	<link href="~/assets/css/owl.carousel.css" rel="stylesheet" type="text/css" media="all">
+	<script src="~/assets/js/owl.carousel.js"></script>
+	<script>
+		$(document).ready(function () {
+			$("#owl-demo").owlCarousel({
+
+				autoPlay: 3000, //Set AutoPlay to 3 seconds
+
+				items: 5,
+				itemsDesktop: [640, 4],
+				itemsDesktopSmall: [414, 3]
+
+			});
+
+		});
+	</script>
+	<!-- //banner-bottom-plugin -->
+	<link href='//fonts.googleapis.com/css?family=Roboto+Condensed:400,700italic,700,400italic,300italic,300' rel='stylesheet' type='text/css'>
+	<!-- start-smoth-scrolling -->
+	<script type="text/javascript" src="~/assets/js/move-top.js"></script>
+	<script type="text/javascript" src="~/assets/js/easing.js"></script>
+	<script type="text/javascript">
+		jQuery(document).ready(function ($) {
+			$(".scroll").click(function (event) {
+				event.preventDefault();
+				$('html,body').animate({ scrollTop: $(this.hash).offset().top }, 1000);
+			});
+		});
+	</script>
+	<!-- start-smoth-scrolling -->
+</head>
+
+<body>
+	<!-- header -->
+	<div class="header">
+		<div class="container">
+			<div class="w3layouts_logo">
+				<a asp-controller="Home" asp-action="Index"><h1>Cinemax</h1></a>
+			</div>
+			<div class="w3l_sign_in_register">
+				<ul>
+					<li><a href="#">Đăng nhập</a></li>
+					<li><a href="#">Đăng ký</a></li>
+				</ul>
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+	<!-- //header -->
+	<!-- bootstrap-pop-up -->
+	<div class="modal video-modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					Sign In & Sign Up
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+				<section>
+					<div class="modal-body">
+						<div class="w3_login_module">
+							<div class="module form-module">
+								<div class="toggle">
+									<i class="fa fa-times fa-pencil"></i>
+									<div class="tooltip">Click Me</div>
+								</div>
+								<div class="form">
+									<h3>Login to your account</h3>
+									<form action="#" method="post">
+										<input type="text" name="Username" placeholder="Username" required="">
+										<input type="password" name="Password" placeholder="Password" required="">
+										<input type="submit" value="Login">
+									</form>
+								</div>
+								<div class="form">
+									<h3>Create an account</h3>
+									<form action="#" method="post">
+										<input type="text" name="Username" placeholder="Username" required="">
+										<input type="password" name="Password" placeholder="Password" required="">
+										<input type="email" name="Email" placeholder="Email Address" required="">
+										<input type="text" name="Phone" placeholder="Phone Number" required="">
+										<input type="submit" value="Register">
+									</form>
+								</div>
+								<div class="cta"><a href="#">Forgot your password?</a></div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+	<script>
+		$('.toggle').click(function () {
+			// Switches the Icon
+			$(this).children('i').toggleClass('fa-pencil');
+			// Switches the forms
+			$('.form').animate({
+				height: "toggle",
+				'padding-top': 'toggle',
+				'padding-bottom': 'toggle',
+				opacity: "toggle"
+			}, "slow");
+		});
+	</script>
+	<!-- //bootstrap-pop-up -->
+	<!-- nav -->
+	<div class="movies_nav">
+		<div class="container">
+			<nav class="navbar navbar-default">
+				<div class="navbar-header navbar-left">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+				</div>
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
+					<nav>
+						<ul class="nav navbar-nav">
+							<li class="active"><a asp-action="Index" asp-controller="Home">Trang chủ</a></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Phim <b class="caret"></b></a>
+								<ul class="dropdown-menu multi-column columns-2">
+									<li>
+										<div class="col-sm-4">
+											<ul class="multi-column-dropdown">
+												<li><a href="#">Phim đang chiếu</a></li>
+											</ul>
+										</div>
+										<div class="col-sm-4">
+											<ul class="multi-column-dropdown">
+												<li><a href="#">Phim sắp chiếu</a></li>
+											</ul>
+										</div>
+										<div class="col-sm-4">
+											<ul class="multi-column-dropdown">
+												<li><a href="#">Mọi người đang xem</a></li>
+											</ul>
+										</div>
+										<div class="clearfix"></div>
+									</li>
+								</ul>
+							</li>
+							<li><a href="#">Danh sách rạp</a></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Thành viên <b class="caret"></b></a>
+								<ul class="dropdown-menu multi-column columns-3">
+									<li>
+										<div class="col-sm-4">
+											<ul class="multi-column-dropdown">
+												<li><a href="#">Tài khoản thành viên</a></li>
+											</ul>
+										</div>
+										<div class="col-sm-4">
+											<ul class="multi-column-dropdown">
+												<li><a href="#">Tài khoản thành viên</a></li>
+											</ul>
+										</div>
+										<div class="col-sm-4">
+											<ul class="multi-column-dropdown">
+												<li><a href="#">Đăng ký thành viên</a></li>
+											</ul>
+										</div>
+										<div class="clearfix"></div>
+									</li>
+								</ul>
+							</li>
+							<li><a href="#">Liên hệ</a></li>
+							<li><a href="#">Tin mới & Khuyến mãi</a></li>
+						</ul>
+					</nav>
+				</div>
+			</nav>
+		</div>
+	</div>
+	<!-- //nav -->
+	<main role="main" class="pb-3">
+    @RenderBody()
+	</main>
+	<!-- pop-up-box -->
+	<script src="~/assets/js/jquery.magnific-popup.js" type="text/javascript"></script>
+	<!--//pop-up-box -->
+	<div id="small-dialog" class="mfp-hide">
+		<iframe src="https://player.vimeo.com/video/164819130?title=0&byline=0"></iframe>
+	</div>
+	<div id="small-dialog1" class="mfp-hide">
+		<iframe src="https://player.vimeo.com/video/148284736"></iframe>
+	</div>
+	<div id="small-dialog2" class="mfp-hide">
+		<iframe src="https://player.vimeo.com/video/165197924?color=ffffff&title=0&byline=0&portrait=0"></iframe>
+	</div>
+	<script>
+		$(document).ready(function () {
+			$('.w3_play_icon,.w3_play_icon1,.w3_play_icon2').magnificPopup({
+				type: 'inline',
+				fixedContentPos: false,
+				fixedBgPos: true,
+				overflowY: 'auto',
+				closeBtnInside: true,
+				preloader: false,
+				midClick: true,
+				removalDelay: 300,
+				mainClass: 'my-mfp-zoom-in'
+			});
+
+		});
+	</script>
+	<!-- //Latest-tv-series -->
+	<!-- footer -->
+	<div class="footer">
+		<div class="container">
+			<div class="w3ls_footer_grid">
+				<div class="col-md-6 w3ls_footer_grid_left">
+					<div class="w3ls_footer_grid_left1">
+						<h2>Kết nối với chúng tôi</h2>
+						<div class="w3ls_footer_grid_left1_pos">
+							<form action="#" method="post">
+								<input type="email" name="email" placeholder="Your email..." required="">
+								<input type="submit" value="Send">
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 w3ls_footer_grid_right">
+					<a asp-action="Index" asp-controller="Home"><h2>Cinemax</h2></a>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+			<div class="col-md-5 w3ls_footer_grid1_left">
+				<p>
+					©
+					<script>
+						document.write(new Date().getFullYear());
+					</script>
+					, made with ❤️ by Huynh Cong Hung.
+				</p>
+			</div>
+			<div class="col-md-7 w3ls_footer_grid1_right">
+				<ul>
+					<li>
+						<a href="genres.html">Phim</a>
+					</li>
+					<li>
+						<a href="faq.html">Rạp</a>
+					</li>
+					<li>
+						<a href="horror.html">Liên hệ</a>
+					</li>
+					<li>
+						<a href="icons.html">Tin mới & Ưu đãi</a>
+					</li>
+					<li>
+						<a href="genres.html">Đăng nhập</a>
+					</li>
+					<li>
+						<a href="comedy.html">Đăng ký</a>
+					</li>
+				</ul>
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+	<!-- //footer -->
+	<!-- Bootstrap Core JavaScript -->
+	<script src="~/assets/js/bootstrap.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$(".dropdown").hover(
+				function () {
+					$('.dropdown-menu', this).stop(true, true).slideDown("fast");
+					$(this).toggleClass('open');
+				},
+				function () {
+					$('.dropdown-menu', this).stop(true, true).slideUp("fast");
+					$(this).toggleClass('open');
+				}
+			);
+		});
+	</script>
+	<!-- //Bootstrap Core JavaScript -->
+	<!-- here stars scrolling icon -->
+	<script type="text/javascript">
+		$(document).ready(function () {
+			/*
+				var defaults = {
+				containerID: 'toTop', // fading element id
+				containerHoverID: 'toTopHover', // fading element hover id
+				scrollSpeed: 1200,
+				easingType: 'linear'
+				};
+			*/
+
+			$().UItoTop({ easingType: 'easeOutQuart' });
+
+		});
+	</script>
+@await RenderSectionAsync("Scripts", required: false)
+	<!-- //here ends scrolling icon -->
+</body>
+</html>
+
+
+
+
