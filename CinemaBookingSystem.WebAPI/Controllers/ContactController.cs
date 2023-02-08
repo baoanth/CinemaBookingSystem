@@ -59,7 +59,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                     var contact = _mapper.Map<Contact>(contactVm);
                     _contactService.Add(contact);
                     _contactService.SaveChanges();
-                    return Created("Create successfully", contactVm);
+                    return Created("Create successfully", contact);
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -99,7 +99,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                     var contact = _mapper.Map<Contact>(contactVm);
                     _contactService.Update(contact);
                     _contactService.SaveChanges();
-                    return Ok(contactVm);
+                    return Ok(contact);
                 }
                 catch (DbEntityValidationException ex)
                 {

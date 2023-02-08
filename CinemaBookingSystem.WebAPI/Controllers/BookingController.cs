@@ -56,10 +56,10 @@ namespace CinemaBookingSystem.WebAPI.Controllers
             {
                 try
                 {
-                    var Booking = _mapper.Map<Booking>(bookingVm);
-                    _bookingService.Add(Booking);
+                    var booking = _mapper.Map<Booking>(bookingVm);
+                    _bookingService.Add(booking);
                     _bookingService.SaveChanges();
-                    return Created("Create successfully", bookingVm);
+                    return Created("Create successfully", booking);
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -99,7 +99,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                     var booking = _mapper.Map<Booking>(bookingVm);
                     _bookingService.Update(booking);
                     _bookingService.SaveChanges();
-                    return Ok(bookingVm);
+                    return Ok(booking);
                 }
                 catch (DbEntityValidationException ex)
                 {

@@ -187,7 +187,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                     var user = _mapper.Map<User>(userVm);
                     _userService.Update(user);
                     _userService.SaveChanges();
-                    return Ok(userVm);
+                    return Ok(user);
                 }
                 catch (DbEntityValidationException ex)
                 {

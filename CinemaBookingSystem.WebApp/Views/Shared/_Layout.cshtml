@@ -57,7 +57,7 @@
                                         <li><a asp-controller="Movie" asp-action="ComingSoon">Phim sắp chiếu</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="#">Rạp</a></li>
+                                <li><a asp-action="Index" asp-controller="Cinema">Rạp</a></li>
                                 <li>
                                     <a href="#">Tin mới<span class="arrow_carrot-down"></span></a>
                                     <ul class="dropdown">
@@ -69,6 +69,7 @@
                                 @{
                                     if (!String.IsNullOrEmpty(sessionName))
                                     {
+                                        <li>Xin chào, @sessionFullName</li>
                                         <li><a asp-action="Logout" asp-controller="Home">Đăng xuất</a></li>
                                     }
                                     else
@@ -111,10 +112,10 @@
                     <div class="footer__nav">
                         <ul>
                             <li class="active"><a asp-action="Index" asp-controller="Home">Trang chủ</a></li>
-                            <li><a href="#">Phim</a></li>
-                            <li><a href="#">Thông tin rạp</a></li>
+                            <li><a asp-action="NowShowing" asp-controller="Movie">Phim</a></li>
+                            <li><a asp-action="Index" asp-controller="Cinema">Thông tin rạp</a></li>
                             <li><a href="#">Tin mới & Ưu đãi</a></li>
-                            <li><a href="#">Liên hệ</a></li>
+                            <li><a asp-action="Index" asp-controller="Contact">Liên hệ</a></li>
                         </ul>
                     </div>
                 </div>

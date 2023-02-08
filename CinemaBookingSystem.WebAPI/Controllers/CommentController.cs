@@ -60,7 +60,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                     var comment = _mapper.Map<Comment>(commentVm);
                     _commentService.Add(comment);
                     _commentService.SaveChanges();
-                    return Created("Create successfully", commentVm);
+                    return Created("Create successfully", comment);
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -100,7 +100,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                     var comment = _mapper.Map<Comment>(commentVm);
                     _commentService.Update(comment);
                     _commentService.SaveChanges();
-                    return Ok(commentVm);
+                    return Ok(comment);
                 }
                 catch (DbEntityValidationException ex)
                 {

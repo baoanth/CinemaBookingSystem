@@ -1,0 +1,63 @@
+﻿@model CinemaBookingSystem.ViewModels.ArticleViewModel;
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Article/</span> Create</h4>
+    <!-- Basic Layout & Basic with Icons -->
+    <div class="row">
+        <!-- Basic Layout -->
+        <div class="col-xxl">
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0">Thêm mới bài viết</h5>
+                    <small class="text-muted float-end text-danger">* là thông tin bắt buộc</small>
+                </div>
+                <div class="card-body">
+                    <form method="post" asp-action="Create" enctype="multipart/form-data">
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="title">Tiêu đề bài viết<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <input type="text" asp-for=ArticleTitle class="form-control" id="title" />
+                                <span asp-validation-for="ArticleTitle" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="img">Ảnh bài viết</label>
+                            <div class="col-sm-10">
+                                <input type="file" asp-for="ArticleImage" name="postedImage" class="form-control" id="img" accept="image/png, image/jpg, image/jpeg" />
+                                <span asp-validation-for="ArticleImage" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="vid">Video bài viết</label>
+                            <div class="col-sm-10">
+                                <input type="file" asp-for="ArticleVideo" name="postedVideo" class="form-control" id="vid" accept="video/mp4" />
+                                <span asp-validation-for="ArticleVideo" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="description">Nội dung bài viết<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                <textarea asp-for=ArticleContent class="form-control" id="description" cols="10"></textarea>
+                                <span asp-validation-for="ArticleContent" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row justify-content-end">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-success w-100" value="Thêm mới">Thêm mới</button> &ensp;
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row justify-content-end">
+                        <div class="col-sm-10">
+                            <a asp-action="Index"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

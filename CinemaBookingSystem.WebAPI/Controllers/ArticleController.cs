@@ -2,6 +2,7 @@
 using CinemaBookingSystem.Model.Models;
 using CinemaBookingSystem.Service;
 using CinemaBookingSystem.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Infrastructure;
@@ -10,56 +11,56 @@ using System.Diagnostics;
 
 namespace CinemaBookingSystem.WebAPI.Controllers
 {
-    [Route("api/movie")]
+    [Route("api/article")]
     [ApiController]
-    public class MovieController : ControllerBase
+    public class ArticleController : ControllerBase
     {
-        private readonly IMovieService _movieService;
+        private readonly IArticleService _articleService;
         private readonly IErrorService _errorService;
         private readonly IMapper _mapper;
 
-        public MovieController(IMovieService movieService,IErrorService errorService, IMapper mapper)
+        public ArticleController(IArticleService articleService, IMapper mapper, IErrorService errorService)
         {
-            _movieService = movieService;
-            _errorService = errorService;
+            _articleService = articleService;
             _mapper = mapper;
+            _errorService = errorService;
         }
 
         [HttpGet]
         [Route("getall")]
         public ActionResult Get([FromHeader, Required] string CBSToken)
         {
-            var listMovie = _movieService.GetAll();
-            var listMovieVm = _mapper.Map<IEnumerable<MovieViewModel>>(listMovie);
-            return Ok(listMovieVm);
+            var listArticle = _articleService.GetAll();
+            var listArticleVm = _mapper.Map<IEnumerable<ArticleViewModel>>(listArticle);
+            return Ok(listArticleVm);
         }
 
         [HttpGet]
         [Route("getsingle/{id}")]
         public ActionResult GetSingle([FromHeader, Required] string CBSToken, int id)
         {
-            var movie = _movieService.GetById(id);
-            if (movie == null) return BadRequest("The input Id doesn't exist");
+            var article = _articleService.GetById(id);
+            if (article == null) return NotFound();
             else
             {
-                var movieVm = _mapper.Map<MovieViewModel>(movie);
-                return Ok(movieVm);
+                var articleVm = _mapper.Map<ArticleViewModel>(article);
+                return Ok(articleVm);
             }
         }
 
         [HttpPost]
         [Route("create")]
-        public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] MovieViewModel movieVm)
+        public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] ArticleViewModel articleVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
             {
                 try
                 {
-                    var movie = _mapper.Map<Movie>(movieVm);
-                    _movieService.Add(movie);
-                    _movieService.SaveChanges();
-                    return Created("Create successfully", movieVm);
+                    var article = _mapper.Map<Article>(articleVm);
+                    _articleService.Add(article);
+                    _articleService.SaveChanges();
+                    return Created("Create successfully", article);
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -89,17 +90,17 @@ namespace CinemaBookingSystem.WebAPI.Controllers
 
         [HttpPost]
         [Route("update")]
-        public ActionResult Put([FromHeader, Required] string CBSToken, [FromBody] MovieViewModel movieVm)
+        public ActionResult Put([FromHeader, Required] string CBSToken, [FromBody] ArticleViewModel articleVm)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
             else
             {
                 try
                 {
-                    var movie = _mapper.Map<Movie>(movieVm);
-                    _movieService.Update(movie);
-                    _movieService.SaveChanges();
-                    return Ok(movie);
+                    var article = _mapper.Map<Article>(articleVm);
+                    _articleService.Update(article);
+                    _articleService.SaveChanges();
+                    return Ok(article);
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -131,19 +132,20 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         [Route("delete/{id}")]
         public ActionResult Delete([FromHeader, Required] string CBSToken, int id)
         {
-            var movie = _movieService.GetById(id);
-            bool IsValid = movie != null;
-            if (!IsValid) return BadRequest();
+            var article = _articleService.GetById(id);
+            bool IsValid = article != null;
+            if (!IsValid) return BadRequest("The input ID is not exist!");
             else
             {
                 try
                 {
-                    _movieService.Delete(id);
-                    _movieService.SaveChanges();
-                    return Ok();
+                    _articleService.Delete(id);
+                    _articleService.SaveChanges();
+                    return Ok(article);
                 }
                 catch (Exception ex)
                 {
+                    _errorService.LogError(ex);
                     return BadRequest(ex.Message);
                 }
             }

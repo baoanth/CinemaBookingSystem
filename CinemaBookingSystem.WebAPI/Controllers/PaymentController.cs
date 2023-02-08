@@ -59,7 +59,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                     var payment = _mapper.Map<Payment>(paymentVm);
                     _paymentService.Add(payment);
                     _paymentService.SaveChanges();
-                    return Created("Create successfully", paymentVm);
+                    return Created("Create successfully", payment);
                 }
                 catch (DbEntityValidationException ex)
                 {

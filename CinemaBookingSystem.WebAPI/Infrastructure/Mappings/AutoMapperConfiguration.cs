@@ -23,6 +23,7 @@ namespace CinemaBookingSystem.WebAPI.Infrastructure.Mappings
             CreateMap<VisitorStatistic, VisitorStatisticViewModel>().ReverseMap();
             CreateMap<User, SignupViewModel>().ReverseMap();
             CreateMap<Payment, PaymentViewModel>().ReverseMap();
+            CreateMap<Article, ArticleViewModel>().ReverseMap();
         }
     }
 }

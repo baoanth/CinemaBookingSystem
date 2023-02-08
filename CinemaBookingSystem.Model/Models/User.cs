@@ -41,6 +41,7 @@ namespace CinemaBookingSystem.Model.Models
         [ForeignKey("RoleID")]
         public virtual Role Role { get; set; }
         public IEnumerable<Comment> Comments { get; set; }
+        public IEnumerable<Article> Articles { get; set; }
         public IEnumerable<Booking> Bookings { get; set; }
     }
 }

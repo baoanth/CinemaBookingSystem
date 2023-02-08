@@ -72,7 +72,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                     var screeningPosition = _mapper.Map<ScreeningPosition>(screeningPositionVm);
                     _screeningPositionService.Add(screeningPosition);
                     _screeningPositionService.SaveChanges();
-                    return Created("Create successfully", screeningPositionVm);
+                    return Created("Create successfully", screeningPosition);
                 }
                 catch (DbEntityValidationException ex)
                 {
@@ -114,7 +114,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                         _screeningPositionService.Add(sp);
                         _screeningPositionService.SaveChanges();
                     }
-                    return Created("Create successfully", screeningPositionVms);
+                    return Created("Create successfully", screeningPositions);
                 }
                 catch (DbEntityValidationException ex)
                 {
