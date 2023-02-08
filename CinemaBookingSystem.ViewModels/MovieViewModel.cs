@@ -12,6 +12,7 @@
         public string Rated { get; set; }
         public string? TrailerURL { get; set; }
         public string? ThumpnailImg { get; set; }
+        public string? BannerImg { get; set; }
         public string Description { get; set; }
         public IEnumerable<ScreeningViewModel>? Screenings { get; set; }
         public IEnumerable<CommentViewModel>? Comments { get; set; }

@@ -48,6 +48,7 @@
     <!-- Helpers -->
     <script src="~/assets/vendor/js/helpers.js"></script>
     <script src="~/assets/js/config.js"></script>
+    @RenderSection("Styles", required: false)
 </head>
 
 <body>
@@ -160,12 +161,6 @@
                                 <a asp-action="Index" asp-controller="Contact" class="menu-link">
                                     <i class="menu-icon tf-icons bx bxs-contact"></i>
                                     <div data-i18n="Documentation">Thông tin liên hệ</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a asp-action="Index" asp-controller="Slide" class="menu-link">
-                                    <i class="menu-icon tf-icons bxs-carousel"></i>
-                                    <div data-i18n="Documentation">Banner trang web</div>
                                 </a>
                             </li>
                             <li class="menu-item">

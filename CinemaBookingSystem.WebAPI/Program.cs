@@ -39,7 +39,6 @@ builder.Services.AddTransient<CinemaBookingSystemDbContext>();
 //Services
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IBookingDetailService, BookingDetailService>();
-builder.Services.AddScoped<ISlideService, SlideService>();
 builder.Services.AddScoped<ICinemaService, CinemaService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IErrorService, ErrorService>();
@@ -56,7 +55,6 @@ builder.Services.AddScoped<IVisitorStatisticService, VisitorStatisticService>();
 //Repository
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IBookingDetailRepository, BookingDetailRepository>();
-builder.Services.AddScoped<ISlideRepository, SlideRepository>();
 builder.Services.AddScoped<ICinemaRepository, CinemaRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IErrorRepository, ErrorRepository>();

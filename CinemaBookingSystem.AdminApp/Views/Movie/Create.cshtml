@@ -63,25 +63,32 @@
                             <label class="col-sm-2 col-form-label" for="rated-select">Đánh giá<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
                                 <select id="rated-select" class="form-select" asp-for="Rated">
-                                    <option value="18+">18+ - Cấm người xem dưới 18 tuổi</option>
-                                    <option value="16+">16+ - Cấm người xem dưới 16 tuổi</option>
-                                    <option value="13+">13+ - Cấm người xem dưới 13 tuổi</option>
+                                    <option value="18+ - Cấm khán giả dưới 18 tuổi">18+ - Cấm khán giả dưới 18 tuổi</option>
+                                    <option value="16+ - Cấm khán giả dưới 16 tuổi">16+ - Cấm khán giả dưới 16 tuổi</option>
+                                    <option value="13+ - Cấm khán giả dưới 13 tuổi">13+ - Cấm khán giả dưới 13 tuổi</option>
                                 </select>
                                 <span asp-validation-for="Rated" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label" for="trailer-link">Link trailer<span class="text-danger"> *</span></label>
+                            <label class="col-sm-2 col-form-label" for="trailer-link">Link trailer</label>
                             <div class="col-sm-10">
                                 <input type="text" asp-for="TrailerURL" class="form-control" id="trailer-link" />
                                 <span asp-validation-for="TrailerURL" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label" for="thump-img">Ảnh thumpnail<span class="text-danger"> *</span></label>
+                            <label class="col-sm-2 col-form-label" for="thump-img">Ảnh thumpnail</label>
                             <div class="col-sm-10">
-                                <input type="file" asp-for="ThumpnailImg" name="postedFile" class="form-control" id="thump-img" accept="image/png, image/jpg, image/jpeg" />
+                                <input type="file" asp-for="ThumpnailImg" name="postedThumpnail" class="form-control" id="thump-img" accept="image/png, image/jpg, image/jpeg" />
                                 <span asp-validation-for="ThumpnailImg" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="banner-img">Ảnh banner</label>
+                            <div class="col-sm-10">
+                                <input type="file" asp-for="BannerImg" name="postedBanner" class="form-control" id="banner-img" accept="image/png, image/jpg, image/jpeg" />
+                                <span asp-validation-for="BannerImg" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">

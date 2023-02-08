@@ -11,7 +11,6 @@ namespace CinemaBookingSystem.Data
         }
 
         public DbSet<Booking> Bookings { get; set; }
-        public DbSet<Slide> Slides { get; set; }
         public DbSet<Cinema> Cinemas { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Movie> Movies { get; set; }

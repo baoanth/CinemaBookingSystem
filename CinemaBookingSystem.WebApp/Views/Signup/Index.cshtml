@@ -1,0 +1,72 @@
+﻿@model CinemaBookingSystem.ViewModels.UserViewModel;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Normal Breadcrumb Begin -->
+<section class="normal-breadcrumb set-bg" data-setbg="@("../assets/img/banner.jpg")">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="normal__breadcrumb__text">
+                    <h2>Đăng ký thành viên</h2>
+                    <p>Trở thành thành viên của CINE<span style="color:red !important">MAX</span> ngay hôm nay.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Normal Breadcrumb End -->
+<!-- Signup Section Begin -->
+<section class="signup spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="login__form">
+                    <h3 style="color:white !important">Đăng ký</h3>
+                    <form asp-action="Signup" method="post">
+                        <div class="input__item">
+                            <input type="text" asp-for="Username" placeholder="Nhập tài khoản của bạn..." required>
+                            <span class="icon_profile"></span>
+                        </div>
+                        <div class="input__item">
+                            <input type="password" asp-for="Password" placeholder="Nhập mật khẩu của bạn..." required>
+                            <span class="icon_lock"></span>
+                        </div>
+                        <div class="input__item">
+                            <input type="text" asp-for="Email" placeholder="Nhập địa chỉ email của bạn..." required>
+                            <span class="icon_mail"></span>
+                        </div>
+                        <div class="input__item">
+                            <input type="text" asp-for="PhoneNumber" placeholder="Nhập số điện thoại của bạn..." required>
+                            <span class="icon_phone"></span>
+                        </div>
+                        <div class="input__item">
+                            <input type="text" asp-for="Address" placeholder="Nhập địa chỉ của bạn..." required>
+                            <span class="icon_house"></span>
+                        </div>
+                        <div class="input__item">
+                            <input type="date" asp-for="DOB" required="Chọn ngày sinh của bạn...">
+                            <span class="icon_gift"></span>
+                        </div>
+                        <button type="submit" class="site-btn">Đăng ký ngay</button>
+                    </form>
+                    <h5>Bạn đã là thành viên của CINEMAX? <a asp-controller="Login">Đăng nhập tại đây</a></h5>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="login__social__links">
+                    <h3>Đăng nhập với:</h3>
+                    <ul>
+                        <li>
+                            <a href="#" class="facebook"><i class="fa fa-facebook"></i> Đăng nhập với tài khoản Facebook</a>
+                        <li><a href="#" class="google"><i class="fa fa-google"></i> Đăng nhập với tài khoản Google</a></li>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Signup Section End -->
+

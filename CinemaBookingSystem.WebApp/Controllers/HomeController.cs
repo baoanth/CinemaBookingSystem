@@ -9,13 +9,12 @@ namespace CinemaBookingSystem.WebApp.Controllers
 {
     public class HomeController : Controller
     {
-        private Uri _baseUrl = new Uri("https://localhost:44322/api/movie");
+        private Uri _baseUrl = new Uri("https://localhost:44322/api/");
         private HttpClient _client;
         private const string APIKEY = "movienew";
         private readonly INotyfService _notyf;
-        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public HomeController(INotyfService notyf, IWebHostEnvironment webHostEnvironment)
+        public HomeController(INotyfService notyf)
         {
             _client = new HttpClient();
             _client.BaseAddress = _baseUrl;
@@ -25,15 +24,27 @@ namespace CinemaBookingSystem.WebApp.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<MovieViewModel> list = GetMovieList();
+            IEnumerable<MovieViewModel> list = GetMovieListRequest();
             return View(list);
         }
-
-        public IEnumerable<MovieViewModel> GetMovieList()
+        public IActionResult Logout()
+		{
+			if (HttpContext.Session.GetString("_clientname") == null)
+			{
+				return RedirectToAction("Index", "Home");
+			}
+			else
+			{
+				HttpContext.Session.Remove("_clientname");
+				HttpContext.Session.Remove("_clientfullname");
+				return RedirectToAction("Index", "Home");
+			}
+		}
+		public IEnumerable<MovieViewModel> GetMovieListRequest()
         {
             IEnumerable<MovieViewModel> list = null;
             HttpRequestMessage request = new HttpRequestMessage();
-            request.RequestUri = new Uri(_baseUrl + "/getall");
+            request.RequestUri = new Uri(_baseUrl + "movie/getall");
             request.Method = HttpMethod.Get;
             request.Headers.Add("CBSToken", APIKEY);
             HttpResponseMessage response = _client.SendAsync(request).Result;
@@ -51,6 +62,8 @@ namespace CinemaBookingSystem.WebApp.Controllers
             }
             return list;
         }
+
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

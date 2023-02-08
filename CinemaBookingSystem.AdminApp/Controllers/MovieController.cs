@@ -2,9 +2,7 @@
 using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Text;
 
 namespace CinemaBookingSystem.AdminApp.Controllers
@@ -45,22 +43,33 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(IFormFile postedFile, [Bind("MovieId,MovieName,Director,Cast,ReleaseDate,Genres,RunningTime,Rated,TrailerURL,ThumpnailImg,Description")] MovieViewModel movie)
+        public IActionResult Create(IFormFile postedThumpnail, IFormFile postedBanner, [Bind("MovieId,MovieName,Director,Cast,ReleaseDate,Genres,RunningTime,Rated,TrailerURL,ThumpnailImg,BannerImg,Description")] MovieViewModel movie)
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "..\\sharedmedia\\images\\thumpnails");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "..\\sharedmedia\\images");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
-            if (postedFile != null && postedFile.Length > 0)
+            if (postedThumpnail != null && postedThumpnail.Length > 0)
             {
-                string fileName = Path.GetFileName(postedFile.FileName);
+                string fileName = Path.GetFileName(postedThumpnail.FileName);
                 fileName = Guid.NewGuid().ToString() + fileName;
                 movie.ThumpnailImg = fileName;
-                using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                using (FileStream stream = new FileStream(Path.Combine(path, "thumpnails", fileName), FileMode.Create))
                 {
-                    postedFile.CopyTo(stream);
+                    postedThumpnail.CopyTo(stream);
                     _notyf.Success($"Upload ảnh thành công: {movie.ThumpnailImg}", 3);
+                }
+            }
+            if (postedBanner != null && postedBanner.Length > 0)
+            {
+                string fileName = Path.GetFileName(postedBanner.FileName);
+                fileName = Guid.NewGuid().ToString() + fileName;
+                movie.BannerImg = fileName;
+                using (FileStream stream = new FileStream(Path.Combine(path, "banners", fileName), FileMode.Create))
+                {
+                    postedBanner.CopyTo(stream);
+                    _notyf.Success($"Upload ảnh thành công: {movie.BannerImg}", 3);
                 }
             }
             HttpResponseMessage response = CreateMovie(movie);
@@ -86,27 +95,49 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(MovieViewModel movie, IFormFile postedFile)
+        public IActionResult Edit(MovieViewModel movie, IFormFile postedThumpnail, IFormFile postedBanner)
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), "..\\sharedmedia\\images\\thumpnails");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "..\\sharedmedia\\images");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
-            if (postedFile != null && postedFile.Length > 0)
+            if (postedThumpnail != null && postedThumpnail.Length > 0)
             {
-                var oldFilePath = Path.Combine(path,movie.ThumpnailImg);
-                if (Directory.Exists(oldFilePath))
+                if (!String.IsNullOrEmpty(movie.ThumpnailImg))
                 {
-                    Directory.Delete(oldFilePath);
+                    var oldFilePath = Path.Combine(path, "thumpnails", movie.ThumpnailImg);
+                    if (Directory.Exists(oldFilePath))
+                    {
+                        Directory.Delete(oldFilePath);
+                    }
                 }
-                string fileName = Path.GetFileName(postedFile.FileName);
+                string fileName = Path.GetFileName(postedThumpnail.FileName);
                 fileName = Guid.NewGuid().ToString() + fileName;
                 movie.ThumpnailImg = fileName;
-                using (FileStream stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+                using (FileStream stream = new FileStream(Path.Combine(path, "thumpnails", fileName), FileMode.Create))
                 {
-                    postedFile.CopyTo(stream);
+                    postedThumpnail.CopyTo(stream);
                     _notyf.Success($"Upload ảnh thành công: {movie.ThumpnailImg}", 3);
+                }
+            }
+            if (postedBanner != null && postedBanner.Length > 0)
+            {
+                if (!String.IsNullOrEmpty(movie.BannerImg))
+                {
+                    var oldFilePath = Path.Combine(path, "banners", movie.BannerImg);
+                    if (Directory.Exists(oldFilePath))
+                    {
+                        Directory.Delete(oldFilePath);
+                    }
+                }
+                string fileName = Path.GetFileName(postedBanner.FileName);
+                fileName = Guid.NewGuid().ToString() + fileName;
+                movie.BannerImg = fileName;
+                using (FileStream stream = new FileStream(Path.Combine(path, "banners", fileName), FileMode.Create))
+                {
+                    postedBanner.CopyTo(stream);
+                    _notyf.Success($"Upload ảnh thành công: {movie.BannerImg}", 3);
                 }
             }
             HttpResponseMessage response = UpdateMovie(movie);
@@ -162,7 +193,6 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             {
                 string body = response.Content.ReadAsStringAsync().Result;
                 list = JsonConvert.DeserializeObject<IEnumerable<MovieViewModel>>(body);
-                
             }
             else
             {

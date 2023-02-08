@@ -31,6 +31,8 @@ namespace CinemaBookingSystem.Model.Models
         public string? TrailerURL { get; set; }
         [MaxLength(256)]
         public string? ThumpnailImg { get; set; }
+        [MaxLength(256)]
+        public string? BannerImg { get; set; }
         [Required]
         [MaxLength(5000)]
         public string Description { get; set; }

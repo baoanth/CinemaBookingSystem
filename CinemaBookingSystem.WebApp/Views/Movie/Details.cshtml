@@ -1,0 +1,121 @@
+﻿@model CinemaBookingSystem.ViewModels.MovieViewModel;
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Breadcrumb Begin -->
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__links">
+                    <a asp-action="Index" asp-controller="Home"><i class="fa fa-home"></i> Trang chủ</a>
+                    <a asp-action="NowShowing" asp-controller="Movie">Phim</a>
+                    <span>@Model.MovieName</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<!-- Anime Section Begin -->
+<section class="anime-details spad">
+    <div class="container">
+        <div class="anime__details__content">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="anime__details__pic set-bg" data-setbg="@("/media/thumpnails/" + Model.ThumpnailImg)">
+                        <div class="comment"><i class="fa fa-comments"></i> @Model.Comments.Count()</div>
+                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="anime__details__text">
+                        <div class="anime__details__title">
+                            <h3>@Model.MovieName</h3>
+                            <span>@Model.Genres</span>
+                        </div>
+                        <div class="anime__details__rating">
+                            <span>0 lượt xem</span>
+                        </div>
+                        <p>
+                            @Model.Description
+                        </p>
+                        <div class="anime__details__widget">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12">
+                                    <ul>
+                                        <li><span>Thể loại:</span> @Model.Genres</li>
+                                        <li><span>Đạo diễn:</span> @Model.Director</li>
+                                        <li><span>Diễn viên:</span> @Model.Cast</li>
+                                        <li><span>Ngày khởi chiếu:</span> @Model.ReleaseDate.ToString("dd/MM/yyyy")</li>
+                                        <li><span>Đánh giá:</span> @Model.Rated</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="anime__details__btn">
+                            <a asp-action="TrailerWatch" asp-controller="Movie" asp-route-id="@Model.MovieId" class="follow-btn"><i class="fa fa-film"></i> Xem trailer</a>
+                            <a href="#" class="watch-btn">
+                                <span>Đặt vé ngay</span> <i class="fa fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-md-8">
+                <div class="anime__details__review">
+                    <div class="section-title">
+                        <h5>Bình luận</h5>
+                    </div>
+                    @{
+                        foreach (var item in Model.Comments)
+                        {
+                            <div class="anime__review__item">
+                                <div class="anime__review__item__pic">
+                                    <img src="img/anime/review-1.jpg" alt="">
+                                </div>
+                                <div class="anime__review__item__text">
+                                    <h6>@item.CommentedBy - <span>@item.CommentedAt.ToString("hh:mm dd/MM/yyyy")</span></h6>
+                                    <p>
+                                        @item.Content
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                    } 
+                </div>
+                <div class="anime__details__form">
+                    <div class="section-title">
+                        <h5>Để lại cảm nghĩ của bạn về bộ phim nhé</h5>
+                    </div>
+                    <form action="#">
+                        <textarea name="cmtcontent" placeholder="Cảm nghĩ của bạn về bộ phim"></textarea>
+                        <button type="submit"><i class="fa fa-location-arrow"></i> Bình luận</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <div class="anime__details__sidebar">
+                    <div class="section-title">
+                        <h5>Bạn có thể thích...</h5>
+                    </div>
+                    @{
+                        foreach (var item in ViewBag.Movies as IEnumerable<CinemaBookingSystem.ViewModels.MovieViewModel>)
+                        {
+                            <div class="product__sidebar__view__item set-bg" data-setbg="@("/media/thumpnails/" + item.ThumpnailImg)">
+                                <div class="view"><i class="fa fa-eye"></i> 9141</div>
+                                <h5><a asp-action="Details" asp-controller="Movie" asp-route-id="@item.MovieId">@item.MovieName</a></h5>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Anime Section End -->
+
