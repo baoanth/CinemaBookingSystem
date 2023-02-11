@@ -71,9 +71,11 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                 try
                 {
                     var user = _mapper.Map<User>(userVm);
-                    _userService.Signup(user);
-                    _userService.SaveChanges();
-                    return Ok("Sign-in successful!");
+                    if (_userService.Signup(user))
+                    {
+                        return Ok();
+                    }
+                    return BadRequest("Tài khoản đã được sử dụng");
                 }
                 catch (DbEntityValidationException ex)
                 {

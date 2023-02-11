@@ -30,6 +30,10 @@
                             <span class="icon_profile"></span>
                         </div>
                         <div class="input__item">
+                            <input type="text" asp-for="FullName" placeholder="Nhập họ tên của bạn..." required>
+                            <span class="icon_profile"></span>
+                        </div>
+                        <div class="input__item">
                             <input type="password" asp-for="Password" placeholder="Nhập mật khẩu của bạn..." required>
                             <span class="icon_lock"></span>
                         </div>
@@ -46,22 +50,22 @@
                             <span class="icon_house"></span>
                         </div>
                         <div class="input__item">
-                            <input type="date" asp-for="DOB" required="Chọn ngày sinh của bạn...">
+                            <input type="date" asp-for="DOB" required>
                             <span class="icon_gift"></span>
+                        </div>
+                        <div class="input__item" hidden>
+                            <input type="numer" asp-for="RoleId" value="3" required>
                         </div>
                         <button type="submit" class="site-btn">Đăng ký ngay</button>
                     </form>
-                    <h5>Bạn đã là thành viên của CINEMAX? <a asp-controller="Login">Đăng nhập tại đây</a></h5>
+                    <h5>Bạn đã là thành viên của CINEMAX? <a asp-controller="Account" asp-action="Login">Đăng nhập tại đây</a></h5>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="login__social__links">
                     <h3>Đăng nhập với:</h3>
                     <ul>
-                        <li>
-                            <a href="#" class="facebook"><i class="fa fa-facebook"></i> Đăng nhập với tài khoản Facebook</a>
                         <li><a href="#" class="google"><i class="fa fa-google"></i> Đăng nhập với tài khoản Google</a></li>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -69,4 +73,3 @@
     </div>
 </section>
 <!-- Signup Section End -->
-

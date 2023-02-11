@@ -57,9 +57,21 @@
                         </div>
                         <div class="anime__details__btn">
                             <a asp-action="TrailerWatch" asp-controller="Movie" asp-route-id="@Model.MovieId" class="follow-btn"><i class="fa fa-film"></i> Xem trailer</a>
-                            <a href="#" class="watch-btn">
-                                <span>Đặt vé ngay</span> <i class="fa fa-angle-right"></i>
-                            </a>
+                            @{
+                                if (Model.ReleaseDate < DateTime.Now)
+                                {
+                                    <a asp-controller="Screening" asp-action="CinemaChoose" asp-route-id="@Model.MovieId" class="watch-btn">
+                                        <span>Đặt vé ngay</span> <i class="fa fa-angle-right"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="#" class="watch-btn">
+                                        <span>Phim sắp chiếu</span> <i class="fa fa-angle-right"></i>
+                                    </a>
+                                }
+                            }
+                            
                         </div>
                     </div>
                 </div>
@@ -72,30 +84,46 @@
                         <h5>Bình luận</h5>
                     </div>
                     @{
-                        foreach (var item in Model.Comments)
+                        if (Model.Comments != null)
                         {
-                            <div class="anime__review__item">
-                                <div class="anime__review__item__pic">
-                                    <img src="img/anime/review-1.jpg" alt="">
+                            foreach (var item in Model.Comments.OrderBy(x => x.CommentedAt))
+                            {
+                                <div class="anime__review__item">
+                                    <div class="anime__review__item__pic">
+                                        <img src="~/assets/img/usericon.png" alt="">
+                                    </div>
+                                    <div class="anime__review__item__text">
+                                        <h6>@item.CommentedUser.FullName - <span>@item.CommentedAt.ToString("HH:mm dd/MM/yyyy")</span></h6>
+                                        <p>
+                                            @item.Content
+                                        </p>
+                                    </div>
                                 </div>
-                                <div class="anime__review__item__text">
-                                    <h6>@item.CommentedBy - <span>@item.CommentedAt.ToString("hh:mm dd/MM/yyyy")</span></h6>
-                                    <p>
-                                        @item.Content
-                                    </p>
-                                </div>
-                            </div>
+                            }
                         }
                     } 
                 </div>
                 <div class="anime__details__form">
-                    <div class="section-title">
-                        <h5>Để lại cảm nghĩ của bạn về bộ phim nhé</h5>
-                    </div>
-                    <form action="#">
-                        <textarea name="cmtcontent" placeholder="Cảm nghĩ của bạn về bộ phim"></textarea>
-                        <button type="submit"><i class="fa fa-location-arrow"></i> Bình luận</button>
-                    </form>
+                    @{
+                        if (!String.IsNullOrEmpty(Context.Session.GetString("_clientid")))
+                        {
+                            <div class="section-title">
+                                <h5>Để lại cảm nghĩ của bạn về bộ phim nhé</h5>
+                            </div>
+                            <form asp-action="Comment" method="post">
+                                <input type="number" asp-for="@Model.MovieId" name="movieId" hidden />
+                                <textarea name="content" placeholder="Cảm nghĩ của bạn về bộ phim"></textarea>
+                                <button type="submit"><i class="fa fa-location-arrow"></i> Bình luận</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <div class="section-title">
+                                <h5>Hãy <a asp-action="Index" asp-controller="Signup">đăng ký</a> hoặc <a asp-action="Index" asp-controller="Login">đăng nhập</a> rồi để lại bình luận của bạn về phim nhé</h5>
+                            </div>
+                        }
+                    }
+                    
                 </div>
             </div>
             <div class="col-lg-4 col-md-4">

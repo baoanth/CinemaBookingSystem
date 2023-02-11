@@ -60,6 +60,19 @@ namespace CinemaBookingSystem.WebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("getallbycinemaandmovie/{cinemaId}/{movieId}")]
+        public ActionResult GetAllByCinemaAndMovie([FromHeader, Required] string CBSToken, int cinemaId, int movieId)
+        {
+            var screenings = _screeningService.GetAllByCinemaAndMovie(cinemaId, movieId);
+            if (screenings == null) return NotFound("There's no screening schedule!");
+            else
+            {
+                var screeningsVm = _mapper.Map<IEnumerable<ScreeningViewModel>>(screenings);
+                return Ok(screeningsVm);
+            }
+        }
+
         [HttpPost]
         [Route("create")]
         public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] ScreeningViewModel screeningVm)

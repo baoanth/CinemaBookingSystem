@@ -11,6 +11,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
         private Uri _baseUrl = new Uri("https://localhost:44322/api/account");
         private HttpClient _client;
         private const string APIKEY = "movienew";
+        public const string SessionId = "_clientid";
         public const string SessionKeyName = "_clientname";
         public const string SessionFullName = "_clientfullname";
         private INotyfService _notyf;
@@ -49,6 +50,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
                 string body = response.Content.ReadAsStringAsync().Result;
                 user = JsonConvert.DeserializeObject<UserViewModel>(body);
                 _notyf.Success($"Chào mừng quay trở lại, {user.FullName}", 4);
+                HttpContext.Session.SetInt32(SessionId, user.UserId);
                 HttpContext.Session.SetString(SessionKeyName, user.Username);
                 HttpContext.Session.SetString(SessionFullName, user.FullName);
                 return RedirectToAction("Index", "Home");

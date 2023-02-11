@@ -1,8 +1,11 @@
-﻿namespace CinemaBookingSystem.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CinemaBookingSystem.ViewModels
 {
     public class ScreeningViewModel
     {
         public int ScreeningId { get; set; }
+        [Required(ErrorMessage = "Thời gian chiếu là thông tin bắt buộc *")]
         public DateTime ShowTime { get; set; }
         public bool ShowStatus { get; set; }
         public int TheatreId { get; set; }

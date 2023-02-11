@@ -22,7 +22,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             _notyf = notyf;
         }
 
-        public IActionResult Index()
+        public IActionResult Signup()
         {
             return View();
         }
@@ -31,6 +31,11 @@ namespace CinemaBookingSystem.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Signup([Bind("UserId,Username,Password,FullName,DOB,Email,PhoneNumber,Address,RoleId")] UserViewModel user)
         {
+            if (user.Username != user.Username.Trim())
+            {
+                _notyf.Error("Tài khoản không được chứa khoảng trống!", 4);
+                return View(user);
+            }
             const int NORMAL_ROLE = 3;
             user.RoleId = NORMAL_ROLE;
             HttpResponseMessage response = SignupRequest(user);
@@ -41,10 +46,10 @@ namespace CinemaBookingSystem.WebApp.Controllers
             }
             else
             {
-                _notyf.Error("Không thể thực hiện do lỗi server hoặc thông tin chưa hợp lệ", 4);
+                _notyf.Error($"{response.Content}", 4);
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
-            return View(User);
+            return View(user);
         }
 
         public HttpResponseMessage SignupRequest(UserViewModel User)

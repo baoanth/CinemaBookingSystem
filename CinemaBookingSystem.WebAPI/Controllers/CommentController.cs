@@ -26,12 +26,12 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("getall")]
-        public ActionResult Get([FromHeader, Required] string CBSToken, int movieId)
+        [Route("getall/{id}")]
+        public ActionResult Get([FromHeader, Required] string CBSToken, int id)
         {
             //use movie Id to get all the comment of the Movie
-            var listComment = _commentService.GetAllByMovie(movieId);
-            var listCommentVm = _mapper.Map<IEnumerable<MovieViewModel>>(listComment);
+            var listComment = _commentService.GetAllByMovie(id);
+            var listCommentVm = _mapper.Map<IEnumerable<CommentViewModel>>(listComment);
             return Ok(listCommentVm);
         }
 
@@ -43,7 +43,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
             if (comment == null) return NotFound();
             else
             {
-                var movieVm = _mapper.Map<MovieViewModel>(comment);
+                var movieVm = _mapper.Map<CommentViewModel>(comment);
                 return Ok(movieVm);
             }
         }

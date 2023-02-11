@@ -1,0 +1,44 @@
+﻿@model CinemaBookingSystem.ViewModels.MovieViewModel;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="breadcrumb-option">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb__links">
+                    <a asp-action="Index" asp-controller="Home"><i class="fa fa-home"></i> Trang chủ</a>
+                    <a asp-action="NowShowing" asp-controller="Movie">Phim</a>
+                    <a asp-action="Details" asp-controller="Movie" asp-route-id="@Model.MovieId">@Model.MovieName</a>
+                    <span>Đặt vé</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+<!-- Anime Section Begin -->
+<section class="anime-details spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="anime__details__title">
+                    <h3>Chọn rạp bạn muốn xem</h3>
+                </div>
+                <div class="anime__details__btn">
+                    <br />
+                    @{
+                        foreach (var item in ViewBag.Cinemas as IEnumerable<CinemaBookingSystem.ViewModels.CinemaViewModel>)
+                        {
+                            <a class="follow-btn" asp-action="ScreeningChoose" asp-controller="Screening" asp-route-movieId="@Model.MovieId" asp-route-cinemaId="@item.CinemaId"><i class="fa fa-film"></i> @item.CinemaName</a>
+                            <text> &nbsp; &nbsp;</text>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Anime Section End -->

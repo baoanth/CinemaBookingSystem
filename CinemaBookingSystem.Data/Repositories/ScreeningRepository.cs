@@ -6,12 +6,18 @@ namespace CinemaBookingSystem.Data.Repositories
     public interface IScreeningRepository : IRepository<Screening>
     {
         IEnumerable<Screening> GetAllByTheatre(int theatreId);
+        IEnumerable<Screening> GetAllByCinemaAndMovie(int cinemaId,int movieId);
     }
     public class ScreeningRepository : RepositoryBase<Screening>, IScreeningRepository
     {
         public ScreeningRepository(IDbFactory dbFactory) : base(dbFactory)
         {
 
+        }
+
+        public IEnumerable<Screening> GetAllByCinemaAndMovie(int cinemaId, int movieId)
+        {
+            return DbContext.Screenings.Where(x => x.Theatre.CinemaId == cinemaId && x.MovieId == movieId).ToList();
         }
 
         public IEnumerable<Screening> GetAllByTheatre(int theatreId)

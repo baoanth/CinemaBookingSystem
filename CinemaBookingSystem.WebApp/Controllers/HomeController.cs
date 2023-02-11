@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using CinemaBookingSystem.ViewModels;
 using CinemaBookingSystem.WebApp.Models;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -40,7 +41,12 @@ namespace CinemaBookingSystem.WebApp.Controllers
 				return RedirectToAction("Index", "Home");
 			}
 		}
-		public IEnumerable<MovieViewModel> GetMovieListRequest()
+        [Route("Home/Error/{0}")]
+        public IActionResult Error(int statusCode)
+        {
+            return View(statusCode);
+        }
+        public IEnumerable<MovieViewModel> GetMovieListRequest()
         {
             IEnumerable<MovieViewModel> list = null;
             HttpRequestMessage request = new HttpRequestMessage();

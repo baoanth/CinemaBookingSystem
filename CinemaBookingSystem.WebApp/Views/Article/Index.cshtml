@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CinemaBookingSystem.ViewModels.CinemaViewModel>;
+﻿@model IEnumerable<CinemaBookingSystem.ViewModels.ArticleViewModel>;
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="normal__breadcrumb__text">
-                    <h2>DANH SÁCH RẠP TẠI CINE<span style="color:darkred !important">MAX</span></h2>
+                    <h2>TIN MỚI</h2>
                 </div>
             </div>
         </div>
@@ -27,14 +27,15 @@
                         foreach (var item in Model)
                         {
                             <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="blog__item small__item set-bg" data-setbg="@("../assets/img/chairbg.jpg")">
+                                <div class="blog__item small__item set-bg" data-setbg="@("/media/articles/" + item.ArticleImage)">
                                     <div class="blog__item__text">
-                                        <h4><a asp-action="Details" asp-controller="Cinema" asp-route-id="@item.CinemaId">@item.CinemaName</a></h4>
+                                        <p><span class="icon_calendar"></span> @item.CreatedDate.ToString("HH:mm dd/MM/yyyy")</p>
+                                        <h4><a asp-action="Details" asp-controller="Article" asp-route-id="@item.ArticleId">@item.ArticleTitle</a></h4>
                                     </div>
                                 </div>
                             </div>
                         }
-                    }
+                    }  
                 </div>
             </div>
         </div>

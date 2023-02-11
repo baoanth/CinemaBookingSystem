@@ -8,7 +8,7 @@
     <div class="container">
         <div class="hero__slider owl-carousel">
             @{
-                foreach (var item in Model)
+                foreach (var item in Model.Where(x => x.BannerImg != null).OrderBy(y => y.ReleaseDate).Take(5))
                 {
                     <div class="hero__items set-bg" data-setbg="@("/media/banners/" + item.BannerImg)">
                         <div class="row">
@@ -83,7 +83,7 @@
                     </div>
                     <div class="row">
                         @{
-                            foreach (var item in Model)
+                            foreach (var item in Model.Where(x => x.ReleaseDate < DateTime.Now))
                             {
                                 <div class="col-lg-4 col-md-6 col-sm-6">
                                     <div class="product__item">
@@ -112,13 +112,13 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <div class="btn__all">
-                                <a href="#" class="primary-btn">Xem tất cả <span class="arrow_right"></span></a>
+                                <a asp-action="NowShowing" asp-controller="Movie" class="primary-btn">Xem tất cả <span class="arrow_right"></span></a>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         @{
-                            foreach (var item in Model)
+                            foreach (var item in Model.Where(x => DateTime.Now.Subtract(x.ReleaseDate).Days <= 30))
                             {
                                 <div class="col-lg-4 col-md-6 col-sm-6">
                                     <div class="product__item">
@@ -147,13 +147,13 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <div class="btn__all">
-                                <a href="#" class="primary-btn">Xem tất cả <span class="arrow_right"></span></a>
+                                <a asp-action="ComingSoon" asp-controller="Movie" class="primary-btn">Xem tất cả <span class="arrow_right"></span></a>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         @{
-                            foreach (var item in Model)
+                            foreach (var item in Model.Where(x => x.ReleaseDate > DateTime.Now))
                             {
                                 <div class="col-lg-4 col-md-6 col-sm-6">
                                     <div class="product__item">
@@ -180,12 +180,6 @@
                         <div class="section-title">
                             <h5>Lượt xem cao</h5>
                         </div>
-                        <ul class="filter__controls">
-                            <li class="active" data-filter="*">Day</li>
-                            <li data-filter=".week">Week</li>
-                            <li data-filter=".month">Month</li>
-                            <li data-filter=".years">Years</li>
-                        </ul>
                         <div class="filter__gallery">
                                 @{
                                     foreach (var item in Model)
@@ -204,7 +198,7 @@
                             <h5>Xem gì hôm nay</h5>
                         </div>
                         @{
-                            foreach (var item in Model)
+                            foreach (var item in Model.Where(x => x.ReleaseDate < DateTime.Now).OrderBy(y => y.ReleaseDate).Take(5))
                             {
                                 <div class="product__sidebar__comment__item">
                                     <div class="product__sidebar__comment__item__pic">
@@ -215,7 +209,6 @@
                                             <li>@item.Genres</li>
                                         </ul>
                                         <h5><a asp-action="Details" asp-controller="Movie" asp-route-id="@item.MovieId">@item.MovieName</a></h5>
-                                        <span><i class="fa fa-eye"></i>@item.Comments.Count()</span>
                                     </div>
                                 </div>
                             }

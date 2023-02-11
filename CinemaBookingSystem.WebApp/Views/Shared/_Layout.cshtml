@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="~/assets/css/owl.carousel.min.css" type="text/css" asp-append-version="true">
     <link rel="stylesheet" href="~/assets/css/slicknav.min.css" type="text/css" asp-append-version="true">
     <link rel="stylesheet" href="~/assets/css/style.css" type="text/css" asp-append-version="true">
+    @RenderSection("Styles", required: false)
 </head>
 
 <body>
@@ -45,7 +46,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-8">
+                <div class="col-lg-10">
                     <div class="header__nav">
                         <nav class="header__menu mobile-menu">
                             <ul>
@@ -59,17 +60,13 @@
                                 </li>
                                 <li><a asp-action="Index" asp-controller="Cinema">Rạp</a></li>
                                 <li>
-                                    <a href="#">Tin mới<span class="arrow_carrot-down"></span></a>
-                                    <ul class="dropdown">
-                                        <li><a href="#">Phim mới</a></li>
-                                        <li><a href="#">Ưu đãi</a></li>
-                                    </ul>
+                                    <a asp-action="Index" asp-controller="Article">Tin mới</a>
                                 </li>
                                 <li><a asp-controller="Contact" asp-action="Index">Liên hệ</a></li>
                                 @{
                                     if (!String.IsNullOrEmpty(sessionName))
                                     {
-                                        <li>Xin chào, @sessionFullName</li>
+                                        <li><p style="color:white !important">Xin chào, @sessionFullName</p></li>
                                         <li><a asp-action="Logout" asp-controller="Home">Đăng xuất</a></li>
                                     }
                                     else
@@ -77,8 +74,8 @@
                                         <li>
                                             <a href="#">Thành viên<span class="arrow_carrot-down"></span></a>
                                             <ul class="dropdown">
-                                                <li><a asp-controller="Login" asp-action="Index">Đăng nhập</a></li>
-                                                <li><a asp-controller="Signup" asp-action="Index">Đăng ký thành viên</a></li>
+                                                <li><a asp-controller="Account" asp-action="Login">Đăng nhập</a></li>
+                                                <li><a asp-controller="Account" asp-action="Signup">Đăng ký thành viên</a></li>
                                             </ul>
                                         </li>
                                     }

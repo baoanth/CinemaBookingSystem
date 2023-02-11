@@ -1,0 +1,63 @@
+﻿@model IEnumerable<CinemaBookingSystem.ViewModels.ScreeningViewModel>;
+@{
+    ViewData["Title"] = "ScreeningChoose";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    List<DateTime> dateList = new List<DateTime>();
+    DateTime start = DateTime.Now.AddDays(1);
+    DateTime end = start.AddDays(7);
+    while (start < end)
+    {
+        dateList.Add(start);
+        start = start.AddDays(1);
+    }
+}
+
+<!-- Anime Section Begin -->
+<section class="anime-details spad">
+    <div class="container">
+        <div class="blog__details__title">
+            <h3 style="color:white !important">Hãy chọn lịch chiếu phù hợp với bạn nhé</h3>
+        </div>
+        <div class="anime__details__content">
+            @{
+                foreach (DateTime date in dateList)
+                {
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="anime__details__title">
+                                <h4 style="color:white !important">@date.ToString("dd/MM/yyyy")</h4>
+                            </div>
+                        </div>
+                        @if (Model.Where(m => m.ShowTime.Date == date.Date).OrderBy(x => x.ShowTime).Count() == 0)
+                        {
+                            <div class="col-lg-12">
+                                <div class="anime__details__text">
+                                    <div class="blog__details__tags" style="margin-bottom:0px !important">
+                                        <a href="#">Hiện chưa có lịch chiếu nào.</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @foreach (var screening in Model.Where(m => m.ShowTime.Date == date.Date).OrderBy(x => x.ShowTime))
+                            {
+                                <div class="col-lg-1">
+                                    <div class="anime__details__text">
+                                        <div class="blog__details__tags" style="margin-bottom:0px !important">
+                                            <a asp-action="PositionsChoose" asp-controller="Booking" asp-route-id="@screening.ScreeningId">@screening.ShowTime.ToString("HH:mm")</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <hr style="border: 1px solid white !important" />
+                }
+            }
+        </div>
+    </div>
+</section>

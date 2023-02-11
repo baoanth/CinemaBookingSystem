@@ -31,10 +31,20 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label">Video bài viết</label>
                             <div class="col-sm-10">
-                                <video width="795" height="447" controls autoplay>
-                                    <source src="@("/media/articles/vids/" + @Model.ArticleVideo)" type="video/mp4">
-                                    Lỗi video
-                                </video>
+                                @{
+                                    if (Model.ArticleVideo != null)
+                                    {
+                                        <video width="795" height="447" controls autoplay>
+                                            <source src="@("/media/articles/vids/" + @Model.ArticleVideo)" type="video/mp4">
+                                            Lỗi video
+                                        </video>
+                                    }
+                                    else
+                                    {
+                                        <p>Bài viết không có video.</p>
+                                    }
+                                }
+                                
                             </div>
                         </div>
                         <div class="row mb-3">
