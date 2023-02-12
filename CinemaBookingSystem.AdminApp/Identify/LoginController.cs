@@ -45,7 +45,7 @@ namespace CinemaBookingSystem.AdminApp.Identify
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "/systemlogin");
             request.Method = HttpMethod.Post;
-            request.Headers.Add("CBSToken", APIKEY);
+            
             request.Content = content;
 
             HttpResponseMessage response = _client.SendAsync(request).Result;

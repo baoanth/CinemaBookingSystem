@@ -187,33 +187,35 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 return RedirectToAction("Index");
             }
         }
+
         //Response message
         public HttpResponseMessage GetUserList()
         {
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/getallstaff");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
 
             return _client.SendAsync(request).Result;
         }
+
         public HttpResponseMessage GetRoleList()
         {
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri("https://localhost:44322/api/role/getall");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
 
             return _client.SendAsync(request).Result;
         }
+
         public HttpResponseMessage GetUserDetails(int? id)
         {
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/getsingle/{id}");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
+
             return _client.SendAsync(request).Result;
         }
+
         public HttpResponseMessage CreateUser(UserViewModel User)
         {
             string data = JsonConvert.SerializeObject(User);
@@ -222,11 +224,12 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri("https://localhost:44322/api/account/signup");
             request.Method = HttpMethod.Post;
-            request.Headers.Add("CBSToken", APIKEY);
+
             request.Content = content;
 
             return _client.SendAsync(request).Result;
         }
+
         public HttpResponseMessage UpdateUser(UserViewModel User)
         {
             string data = JsonConvert.SerializeObject(User);
@@ -235,17 +238,17 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "/update");
             request.Method = HttpMethod.Post;
-            request.Headers.Add("CBSToken", APIKEY);
+
             request.Content = content;
 
             return _client.SendAsync(request).Result;
         }
+
         public HttpResponseMessage DeleteUser(int id)
         {
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/delete/{id}");
             request.Method = HttpMethod.Delete;
-            request.Headers.Add("CBSToken", APIKEY);
 
             return _client.SendAsync(request).Result;
         }

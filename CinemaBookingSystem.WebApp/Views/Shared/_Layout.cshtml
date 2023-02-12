@@ -66,8 +66,14 @@
                                 @{
                                     if (!String.IsNullOrEmpty(sessionName))
                                     {
-                                        <li><p style="color:white !important">Xin chào, @sessionFullName</p></li>
-                                        <li><a asp-action="Logout" asp-controller="Home">Đăng xuất</a></li>
+                                        <li>
+                                            <a href="#">Xin chào, @sessionFullName<span class="arrow_carrot-down"></span></a>
+                                            <ul class="dropdown">
+                                                <li><a asp-action="UpdateProfile" asp-controller="Profile">Cập nhật thông tin</a></li>
+                                                <li><a asp-action="ChangePassword" asp-controller="Profile">Đổi mật khẩu</a></li>
+                                                <li><a asp-action="Logout" asp-controller="Home">Đăng xuất</a></li>
+                                            </ul>
+                                        </li>
                                     }
                                     else
                                     {

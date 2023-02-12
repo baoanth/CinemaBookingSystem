@@ -19,6 +19,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             _client.DefaultRequestHeaders.Add("CBSToken", APIKEY);
             _notyf = notyf;
         }
+
         public IActionResult CinemaChoose(int id)
         {
             MovieViewModel movie = GetMovieDetailsRequest(id);
@@ -26,9 +27,10 @@ namespace CinemaBookingSystem.WebApp.Controllers
             ViewBag.Cinemas = list;
             return View(movie);
         }
+
         public IActionResult ScreeningChoose(int movieId, int cinemaId)
         {
-            IEnumerable<ScreeningViewModel> screenings = GetSreeningRequest(movieId,cinemaId);
+            IEnumerable<ScreeningViewModel> screenings = GetSreeningRequest(movieId, cinemaId);
             return View(screenings);
         }
 
@@ -38,7 +40,6 @@ namespace CinemaBookingSystem.WebApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"screening/getallbycinemaandmovie/{cinemaId}/{movieId}");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
 
             HttpResponseMessage response = _client.SendAsync(request).Result;
             if (response.IsSuccessStatusCode)
@@ -60,7 +61,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"movie/getsingle/{id}");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
+
             HttpResponseMessage response = _client.SendAsync(request).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -81,7 +82,6 @@ namespace CinemaBookingSystem.WebApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "cinema/getall");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
 
             HttpResponseMessage response = _client.SendAsync(request).Result;
             if (response.IsSuccessStatusCode)

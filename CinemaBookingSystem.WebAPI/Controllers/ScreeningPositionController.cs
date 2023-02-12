@@ -99,6 +99,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                 }
             }
         }
+
         [HttpPost]
         [Route("createmulti")]
         public ActionResult PostMulti([FromHeader, Required] string CBSToken, [FromBody] IEnumerable<ScreeningPositionViewModel> screeningPositionVms)
@@ -203,6 +204,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                 }
             }
         }
+
         [HttpDelete]
         [Route("deletebyscreening/{id}")]
         public ActionResult DeleteByScreening([FromHeader, Required] string CBSToken, int id)

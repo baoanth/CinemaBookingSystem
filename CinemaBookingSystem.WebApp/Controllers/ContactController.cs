@@ -32,7 +32,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "contact/getall");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
+
             HttpResponseMessage response = _client.SendAsync(request).Result;
             if (response.IsSuccessStatusCode)
             {

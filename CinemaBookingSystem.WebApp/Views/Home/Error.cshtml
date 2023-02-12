@@ -1,17 +1,16 @@
-﻿@model int
-
-@{
-    switch (Model)
+﻿@{
+    int statusCode = (int)ViewBag.StatusCode;
+    switch (statusCode)
     {
         case 400:
             ViewData["Icon"] = "fa fa-ban text-danger";
             ViewData["Title"] = "Bad Request";
-            ViewData["Description"] = "Trình duyệt của bạn đã gửi một yêu cầu mà máy chủ này không thể hiểu được.";
+            ViewData["Description"] = "Xin lỗi bạn, nhưng trình duyệt của bạn đã gửi một yêu cầu mà máy chủ này không thể hiểu được.";
             break;
         case 401:
             ViewData["Icon"] = "fa fa-ban text-danger";
             ViewData["Title"] = "Unauthorized";
-            ViewData["Description"] = "Xin lỗi, nhưng trang yêu cầu xác thực.";
+            ViewData["Description"] = "Xin lỗi bạn, nhưng trang yêu cầu xác thực để truy cập URL này.";
             break;
         case 403:
             ViewData["Icon"] = "fa fa-exclamation-circle text-danger";
@@ -24,6 +23,10 @@
             ViewData["Description"] = "Xin lỗi, nhưng không thể tìm thấy trang bạn đang tìm kiếm.";
             break;
         case 500:
+            ViewData["Icon"] = "fa fa-exclamation-circle text-danger";
+            ViewData["Title"] = "Internal Server Error";
+            ViewData["Description"] = "Chà, điều này thật đáng xấu hổ. Đã xảy ra lỗi khi xử lý yêu cầu của bạn. Hãy yên tâm, sự cố này đã được ghi lại và chúng tôi sẽ cố gắng khắc phục sự cố sớm nhất.";
+            break;
         default:
             ViewData["Icon"] = "fa fa-exclamation-circle text-danger";
             ViewData["Title"] = "Unexpected Error";

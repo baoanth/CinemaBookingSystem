@@ -19,6 +19,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             _client.DefaultRequestHeaders.Add("CBSToken", APIKEY);
             _notyf = notyf;
         }
+
         public IActionResult PositionsChoose(int id)
         {
             IEnumerable<ScreeningPositionViewModel> screeningPositions = GetScreeningPositionsDetailsRequest(id);
@@ -31,7 +32,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"screening/getsingle/{id}");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
+
             HttpResponseMessage response = _client.SendAsync(request).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -45,13 +46,14 @@ namespace CinemaBookingSystem.WebApp.Controllers
             }
             return screening;
         }
+
         public IEnumerable<ScreeningPositionViewModel> GetScreeningPositionsDetailsRequest(int? id)
         {
             IEnumerable<ScreeningPositionViewModel>? screeningPositions = null;
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"screeningposition/getallbyscreening/{id}");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
+
             HttpResponseMessage response = _client.SendAsync(request).Result;
             if (response.IsSuccessStatusCode)
             {

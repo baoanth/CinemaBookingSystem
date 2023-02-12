@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
 
-namespace CinemaBookingSystem.AdminApp.Controllers
+namespace CinemaBookingSystem.WebApp.Controllers
 {
     public class ProfileController : Controller
     {
@@ -22,50 +22,67 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             _notyf = notyf;
         }
 
-        public IActionResult Index()
+        public IActionResult UpdateProfile()
         {
-            UserViewModel user = null;
-            string sessionName = HttpContext.Session.GetString("_name");
-            HttpResponseMessage response = GetUserDetails(sessionName);
-            if (response.IsSuccessStatusCode)
+            string ? sessionName = HttpContext.Session.GetString("_clientname");
+            if (String.IsNullOrEmpty(sessionName))
             {
-                string body = response.Content.ReadAsStringAsync().Result;
-                user = JsonConvert.DeserializeObject<UserViewModel>(body);
+                HttpContext.Response.Redirect("/Account/Login");
+                _notyf.Error("Bạn cần đăng nhập để thực hiện thao tác này");
+                return Redirect("/Home/Error/401");
             }
             else
             {
-                _notyf.Error("Không thể tìm thấy thông tin từ server");
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
-                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                return RedirectToAction("NotFound", "Home");
+                UserViewModel user = null;
+                HttpResponseMessage response = GetUserDetails(sessionName);
+                if (response.IsSuccessStatusCode)
+                {
+                    string body = response.Content.ReadAsStringAsync().Result;
+                    user = JsonConvert.DeserializeObject<UserViewModel>(body);
+                }
+                else
+                {
+                    _notyf.Error("Không thể lấy thông tin do lỗi server");
+                    Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+                    return Redirect("/Home/Error/500");
+                }
+                return View(user);
             }
-            return View(user);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(UserViewModel user)
+        public IActionResult UpdateProfile(UserViewModel user)
         {
             HttpResponseMessage response = UpdateUserProfile(user);
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Cập nhật thành công", 3);
-                HttpContext.Session.SetString("_fullname", user.FullName);
-                return RedirectToAction("Index");
+                HttpContext.Session.SetString("_clientname", user.FullName);
+                return RedirectToAction("Index","Home");
             }
             else
             {
                 _notyf.Error("Không thể thực hiện do lỗi server", 4);
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                return RedirectToAction("Index");
+                return View(user);
             }
         }
 
         public IActionResult ChangePassword()
         {
-            string sessionName = HttpContext.Session.GetString("_name");
-            ViewBag.Username = sessionName;
-            return View();
+            string? sessionName = HttpContext.Session.GetString("_clientname");
+            if (String.IsNullOrEmpty(sessionName))
+            {
+                HttpContext.Response.Redirect("/Account/Login");
+                _notyf.Error("Bạn cần đăng nhập để thực hiện thao tác này");
+                return Redirect("/Home/Error/401");
+            }
+            else
+            {
+                ViewBag.Username = sessionName;
+                return View();
+            }
         }
 
         [HttpPost]
@@ -74,7 +91,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         {
             if (changes.NewPassword != changes.ConfirmPassword)
             {
-                _notyf.Warning("Nhập lại mật khẩu mới không trùng khớp", 4);
+                _notyf.Error("Nhập lại mật khẩu mới không trùng khớp", 4);
             }
             else
             {
@@ -90,7 +107,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                     Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
                 }
             }
-            return View();
+            return View(changes);
         }
 
         private HttpResponseMessage GetUserDetails(string name)
@@ -98,7 +115,6 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/getbyusername?username={name}");
             request.Method = HttpMethod.Get;
-
             return _client.SendAsync(request).Result;
         }
 
@@ -106,11 +122,9 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         {
             string data = JsonConvert.SerializeObject(user);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
-
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "/update");
             request.Method = HttpMethod.Post;
-
             request.Content = content;
 
             return _client.SendAsync(request).Result;

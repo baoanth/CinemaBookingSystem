@@ -1,7 +1,9 @@
 ﻿@model CinemaBookingSystem.ViewModels.UserViewModel;
 @{
+    ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 
 <!-- Normal Breadcrumb Begin -->
 <section class="normal-breadcrumb set-bg" data-setbg="@("../assets/img/banner.jpg")">
@@ -9,8 +11,7 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="normal__breadcrumb__text">
-                    <h2>Đăng ký thành viên</h2>
-                    <p>Trở thành thành viên của CINE<span style="color:red !important">MAX</span> ngay hôm nay.</p>
+                    <h2>Cập nhật thông tin người dùng</h2>
                 </div>
             </div>
         </div>
@@ -21,11 +22,15 @@
 <section class="signup spad">
     <div class="container">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <div class="login__form">
-                    <h3 style="color:white !important">Đăng ký</h3>
-                    <form asp-action="Signup" method="post">
-                        <div class="input__item">
+                    <h3 style="color:white !important">Thông tin người dùng</h3>
+                    <form asp-action="UpdateProfile" method="post">
+                        <div class="input__item" hidden>
+                            <input type="number" asp-for="UserId" placeholder="Nhập tài khoản của bạn..." required>
+                            <span class="icon_profile"></span>
+                        </div>
+                        <div class="input__item" hidden>
                             <input type="text" asp-for="Username" placeholder="Nhập tài khoản của bạn..." required>
                             <span class="icon_profile"></span>
                         </div>
@@ -33,8 +38,8 @@
                             <input type="text" asp-for="FullName" placeholder="Nhập họ tên của bạn..." required>
                             <span class="icon_profile"></span>
                         </div>
-                        <div class="input__item">
-                            <input type="password" asp-for="Password" placeholder="Nhập mật khẩu của bạn..." required>
+                        <div class="input__item" hidden>
+                            <input type="text" asp-for="Password" placeholder="Nhập mật khẩu của bạn..." required>
                             <span class="icon_lock"></span>
                         </div>
                         <div class="input__item">
@@ -56,20 +61,12 @@
                         <div class="input__item" hidden>
                             <input type="numer" asp-for="RoleId" value="3" required>
                         </div>
-                        <button type="submit" class="site-btn">Đăng ký ngay</button>
+                        <button type="submit" class="site-btn">Cập nhật</button>
                     </form>
-                    <h5>Bạn đã là thành viên của CINEMAX? <a asp-controller="Account" asp-action="Login">Đăng nhập tại đây</a></h5>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="login__social__links">
-                    <h3>Đăng nhập với:</h3>
-                    <ul>
-                        <li><a asp-action="GoogleLogin" asp-controller="Account" class="google"><i class="fa fa-google"></i> Đăng nhập với tài khoản Google</a></li>
-                    </ul>
                 </div>
             </div>
         </div>
     </div>
 </section>
 <!-- Signup Section End -->
+

@@ -1,17 +1,20 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using CinemaBookingSystem.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Security.Claims;
 using System.Text;
 
 namespace CinemaBookingSystem.WebApp.Controllers
 {
     public class AccountController : Controller
     {
-        private Uri _baseUrl = new Uri("https://localhost:44322/api/account");
+        private Uri _baseUrl = new Uri("https://localhost:44322/api/");
         private HttpClient _client;
         private const string APIKEY = "movienew";
         public const string SessionId = "_clientid";
@@ -42,9 +45,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
                 string body = response.Content.ReadAsStringAsync().Result;
                 UserViewModel user = JsonConvert.DeserializeObject<UserViewModel>(body);
                 _notyf.Success($"Chào mừng quay trở lại, {user.FullName}", 4);
-                HttpContext.Session.SetInt32(SessionId, user.UserId);
-                HttpContext.Session.SetString(SessionKeyName, user.Username);
-                HttpContext.Session.SetString(SessionFullName, user.FullName);
+                SetSessionValues(user.UserId, user.Username, user.FullName);
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -54,17 +55,22 @@ namespace CinemaBookingSystem.WebApp.Controllers
             return View(login);
         }
 
+        private void SetSessionValues(int userId, string username, string fullName)
+        {
+            HttpContext.Session.SetInt32(SessionId, userId);
+            HttpContext.Session.SetString(SessionKeyName, username);
+            HttpContext.Session.SetString(SessionFullName, fullName);
+        }
+
         private HttpResponseMessage LoginRequest(LoginViewModel login)
         {
             string data = JsonConvert.SerializeObject(login);
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
             HttpRequestMessage request = new HttpRequestMessage();
-            request.RequestUri = new Uri(_baseUrl + "/login");
+            request.RequestUri = new Uri(_baseUrl + "account/login");
             request.Method = HttpMethod.Post;
-            request.Headers.Add("CBSToken", APIKEY);
             request.Content = content;
-
             return _client.SendAsync(request).Result;
         }
 
@@ -107,12 +113,73 @@ namespace CinemaBookingSystem.WebApp.Controllers
             StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
             HttpRequestMessage request = new HttpRequestMessage();
-            request.RequestUri = new Uri(_baseUrl + "/signup");
+            request.RequestUri = new Uri(_baseUrl + "account/signup");
             request.Method = HttpMethod.Post;
-            request.Headers.Add("CBSToken", APIKEY);
             request.Content = content;
 
             return _client.SendAsync(request).Result;
+        }
+
+        [Authorize]
+        [AllowAnonymous]
+        public async Task GoogleLogin()
+        {
+            await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties()
+            {
+                RedirectUri = Url.Action("SignupGoogle", "Account")
+            });
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> SignupGoogle()
+        {
+            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            UserViewModel user = new UserViewModel()
+            {
+                Email = result.Principal.FindFirst(ClaimTypes.Email).Value,
+                Username = result.Principal.FindFirst(ClaimTypes.Email).Value,
+                FullName = result.Principal.FindFirst(ClaimTypes.Name).Value,
+            };
+            if (result.Succeeded)
+            {
+                if (CheckUserExistanceRequest(user.Username))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                return View(user);
+            }
+            else
+            {
+                return AccessDenied();
+            }
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+        public bool CheckUserExistanceRequest(string? username)
+        {
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + $"user/getbyusername?username={username}");
+            request.Method = HttpMethod.Get;
+
+            HttpResponseMessage response = _client.SendAsync(request).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string body = response.Content.ReadAsStringAsync().Result;
+                UserViewModel user = JsonConvert.DeserializeObject<UserViewModel>(body);
+                _notyf.Success($"Chào mừng quay trở lại, {user.FullName}", 4);
+                SetSessionValues(user.UserId, user.Username, user.FullName);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

@@ -3,7 +3,6 @@ using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.IO.Pipelines;
 using System.Text;
 
 namespace CinemaBookingSystem.AdminApp.Controllers
@@ -47,6 +46,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             ScreeningViewModel screening = GetScreeningDetailsRequest(id);
             return View(screening);
         }
+
         public ActionResult ScreeningPositionsDetails(int id)
         {
             IEnumerable<ScreeningPositionViewModel> screeningPositions = GetScreeningPositionsDetailsRequest(id);

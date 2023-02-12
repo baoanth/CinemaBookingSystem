@@ -19,6 +19,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             _client.DefaultRequestHeaders.Add("CBSToken", APIKEY);
             _notyf = notyf;
         }
+
         public ActionResult Index()
         {
             IEnumerable<ArticleViewModel>? list = null;
@@ -61,7 +62,6 @@ namespace CinemaBookingSystem.WebApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "/getall");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
 
             return _client.SendAsync(request).Result;
         }
@@ -71,7 +71,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/getsingle/{id}");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
+
             return _client.SendAsync(request).Result;
         }
     }

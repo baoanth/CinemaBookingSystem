@@ -1,10 +1,8 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
 
 namespace CinemaBookingSystem.WebApp.Controllers
@@ -23,26 +21,31 @@ namespace CinemaBookingSystem.WebApp.Controllers
             _client.DefaultRequestHeaders.Add("CBSToken", APIKEY);
             _notyf = notyf;
         }
+
         public IActionResult Index()
         {
             IEnumerable<MovieViewModel> movies = GetMovieListRequest();
             return View(movies);
         }
+
         public IActionResult ComingSoon()
         {
             IEnumerable<MovieViewModel> movies = GetMovieListRequest();
             return View(movies.Where(x => x.ReleaseDate >= DateTime.UtcNow).ToList());
         }
+
         public IActionResult NowShowing()
         {
             IEnumerable<MovieViewModel> movies = GetMovieListRequest();
             return View(movies.Where(x => x.ReleaseDate <= DateTime.UtcNow).ToList());
         }
+
         public IActionResult TrailerWatch(int id)
         {
             MovieViewModel movie = GetMovieDetailsRequest(id);
             return View(movie);
         }
+
         public IActionResult Details(int id)
         {
             MovieViewModel movie = GetMovieDetailsRequest(id);
@@ -92,7 +95,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"movie/getsingle/{id}");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
+
             HttpResponseMessage response = _client.SendAsync(request).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -114,13 +117,12 @@ namespace CinemaBookingSystem.WebApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "movie/getall");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
+
             HttpResponseMessage response = _client.SendAsync(request).Result;
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
                 list = JsonConvert.DeserializeObject<IEnumerable<MovieViewModel>>(body);
-
             }
             else
             {
@@ -130,6 +132,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             }
             return list;
         }
+
         public HttpResponseMessage CreateCommentRequest(CommentViewModel comment)
         {
             string data = JsonConvert.SerializeObject(comment);
@@ -138,7 +141,6 @@ namespace CinemaBookingSystem.WebApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "comment/create");
             request.Method = HttpMethod.Post;
-            request.Headers.Add("CBSToken", APIKEY);
             request.Content = content;
 
             return _client.SendAsync(request).Result;
@@ -150,13 +152,12 @@ namespace CinemaBookingSystem.WebApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"comment/getall/{id}");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
+
             HttpResponseMessage response = _client.SendAsync(request).Result;
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
                 list = JsonConvert.DeserializeObject<IEnumerable<CommentViewModel>>(body);
-
             }
             else
             {

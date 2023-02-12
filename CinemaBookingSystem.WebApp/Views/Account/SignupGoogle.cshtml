@@ -1,5 +1,6 @@
 ﻿@model CinemaBookingSystem.ViewModels.UserViewModel;
 @{
+    ViewData["Title"] = "SignupGoogle";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -9,8 +10,8 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="normal__breadcrumb__text">
-                    <h2>Đăng ký thành viên</h2>
-                    <p>Trở thành thành viên của CINE<span style="color:red !important">MAX</span> ngay hôm nay.</p>
+                    <h2>Đăng ký thành viên bằng tài khoản Google</h2>
+                    <p>Hãy xác nhận và điền các thông tin còn thiếu nhé.</p>
                 </div>
             </div>
         </div>
@@ -26,7 +27,7 @@
                     <h3 style="color:white !important">Đăng ký</h3>
                     <form asp-action="Signup" method="post">
                         <div class="input__item">
-                            <input type="text" asp-for="Username" placeholder="Nhập tài khoản của bạn..." required>
+                            <input type="text" asp-for="Username" placeholder="Nhập tài khoản của bạn..." readonly required>
                             <span class="icon_profile"></span>
                         </div>
                         <div class="input__item">
@@ -34,11 +35,11 @@
                             <span class="icon_profile"></span>
                         </div>
                         <div class="input__item">
-                            <input type="password" asp-for="Password" placeholder="Nhập mật khẩu của bạn..." required>
+                            <input type="password" asp-for="Password" placeholder="Nhập mật khẩu bạn muốn sử dụng tại đây..." required>
                             <span class="icon_lock"></span>
                         </div>
                         <div class="input__item">
-                            <input type="text" asp-for="Email" placeholder="Nhập địa chỉ email của bạn..." required>
+                            <input type="text" asp-for="Email" placeholder="Nhập địa chỉ email của bạn..." readonly required>
                             <span class="icon_mail"></span>
                         </div>
                         <div class="input__item">
@@ -73,3 +74,4 @@
     </div>
 </section>
 <!-- Signup Section End -->
+

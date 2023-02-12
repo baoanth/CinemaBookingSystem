@@ -40,8 +40,10 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                 {
                     case ADMIN_ROLE:
                         return Ok(user);
+
                     case STAFF_ROLE:
                         return Ok(user);
+
                     default:
                         return BadRequest();
                 }

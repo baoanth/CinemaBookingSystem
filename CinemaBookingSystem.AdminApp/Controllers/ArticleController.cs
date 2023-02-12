@@ -92,7 +92,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 string fileName = Path.GetFileName(postedVideo.FileName);
                 fileName = Guid.NewGuid().ToString() + fileName;
                 article.ArticleVideo = fileName;
-                using (FileStream stream = new FileStream(Path.Combine(path,"vids",fileName), FileMode.Create))
+                using (FileStream stream = new FileStream(Path.Combine(path, "vids", fileName), FileMode.Create))
                 {
                     postedVideo.CopyTo(stream);
                     _notyf.Success($"Upload video thành công: {article.ArticleVideo}", 3);
@@ -164,7 +164,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             {
                 if (!String.IsNullOrEmpty(article.ArticleVideo))
                 {
-                    var oldFilePath = Path.Combine(path,"vids", article.ArticleVideo);
+                    var oldFilePath = Path.Combine(path, "vids", article.ArticleVideo);
                     if (Directory.Exists(oldFilePath))
                     {
                         Directory.Delete(oldFilePath);
@@ -173,7 +173,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 string fileName = Path.GetFileName(postedVideo.FileName);
                 fileName = Guid.NewGuid().ToString() + fileName;
                 article.ArticleVideo = fileName;
-                using (FileStream stream = new FileStream(Path.Combine(path,"vids", fileName), FileMode.Create))
+                using (FileStream stream = new FileStream(Path.Combine(path, "vids", fileName), FileMode.Create))
                 {
                     postedVideo.CopyTo(stream);
                     _notyf.Success($"Upload video thành công: {article.ArticleVideo}", 3);
@@ -238,7 +238,6 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "/getall");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
 
             return _client.SendAsync(request).Result;
         }
@@ -248,7 +247,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/getsingle/{id}");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
+
             return _client.SendAsync(request).Result;
         }
 
@@ -260,7 +259,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "/create");
             request.Method = HttpMethod.Post;
-            request.Headers.Add("CBSToken", APIKEY);
+
             request.Content = content;
 
             return _client.SendAsync(request).Result;
@@ -274,7 +273,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "/update");
             request.Method = HttpMethod.Post;
-            request.Headers.Add("CBSToken", APIKEY);
+
             request.Content = content;
 
             return _client.SendAsync(request).Result;
@@ -285,7 +284,6 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/delete/{id}");
             request.Method = HttpMethod.Delete;
-            request.Headers.Add("CBSToken", APIKEY);
 
             return _client.SendAsync(request).Result;
         }

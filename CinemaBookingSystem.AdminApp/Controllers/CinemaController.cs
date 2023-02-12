@@ -165,7 +165,6 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "/getall");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
 
             return _client.SendAsync(request).Result;
         }
@@ -175,7 +174,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/getsingle/{id}");
             request.Method = HttpMethod.Get;
-            request.Headers.Add("CBSToken", APIKEY);
+
             return _client.SendAsync(request).Result;
         }
 
@@ -187,7 +186,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "/create");
             request.Method = HttpMethod.Post;
-            request.Headers.Add("CBSToken", APIKEY);
+
             request.Content = content;
 
             return _client.SendAsync(request).Result;
@@ -201,7 +200,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + "/update");
             request.Method = HttpMethod.Post;
-            request.Headers.Add("CBSToken", APIKEY);
+
             request.Content = content;
 
             return _client.SendAsync(request).Result;
@@ -212,7 +211,6 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"/delete/{id}");
             request.Method = HttpMethod.Delete;
-            request.Headers.Add("CBSToken", APIKEY);
 
             return _client.SendAsync(request).Result;
         }
