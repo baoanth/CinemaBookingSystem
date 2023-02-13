@@ -36,7 +36,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 _notyf.Error("Không thể tìm thấy thông tin từ server");
                 _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                return RedirectToAction("NotFound", "Home");
+                
             }
             return View(contact.First());
         }

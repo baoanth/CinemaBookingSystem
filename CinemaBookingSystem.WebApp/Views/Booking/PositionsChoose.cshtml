@@ -111,9 +111,7 @@
 
         table {
             display: table;
-            border-collapse: separate;
-            border-spacing: 2px;
-            border-color: none;
+            border: none;
         }
 
         td {
@@ -158,7 +156,7 @@
                         <div class="row">
                             <div class="col-lg-8 col-md-8 col-sm-6">
                                 <div class="section-title">
-                                    <h4>Giờ chiếu: @Model.First().Screening.ShowTime.ToString("HH:mm")</h4>
+                                    <h4>Giờ chiếu: @Model.First().Screening.ShowTime.ToString("HH:mm") (Thời gian chiếu: @Model.First().Screening.Movie.RunningTime phút)</h4>
                                 </div>
                             </div>
                         </div>
@@ -179,6 +177,13 @@
                             </div>
                         </div>
                         <br />
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-6">
+                                <div class="section-title">
+                                    <h4>Giá vé: @string.Format("{0:#,##0.00}", Model.First().Price)</h4>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -197,128 +202,52 @@
             </ul>
             <!-- seat availabilty list -->
             <!-- seat layout -->
-            <div class="seatStructure text-center" style="overflow-x:auto;">
+            <div class="text-center" style="overflow-x:auto;">
                 <div class="screen text-center">
                     <h2 class="wthree">MÀN HÌNH Ở ĐÂY</h2>
                 </div>
-                <table class="table">
-                    <tr>
-                        <td></td>
+                <form method="post" asp-action="BookingConfirm" asp-controller="Booking">
+                    <table class="table">
+                        <tr>
+                            <td></td>
+                            @{
+                                int totalSeatOneRow = 10;
+                                for (int i = 1; i <= totalSeatOneRow; i++)
+                                {
+                                    <td>@i</td>
+                                }
+                            }
+                        </tr>
                         @{
-                            int totalSeatOneRow = 10;
-                            for (int i = 1; i <= totalSeatOneRow; i++)
+                            for (int i = 1; i <= (Model.Count() / 10); i++)
                             {
-                                <td>@i</td>
+                                string col = ((char)('A' + (i - 1) % 26)).ToString();
+                                <tr>
+                                    <td>@col</td>
+                                    @{
+                                        foreach (var item in Model.Where(x => x.Row == col))
+                                        {
+                                            <td>
+                                                @if (item.IsBooked)
+                                                {
+                                                    <input type="checkbox" class="seats" value="@(item.PositionId)" disabled />
+                                                }
+                                                else
+                                                {
+                                                    <input type="checkbox" class="seats" name="availSeats" value="@(item.PositionId)" />
+                                                }
+                                            </td>
+                                        }
+                                    }
+                                </tr>
                             }
                         }
-                    </tr>
-                    @{
-                        for (int i = 1; i <= (Model.Count() / 10); i++)
-                        {
-                            string col = ((char)('A' + (i - 1) % 26)).ToString();
-                            <tr>
-                                <td>@col</td>
-                                @{
-                                    foreach (var item in Model.Where(x => x.Row == col))
-                                    {
-                                        <td>
-                                            @if (item.IsBooked)
-                                            {
-                                                <input type="checkbox" checked="@item.IsBooked" class="seats" value="" disabled />
-                                            }
-                                            else
-                                            {
-                                                <input type="checkbox" class="seats" value="@(item.PositionId)" />
-                                            }
-                                        </td>
-                                    }
-                                }
-                            </tr>
-                        }
-                    }
-                </table>
+                    </table>
+                    <button type="submit" class="site-btn">Xác nhận đặt</button>
+                </form>            
             </div>
             <!-- //seat layout -->
         </div>
     </div>
 </section>
 <!-- Product Section End -->
-
-
-
-<script>
-    function onLoaderFunc() {
-        $(".seatStructure *").prop("disabled", true);
-        $(".displayerBoxes *").prop("disabled", true);
-    }
-
-    function takeData() {
-        if (($("#Username").val().length == 0) || ($("#Numseats").val().length == 0)) {
-            alert("Please Enter your Name and Number of Seats");
-        } else {
-            $(".inputForm *").prop("disabled", true);
-            $(".seatStructure *").prop("disabled", false);
-            document.getElementById("notification").innerHTML =
-                "<b style='margin-bottom:0px;background:#ff9800;letter-spacing:1px;'>Please Select your Seats NOW!</b>";
-        }
-    }
-
-
-    function updateTextArea() {
-
-        if ($("input:checked").length == ($("#Numseats").val())) {
-            $(".seatStructure *").prop("disabled", true);
-
-            var allNameVals = [];
-            var allNumberVals = [];
-            var allSeatsVals = [];
-
-            //Storing in Array
-            allNameVals.push($("#Username").val());
-            allNumberVals.push($("#Numseats").val());
-            $('#seatsBlock :checked').each(function () {
-                allSeatsVals.push($(this).val());
-            });
-
-            //Displaying
-            $('#nameDisplay').val(allNameVals);
-            $('#NumberDisplay').val(allNumberVals);
-            $('#seatsDisplay').val(allSeatsVals);
-        } else {
-            alert("Please select " + ($("#Numseats").val()) + " seats")
-        }
-    }
-
-
-    function myFunction() {
-        alert($("input:checked").length);
-    }
-
-    /*
-    function getCookie(cname) {
-        var name = cname + "=";
-        var ca = document.cookie.split(';');
-        for(var i = 0; i < ca.length; i++) {
-            var c = ca[i];
-            while (c.charAt(0) == ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) == 0) {
-                return c.substring(name.length, c.length);
-            }
-        }
-        return "";
-    }
-    */
-
-
-    $(":checkbox").click(function () {
-        if ($("input:checked").length == ($("#Numseats").val())) {
-            $(":checkbox").prop('disabled', true);
-            $(':checked').prop('disabled', false);
-        } else {
-            $(":checkbox").prop('disabled', false);
-        }
-    });
-</script>
-

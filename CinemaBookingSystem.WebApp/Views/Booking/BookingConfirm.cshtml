@@ -1,0 +1,137 @@
+﻿@model IEnumerable<CinemaBookingSystem.ViewModels.ScreeningPositionViewModel>;
+@{
+    ViewData["Title"] = "BookingConfirm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    string? sessionName = Context.Session.GetString("_clientname");
+    string? sessionFullName = Context.Session.GetString("_clientfullname");
+    if (String.IsNullOrEmpty(sessionName))
+    {
+        Context.Response.Redirect("/Account/Login");
+    }
+}
+
+<section class="product-page spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12">
+                <div class="anime__details__title text-center">
+                    <h3>Xác nhận thông tin đặt vé của bạn</h3>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="product__page__content">
+                    <div class="product__page__title">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-6">
+                                <div class="section-title">
+                                    <h4>Phim: @Model.First().Screening.Movie.MovieName</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-6">
+                                <div class="section-title">
+                                    <h4>Ngày chiếu: @Model.First().Screening.ShowTime.ToString("dd/MM/yyyy")</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-6">
+                                <div class="section-title">
+                                    <h4>Giờ chiếu: @Model.First().Screening.ShowTime.ToString("HH:mm") (Thời gian chiếu: @Model.First().Screening.Movie.RunningTime phút)</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-6">
+                                <div class="section-title">
+                                    <h4>Tại rạp: @Model.First().Screening.Theatre.Cinema.CinemaName</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-6">
+                                <div class="section-title">
+                                    <h4>Phòng chiếu: @Model.First().Screening.Theatre.TheatreName</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-6">
+                                <div class="section-title">
+                                    <h4>Tổng số ghế: @Model.Count()</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-6">
+                                <div class="section-title">
+                                    <h4>
+                                        Ghế bạn đã chọn:  
+                                        @foreach (var item in Model)
+                                        {
+                                            if (Model.Last() == item)
+                                            {
+                                                string seat = item.Row + item.Column;
+                                                <text>@seat (@string.Format("{0:#,##0}", item.Price)đ).</text>
+                                            }
+                                            else
+                                            {
+                                                string seat = item.Row + item.Column;
+                                                <text>@seat (@string.Format("{0:#,##0}", item.Price)đ), </text>
+                                            }
+                                        }
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-6">
+                                <div class="section-title">
+                                    @{
+                                        int total = 0;
+                                        foreach (var item in Model)
+                                        {
+                                            total += item.Price;
+                                        }
+                                    }
+                                    <h4>Tổng thanh toán: @string.Format("{0:#,##0}", total)đ</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-6">
+                                <div class="section-title">
+                                    <h4>Bấm chọn phương thức thanh toán để hoàn thành phần đặt vé:</h4>
+                                    <div class="anime__details__btn">
+                                        <br />
+                                        @{
+                                            foreach (var item in ViewBag.PaymentMethods as IEnumerable<CinemaBookingSystem.ViewModels.PaymentViewModel>)
+                                            {
+                                                <a class="follow-btn" asp-action="Checkout" asp-controller="Booking" asp-route-paymentid="@item.PaymentId" asp-route-total="@total"><i class="fa fa-credit-card"></i> @item.PaymentMethod</a>
+                                                <text> &nbsp; &nbsp;</text>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</section>
+<!-- Product Section End -->

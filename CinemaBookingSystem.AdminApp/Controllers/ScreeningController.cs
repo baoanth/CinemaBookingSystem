@@ -64,9 +64,9 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("ScreeningId,MovieId,ShowTime")] ScreeningViewModel screening, int positionPrice)
         {
-            if (screening.ShowTime < DateTime.Now)
+            if (screening.ShowTime < DateTime.Now.AddDays(1))
             {
-                _notyf.Error("Thời gian chiếu không hợp lệ!", 4);
+                _notyf.Error("Thời gian chiếu không hợp lệ! Thời gian hợp lệ không được nhỏ hơn 1 ngày so với thời gian hiện tại", 5);
                 return View(screening);
             }
             //Setting attribute for screening schedule

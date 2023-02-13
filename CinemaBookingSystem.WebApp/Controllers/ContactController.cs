@@ -1,7 +1,10 @@
-﻿using AspNetCoreHero.ToastNotification.Abstractions;
+﻿using AspNetCore;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using CinemaBookingSystem.ViewModels;
+using CinemaBookingSystem.WebApp.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Mail;
 
 namespace CinemaBookingSystem.WebApp.Controllers
 {
@@ -24,6 +27,26 @@ namespace CinemaBookingSystem.WebApp.Controllers
         {
             IEnumerable<ContactViewModel> contact = GetContactRequest();
             return View(contact);
+        }
+        [HttpPost]
+        public async void SendContact(string fullname, string phonenumber, string email, string message)
+        {
+            string subject = "Phản hồi từ khách hàng " + fullname;
+            const string receiveMailAddress = "huynhconghung131@gmail.com";
+            message = "Số điện thoại khách hàng:" + phonenumber + ". " + message;
+            using (SmtpClient client = new SmtpClient("localhost"))
+            {
+                if(await MailUtils.SendMail(email, receiveMailAddress, subject, message, client))
+                {
+                    _notyf.Success("Phản hồi đã được gửi! Chúng tôi xin cảm ơn vì những feedback của bạn!", 5);
+                }
+                else
+                {
+                    _notyf.Warning("Lỗi", 5);
+                }
+                
+            }
+            RedirectToAction("Index", "Contact");
         }
 
         public IEnumerable<ContactViewModel> GetContactRequest()

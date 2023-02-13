@@ -15,7 +15,7 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = ".CBS.Client.Session";
-    options.IdleTimeout = TimeSpan.FromMinutes(2);
+    options.IdleTimeout = TimeSpan.FromMinutes(5);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
