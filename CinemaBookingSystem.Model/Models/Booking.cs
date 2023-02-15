@@ -21,5 +21,7 @@ namespace CinemaBookingSystem.Model.Models
         public int UserId { get; set; }
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
+        [MaxLength(100)]
+        public string? VerifyCode { get; set; }
     }
 }

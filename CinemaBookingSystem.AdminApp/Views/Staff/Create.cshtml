@@ -5,7 +5,7 @@
 }
 
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">User/</span> Edit</h4>
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">User/</span> Create</h4>
     <!-- Basic Layout & Basic with Icons -->
     <div class="row">
         <!-- Basic Layout -->
@@ -71,7 +71,7 @@
                             <div class="col-sm-10">
                                 <select id="role-select" class="form-select" asp-for="RoleId">
                                     @{
-                                        foreach (var item in ViewBag.RoleList as IEnumerable<CinemaBookingSystem.ViewModels.RoleViewModel>)
+                                        foreach (var item in ViewBag.RoleList)
                                         {
                                             <option value="@item.RoleId">@item.RoleName</option>
                                         }

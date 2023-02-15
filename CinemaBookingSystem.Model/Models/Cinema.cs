@@ -13,13 +13,13 @@ namespace CinemaBookingSystem.Model.Models
         [MaxLength(256)]
         public string CinemaName { get; set; }
         [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string FAX { get; set; }
         [Required]
         [MaxLength(50)]
         public string Hotline { get; set; }
         [Required]
-        [MaxLength(100)]
+        [MaxLength(1000)]
         public string Address { get; set; }
         [Required]
         [MaxLength(100)]

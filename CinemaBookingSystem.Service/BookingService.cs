@@ -14,6 +14,8 @@ namespace CinemaBookingSystem.Service
 
         IEnumerable<Booking> GetAll();
 
+        IEnumerable<Booking> GetAllByUser(int userId);
+
         Booking GetById(int id);
 
         void SaveChanges();
@@ -43,6 +45,11 @@ namespace CinemaBookingSystem.Service
         public IEnumerable<Booking> GetAll()
         {
             return _bookingRepository.GetAll();
+        }
+
+        public IEnumerable<Booking> GetAllByUser(int userId)
+        {
+            return _bookingRepository.GetAllByUser(userId);
         }
 
         public Booking GetById(int id)

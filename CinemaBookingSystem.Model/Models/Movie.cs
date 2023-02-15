@@ -13,7 +13,7 @@ namespace CinemaBookingSystem.Model.Models
         [MaxLength(256)]
         public string MovieName { get; set; }
         [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Director { get; set; }
         [Required]
         [MaxLength(1000)]

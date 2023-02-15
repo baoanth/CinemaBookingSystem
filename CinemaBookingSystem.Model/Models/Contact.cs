@@ -14,7 +14,7 @@ namespace CinemaBookingSystem.Model.Models
         [MaxLength(50)]
         public string Name { get; set; }
         [Required]
-        [MaxLength(50)]
+        [MaxLength(1000)]
         public string Department { get; set; }
         [MaxLength(50)]
         public string Mobile { get; set; }

@@ -10,7 +10,7 @@ namespace CinemaBookingSystem.Model.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CommentId { get; set; }
         [Required]
-        [MaxLength(500)]
+        [MaxLength(1000)]
         public string Content { get; set; }
         [Required]
         public DateTime CommentedAt { get; set; }

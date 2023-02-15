@@ -9,5 +9,6 @@
         public virtual PaymentViewModel? Payment { get; set; }
         public int UserId { get; set; }
         public virtual UserViewModel? User { get; set; }
+        public string? VerifyCode { get; set; }
     }
 }

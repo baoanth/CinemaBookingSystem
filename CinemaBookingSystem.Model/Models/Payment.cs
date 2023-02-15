@@ -10,7 +10,7 @@ namespace CinemaBookingSystem.Model.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PaymentId { get; set; }
         [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string PaymentMethod { get; set; }
     }
 }

@@ -5,14 +5,14 @@ using Newtonsoft.Json;
 
 namespace CinemaBookingSystem.WebApp.Controllers
 {
-    public class CinemaController : Controller
+    public class ClientBookingController : Controller
     {
-        private Uri _baseUrl = new Uri("https://localhost:44322/api/cinema");
+        private Uri _baseUrl = new Uri("https://localhost:44322/api/");
         private HttpClient _client;
         private const string APIKEY = "movienew";
         private readonly INotyfService _notyf;
 
-        public CinemaController(INotyfService notyf)
+        public ClientBookingController(INotyfService notyf)
         {
             _client = new HttpClient();
             _client.BaseAddress = _baseUrl;
@@ -22,59 +22,64 @@ namespace CinemaBookingSystem.WebApp.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<CinemaViewModel> list = GetCinemaList();
-
-            return View(list.OrderBy(x => x.City));
+            int sessionId = (int)HttpContext.Session.GetInt32("_clientid");
+            if (sessionId != null)
+            {
+                IEnumerable<BookingViewModel> clientBookings = GetClientBookingRequest(sessionId);
+                return View(clientBookings);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
 
-        public IActionResult Details(int? id)
+        public IActionResult Details(int id)
         {
-            CinemaViewModel? cinema = GetCinemaDetails(id);
-
-            return View(cinema);
+            IEnumerable<BookingDetailViewModel> bookingDetails = GetClientBookingDetailsRequest(id);
+            return View(bookingDetails);
         }
 
-        public IEnumerable<CinemaViewModel> GetCinemaList()
+        private IEnumerable<BookingDetailViewModel> GetClientBookingDetailsRequest(int id)
         {
-            IEnumerable<CinemaViewModel> list = null;
+            IEnumerable<BookingDetailViewModel> bookingDetails = null;
             HttpRequestMessage request = new HttpRequestMessage();
-            request.RequestUri = new Uri(_baseUrl + "/getall");
+            request.RequestUri = new Uri(_baseUrl + $"bookingdetail/getallbybooking/{id}");
             request.Method = HttpMethod.Get;
 
             HttpResponseMessage response = _client.SendAsync(request).Result;
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
-                list = JsonConvert.DeserializeObject<IEnumerable<CinemaViewModel>>(body);
+                bookingDetails = JsonConvert.DeserializeObject<IEnumerable<BookingDetailViewModel>>(body);
             }
             else
             {
                 _notyf.Error("Không thể lấy thông tin do lỗi server");
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
-            return list;
+            return bookingDetails;
         }
 
-        public CinemaViewModel GetCinemaDetails(int? id)
+        private IEnumerable<BookingViewModel> GetClientBookingRequest(int id)
         {
-            CinemaViewModel? cinema = null;
+            IEnumerable<BookingViewModel> bookings = null;
             HttpRequestMessage request = new HttpRequestMessage();
-            request.RequestUri = new Uri(_baseUrl + $"/getsingle/{id}");
+            request.RequestUri = new Uri(_baseUrl + $"booking/getallbyuser/{id}");
             request.Method = HttpMethod.Get;
 
             HttpResponseMessage response = _client.SendAsync(request).Result;
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
-                cinema = JsonConvert.DeserializeObject<CinemaViewModel>(body);
+                bookings = JsonConvert.DeserializeObject<IEnumerable<BookingViewModel>>(body);
             }
             else
             {
-                _notyf.Error("Không thể tìm thấy thông tin từ server");
+                _notyf.Error("Không thể lấy thông tin do lỗi server");
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                RedirectToAction("NotFound", "Home");
             }
-            return cinema;
+            return bookings;
         }
     }
 }

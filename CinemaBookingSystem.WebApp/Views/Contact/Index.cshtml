@@ -52,9 +52,12 @@
                     <hr style="border:white !important;" />
                     <h4 style="color:white !important;">Dịch vụ khách hàng</h4>
                     <p style="color:white !important;">
+                        Thời gian làm việc: 8:00 - 21:00<br />
                         Hotline: @Model.First().Mobile <br />
-                        Email hỗ trợ: @Model.First().Email<br />
-                        Facebook hỗ trợ: @Model.First().FacebookURL
+                        Email hỗ trợ: <a href="@Model.First().Email">@Model.First().Email</a><br />
+                        Facebook hỗ trợ: <a href="@Model.First().FacebookURL">@Model.First().FacebookURL</a><br />
+                        <br />
+                        @Model.First().Message
                     </p>
                     <hr style="border:white !important;" />
                     <h4 style="color:white !important;">Trạng thái hoạt động</h4>

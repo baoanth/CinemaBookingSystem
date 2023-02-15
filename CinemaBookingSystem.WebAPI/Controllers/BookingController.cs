@@ -35,6 +35,15 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("getallbyuser/{id}")]
+        public ActionResult Get([FromHeader, Required] string CBSToken, int id)
+        {
+            var bookingList = _bookingService.GetAllByUser(id);
+            var bookingListVm = _mapper.Map<IEnumerable<BookingViewModel>>(bookingList);
+            return Ok(bookingListVm);
+        }
+
+        [HttpGet]
         [Route("getsingle/{id}")]
         public ActionResult GetSingle([FromHeader, Required] string CBSToken, int id)
         {

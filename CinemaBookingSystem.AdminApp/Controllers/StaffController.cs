@@ -37,7 +37,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
-            return View(list);
+            return View(list.Reverse());
         }
 
         public IActionResult Details(int? id)
@@ -94,7 +94,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
-            return View(User);
+            return View(user);
         }
 
         public ActionResult Edit(int id)

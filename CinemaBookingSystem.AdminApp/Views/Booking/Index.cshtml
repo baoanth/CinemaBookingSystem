@@ -1,31 +1,33 @@
-﻿@model IEnumerable<CinemaBookingSystem.ViewModels.CinemaViewModel>
+﻿@model IEnumerable<CinemaBookingSystem.ViewModels.BookingViewModel>;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
     int num = 0;
-    int totalCinema = Model.Count();
+    int totalBooking = Model.Count();
 }
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Cinema/</span> List</h4>
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Booking/</span> List</h4>
     <!-- Basic Layout & Basic with Icons -->
     <div class="row">
         <!-- Basic Layout -->
         <div class="col-xxl">
             <div class="card mb-4">
                 <div class="card-header d-flex align-items-center justify-content-between">
-                    <h4 class="mb-0">DANH SÁCH RẠP PHIM</h4>
+                    <h4 class="mb-0">DANH SÁCH ĐƠN ĐẶT VÉ</h4>
                     <hr />
-                    <h5 class="card-header">Rạp phim hiện có : @totalCinema</h5>
+                    <h5 class="card-header">Tổng số đơn : @totalBooking</h5>
                 </div>
                 <div class="card-body">
-                    <a asp-action="Create" style="padding-left:20px !important"> <input type="submit" class="btn btn-primary" value="Thêm mới" /></a>
                     <div class="table-responsive text-nowrap">
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>STT</th>
-                                    <th>Tên rạp</th>
-                                    <th>Thành phố</th>
+                                    <th>Mã lấy vé</th>
+                                    <th>Ngày đặt</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,17 +39,10 @@
                                             <span>@num</span>
                                         </td>
                                         <td>
-                                            <a asp-action="Details" asp-route-id="@item.CinemaId"> @Html.DisplayFor(modelItem => item.CinemaName)</a>
+                                            <a asp-action="Details" asp-controller="Booking" asp-route-id="@item.BookingId"> @Html.DisplayFor(modelItem => item.VerifyCode)</a>
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.City)
-                                        </td>
-                                        <td>
-                                            <a asp-action="Index" asp-controller="Theatre" asp-route-id="@item.CinemaId"> <input type="submit" value="Danh sách phòng chiếu" class="btn btn-primary" /></a>
-                                            &nbsp&nbsp
-                                            <a asp-action="Edit" asp-route-id="@item.CinemaId"> <input type="submit" value="Chỉnh sửa" class="btn btn-warning" /></a>
-                                            &nbsp&nbsp
-                                            <a asp-action="Delete" asp-route-id="@item.CinemaId"> <input type="submit" value="Xóa" class="btn btn-danger" /></a>
+                                            @item.BookedAt.ToString("HH:mm dd/MM/yyyy")
                                         </td>
                                     </tr>
                                 }
@@ -55,8 +50,8 @@
                             <tfoot class="table-border-bottom-0">
                                 <tr>
                                     <th>STT</th>
-                                    <th>Tên rạp</th>
-                                    <th>Thành phố</th>
+                                    <th>Mã lấy vé</th>
+                                    <th>Ngày đặt</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -66,3 +61,4 @@
         </div>
     </div>
 </div>
+

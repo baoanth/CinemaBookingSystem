@@ -10,7 +10,7 @@ namespace CinemaBookingSystem.Model.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ArticleId { get; set; }
         [Required]
-        [MaxLength(50)]
+        [MaxLength(500)]
         public string ArticleTitle { get; set; }
         [MaxLength(500)]
         public string ArticleImage { get; set; }

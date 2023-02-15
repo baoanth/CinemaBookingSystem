@@ -193,6 +193,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             {
                 BookingViewModel booking = GetSingleBookingRequest(bookingId);
                 booking.IsPayed = true;
+                booking.VerifyCode = Guid.NewGuid().ToString();
                 UpdateBookingRequest(booking);
 
                 IEnumerable<BookingDetailViewModel> bookingDetails = GetBookingDetailRequest(bookingId);
