@@ -4,6 +4,7 @@ using CinemaBookingSystem.WebApp.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Text;
 
 namespace CinemaBookingSystem.WebApp.Controllers
 {
@@ -13,6 +14,20 @@ namespace CinemaBookingSystem.WebApp.Controllers
         private HttpClient _client;
         private const string APIKEY = "movienew";
         private readonly INotyfService _notyf;
+        private BookingViewModel _booking;
+        private static List<ScreeningPositionViewModel> _seats;
+
+        public BookingViewModel Booking
+        {
+            set { _booking = value; }
+            get { return _booking; }
+        }
+
+        public static List<ScreeningPositionViewModel> Seats
+        {
+            set { _seats = value; }
+            get { return _seats; }
+        }
 
         public BookingController(INotyfService notyf)
         {
@@ -44,17 +59,52 @@ namespace CinemaBookingSystem.WebApp.Controllers
                 pickedSeats.Add(seat);
             }
             ViewBag.PaymentMethods = GetPaymentListRequest();
+            Seats = pickedSeats;
             return View(pickedSeats);
         }
 
         public ActionResult Checkout(int paymentid, int total)
         {
+            CreateBooking(paymentid);
+            CreateBookingDetails(Booking, Seats);
             switch (paymentid)
             {
                 case 4:
                     return MomoPayment(total);
+
                 default:
                     return MomoPayment(total);
+            }
+        }
+
+        private void CreateBookingDetails(BookingViewModel booking, IEnumerable<ScreeningPositionViewModel> seats)
+        {
+            foreach (var item in seats)
+            {
+                BookingDetailViewModel bookingDetail = new BookingDetailViewModel()
+                {
+                    BookingId = booking.BookingId,
+                    PositionId = item.PositionId,
+                };
+                CreateBookingDetailRequest(bookingDetail);
+            }
+        }
+
+        public void CreateBooking(int paymentId)
+        {
+            BookingViewModel booking = new BookingViewModel()
+            {
+                IsPayed = false,
+                UserId = (int)HttpContext.Session.GetInt32("_clientid"),
+                PaymentId = paymentId,
+                BookedAt = DateTime.Now,
+            };
+            HttpResponseMessage response = CreateBookingRequest(booking);
+            if (response.IsSuccessStatusCode)
+            {
+                string body = response.Content.ReadAsStringAsync().Result;
+                Booking = JsonConvert.DeserializeObject<BookingViewModel>(body);
+                HttpContext.Session.SetInt32("_bookingid", Booking.BookingId);
             }
         }
 
@@ -67,8 +117,8 @@ namespace CinemaBookingSystem.WebApp.Controllers
             string partnerCode = "MOMOOJOI20210710";
             string accessKey = "iPXneGmrJH0G8FOP";
             string serectkey = "sFcbSGRSJjwGxwhhcEktCHWYUuTuPNDB";
-            string orderInfo = "Thanh toán đặt vé Cinemax";
-            string returnUrl = "https://localhost:7094/Home/ConfirmPaymentClient";
+            string orderInfo = "Thanh toán đặt vé tại rạp Cinemax";
+            string returnUrl = $"https://localhost:7094/Booking/ConfirmPaymentClient";
             string notifyurl = "http://ba1adf48beba.ngrok.io/Home/SavePayment"; //lưu ý: notifyurl không được sử dụng localhost, có thể sử dụng ngrok để public localhost trong quá trình test
 
             string amount = total.ToString();
@@ -115,43 +165,165 @@ namespace CinemaBookingSystem.WebApp.Controllers
             return Redirect(jmessage.GetValue("payUrl").ToString());
         }
 
-        //Khi thanh toán xong ở cổng thanh toán Momo, Momo sẽ trả về một số thông tin, trong đó có errorCode để check thông tin thanh toán
-        //errorCode = 0 : thanh toán thành công (Request.QueryString["errorCode"])
-        //Tham khảo bảng mã lỗi tại: https://developers.momo.vn/#/docs/aio/?id=b%e1%ba%a3ng-m%c3%a3-l%e1%bb%97i
-        public ActionResult ConfirmPaymentClient()
+        public ActionResult ConfirmPaymentClient(int bookingId)
         {
             //hiển thị thông báo cho người dùng
+            string errorCode = HttpContext.Request.Query["errorCode"].ToString();
+            if (errorCode == "0")
+            {
+                SavePayment();
+                return View();
+            }
+            else
+            {
+                DeleteBooking();
+                return RedirectToAction("PaymentFailed", "Booking");
+            }
+        }
+
+        public ActionResult PaymentFailed()
+        {
             return View();
         }
 
-        [HttpPost]
         public void SavePayment()
         {
-            //cập nhật dữ liệu vào db
+            int bookingId = (int)HttpContext.Session.GetInt32("_bookingid");
+            if (bookingId != null)
+            {
+                BookingViewModel booking = GetSingleBookingRequest(bookingId);
+                booking.IsPayed = true;
+                UpdateBookingRequest(booking);
+
+                IEnumerable<BookingDetailViewModel> bookingDetails = GetBookingDetailRequest(bookingId);
+                foreach (var position in bookingDetails)
+                {
+                    ScreeningPositionViewModel screeningPosition = GetScreeningPositionsDetailsRequest(position.PositionId);
+                    screeningPosition.IsBooked = true;
+                    UpdateScreeningPositionsRequest(screeningPosition);
+                }
+            }
+        }
+
+        private void DeleteBooking()
+        {
+            int bookingId = (int)HttpContext.Session.GetInt32("_bookingid");
+            if (bookingId != null)
+            {
+                DeleteBookingDetailRequest(bookingId);
+                DeleteBookingRequest(bookingId);
+            }
         }
 
         #endregion MOMO PAYMENT
 
-        //private ScreeningViewModel GetScreeningDetailsRequest(int id)
-        //{
-        //    ScreeningViewModel screening = null;
-        //    HttpRequestMessage request = new HttpRequestMessage();
-        //    request.RequestUri = new Uri(_baseUrl + $"screening/getsingle/{id}");
-        //    request.Method = HttpMethod.Get;
+        public IEnumerable<BookingDetailViewModel> GetBookingDetailRequest(int bookingId)
+        {
+            IEnumerable<BookingDetailViewModel>? bookingDetail = null;
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + $"bookingdetail/getallbybooking/{bookingId}");
+            request.Method = HttpMethod.Get;
 
-        //    HttpResponseMessage response = _client.SendAsync(request).Result;
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        string body = response.Content.ReadAsStringAsync().Result;
-        //        screening = JsonConvert.DeserializeObject<ScreeningViewModel>(body);
-        //    }
-        //    else
-        //    {
-        //        _notyf.Error("Không thể lấy thông tin do lỗi server");
-        //        Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-        //    }
-        //    return screening;
-        //}
+            HttpResponseMessage response = _client.SendAsync(request).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                string body = response.Content.ReadAsStringAsync().Result;
+                bookingDetail = JsonConvert.DeserializeObject<IEnumerable<BookingDetailViewModel>>(body);
+            }
+            else
+            {
+                _notyf.Error("Không thể tìm thấy thông tin từ server");
+                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+            }
+            return bookingDetail;
+        }
+
+        public HttpResponseMessage CreateBookingDetailRequest(BookingDetailViewModel bookingDetail)
+        {
+            string data = JsonConvert.SerializeObject(bookingDetail);
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + "bookingdetail/create");
+            request.Method = HttpMethod.Post;
+            request.Content = content;
+
+            return _client.SendAsync(request).Result;
+        }
+
+        public HttpResponseMessage CreateBookingRequest(BookingViewModel booking)
+        {
+            string data = JsonConvert.SerializeObject(booking);
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + "booking/create");
+            request.Method = HttpMethod.Post;
+            request.Content = content;
+
+            return _client.SendAsync(request).Result;
+        }
+
+        public HttpResponseMessage UpdateBookingRequest(BookingViewModel booking)
+        {
+            string data = JsonConvert.SerializeObject(booking);
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + "booking/update");
+            request.Method = HttpMethod.Post;
+            request.Content = content;
+
+            return _client.SendAsync(request).Result;
+        }
+
+        public HttpResponseMessage DeleteBookingRequest(int id)
+        {
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + $"booking/delete/{id}");
+            request.Method = HttpMethod.Delete;
+
+            return _client.SendAsync(request).Result;
+        }
+
+        public HttpResponseMessage DeleteBookingDetailRequest(int id)
+        {
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + $"bookingdetail/delete/{id}");
+            request.Method = HttpMethod.Delete;
+
+            return _client.SendAsync(request).Result;
+        }
+
+        public HttpResponseMessage UpdateScreeningPositionsRequest(ScreeningPositionViewModel screeningPosition)
+        {
+            string data = JsonConvert.SerializeObject(screeningPosition);
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + "screeningposition/update");
+            request.Method = HttpMethod.Post;
+            request.Content = content;
+
+            return _client.SendAsync(request).Result;
+        }
+
+        private BookingViewModel GetSingleBookingRequest(int id)
+        {
+            BookingViewModel booking = null;
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + $"booking/getsingle/{id}");
+            request.Method = HttpMethod.Get;
+
+            HttpResponseMessage response = _client.SendAsync(request).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                string body = response.Content.ReadAsStringAsync().Result;
+                booking = JsonConvert.DeserializeObject<BookingViewModel>(body);
+            }
+            else
+            {
+                _notyf.Error("Không thể lấy thông tin do lỗi server");
+                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+            }
+            return booking;
+        }
 
         public IEnumerable<PaymentViewModel> GetPaymentListRequest()
         {

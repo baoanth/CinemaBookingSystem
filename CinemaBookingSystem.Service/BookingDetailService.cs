@@ -10,9 +10,11 @@ namespace CinemaBookingSystem.Service
 
         void Update(BookingDetail bookingDetail);
 
-        void Delete(int id);
+        bool DeleteMulti(int bookingId);
 
         IEnumerable<BookingDetail> GetAll();
+
+        IEnumerable<BookingDetail> GetAllByBooking(int bookingId);
 
         BookingDetail GetById(int id);
 
@@ -35,14 +37,19 @@ namespace CinemaBookingSystem.Service
             _bookingDetailRepository.Add(bookingDetail);
         }
 
-        public void Delete(int id)
+        public bool DeleteMulti(int bookingId)
         {
-            _bookingDetailRepository.Delete(id);
+            return _bookingDetailRepository.DeleteMulti(bookingId);
         }
 
         public IEnumerable<BookingDetail> GetAll()
         {
             return _bookingDetailRepository.GetAll();
+        }
+
+        public IEnumerable<BookingDetail> GetAllByBooking(int bookingId)
+        {
+            return _bookingDetailRepository.GetAllByBooking(bookingId);
         }
 
         public BookingDetail GetById(int id)
