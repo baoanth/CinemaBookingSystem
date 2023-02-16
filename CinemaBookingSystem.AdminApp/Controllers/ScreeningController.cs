@@ -1,9 +1,12 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using X.PagedList;
 
 namespace CinemaBookingSystem.AdminApp.Controllers
 {
@@ -22,23 +25,33 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             _notyf = notyf;
         }
 
-        public ActionResult LandingPage()
+        public ActionResult LandingPage(int? page)
         {
+            if (page == null) page = 1;
+            int pageSize = 6;
+            int pageNumber = (page ?? 1);
             IEnumerable<CinemaViewModel> cinemaList = GetCinemaListRequest();
-            return View(cinemaList);
+            return View(cinemaList.Reverse().ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult TheatreChoose(int id)
+        public ActionResult TheatreChoose(int id, int? page)
         {
+            HttpContext.Session.SetInt32("currentCinemaId", id);
+            if (page == null) page = 1;
+            int pageSize = 6;
+            int pageNumber = (page ?? 1);
             IEnumerable<TheatreViewModel> theatreList = GetTheatreListRequest(id);
-            return View(theatreList);
+            return View(theatreList.Reverse().ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult Index(int id)
+        public ActionResult Index(int id, int? page)
         {
             HttpContext.Session.SetInt32("currentTheatreId", id);
+            if (page == null) page = 1;
+            int pageSize = 6;
+            int pageNumber = (page ?? 1);
             IEnumerable<ScreeningViewModel> list = GetScreeningListRequest(id);
-            return View(list);
+            return View(list.Reverse().ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult Details(int id)

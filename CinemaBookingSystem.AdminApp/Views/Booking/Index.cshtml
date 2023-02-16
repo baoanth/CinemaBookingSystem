@@ -1,4 +1,6 @@
-﻿@model IEnumerable<CinemaBookingSystem.ViewModels.BookingViewModel>;
+﻿@model IPagedList<CinemaBookingSystem.ViewModels.BookingViewModel>;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,7 +8,7 @@
 
 @{
     int num = 0;
-    int totalBooking = Model.Count();
+    int totalBooking = Model.TotalItemCount;
 }
 <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Booking/</span> List</h4>
@@ -56,6 +58,16 @@
                             </tfoot>
                         </table>
                     </div>
+                    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+                    <nav aria-label="Page navigation">
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions(){
+                        DisplayLinkToIndividualPages = true,
+                        DisplayPageCountAndCurrentLocation = false,
+                        MaximumPageNumbersToDisplay = 10,
+                        LiElementClasses = new string[] { "page-item" },
+                        PageClasses = new string[] { "page-link" },
+                        })
+                    </nav>
                 </div>
             </div>
         </div>

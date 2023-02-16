@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
+using X.PagedList;
 
 namespace CinemaBookingSystem.AdminApp.Controllers
 {
@@ -24,10 +25,13 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
+            if (page == null) page = 1;
+            int pageSize = 6;
+            int pageNumber = (page ?? 1);
             IEnumerable<MovieViewModel>? list = GetMovieList();
-            return View(list.Reverse());
+            return View(list.Reverse().ToPagedList(pageNumber, pageSize));
         }
 
         public IActionResult Details(int? id)

@@ -1,64 +1,88 @@
-﻿@model IEnumerable<CinemaBookingSystem.ViewModels.UserViewModel>;
+﻿@model IPagedList<CinemaBookingSystem.ViewModels.UserViewModel>;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     int num = 0;
-    int totalUser = Model.Count();
+    int totalUser = Model.TotalItemCount;
 }
 
-<div class="card">
-    <br />
-    <h4 class="card-header text-center">DANH SÁCH NHÂN VIÊN HỆ THỐNG</h4>
-    <hr />
-    <h5 class="card-header">Tổng số nhân viên : @totalUser</h5>
-    <a asp-action="Create" style="padding-left:30px !important"> <input type="submit" class="btn btn-primary" value="Thêm mới" /></a>
-    <hr />
-    <div class="table-responsive text-nowrap">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Tên tài khoản</th>
-                    <th>Họ tên nhân viên</th>
-                    <th>Chức vụ</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    num++;
-                    <tr>
-                        <td>
-                            <span>@num</span>
-                        </td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@item.UserId"> @Html.DisplayFor(modelItem => item.Username)</a>
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FullName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Role.RoleName)
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.UserId"> <input type="submit" value="Chỉnh sửa" class="btn btn-warning" /></a>
-                            &nbsp&nbsp
-                            <a asp-action="Delete" asp-route-id="@item.UserId"> <input type="submit" value="Xóa" class="btn btn-danger" /></a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-            <tfoot class="table-border-bottom-0">
-                <tr>
-                    <th>STT</th>
-                    <th>Tên tài khoản</th>
-                    <th>Họ tên nhân viên</th>
-                    <th>Chức vụ</th>
-                    <th></th>
-                </tr>
-            </tfoot>
-        </table>
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Staff/</span> List</h4>
+    <!-- Basic Layout & Basic with Icons -->
+    <div class="row">
+        <!-- Basic Layout -->
+        <div class="col-xxl">
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h4 class="mb-0">DANH SÁCH NHÂN VIÊN</h4>
+                    <hr />
+                    <h5 class="card-header">Phim hiện có : @totalUser</h5>
+                </div>
+                <div class="card-body">
+                    <a asp-action="Create" asp-controller="Staff" style="padding-left:30px !important"> <input type="submit" class="btn btn-primary" value="Thêm mới" /></a>
+                    <br />
+                    <div class="table-responsive text-nowrap">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên tài khoản</th>
+                                    <th>Họ tên nhân viên</th>
+                                    <th>Chức vụ</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    num++;
+                                    <tr>
+                                        <td>
+                                            <span>@num</span>
+                                        </td>
+                                        <td>
+                                            <a asp-action="Details" asp-route-id="@item.UserId"> @Html.DisplayFor(modelItem => item.Username)</a>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FullName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Role.RoleName)
+                                        </td>
+                                        <td>
+                                            <a asp-action="Edit" asp-controller="Staff" asp-route-id="@item.UserId"> <input type="submit" value="Chỉnh sửa" class="btn btn-warning" /></a>
+                                            &nbsp&nbsp
+                                            <a asp-action="Delete" asp-controller="Staff" asp-route-id="@item.UserId"> <input type="submit" value="Xóa" class="btn btn-danger" /></a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot class="table-border-bottom-0">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên tài khoản</th>
+                                    <th>Họ tên nhân viên</th>
+                                    <th>Chức vụ</th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+                    <nav aria-label="Page navigation">
+                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions(){
+                        DisplayLinkToIndividualPages = true,
+                        DisplayPageCountAndCurrentLocation = false,
+                        MaximumPageNumbersToDisplay = 10,
+                        LiElementClasses = new string[] { "page-item" },
+                        PageClasses = new string[] { "page-link" },
+                        })
+                    </nav>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 

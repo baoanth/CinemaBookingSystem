@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using X.PagedList;
 
 namespace CinemaBookingSystem.WebApp.Controllers
 {
@@ -23,32 +24,42 @@ namespace CinemaBookingSystem.WebApp.Controllers
             _notyf = notyf;
         }
 
-        public IActionResult Index()
+        public IActionResult ComingSoon(int? page, string? key)
         {
-            IEnumerable<MovieViewModel> movies = GetMovieListRequest();
-            return View(movies);
-        }
-
-        public IActionResult ComingSoon()
-        {
+            if (page == null) page = 1;
+            int pageSize = 12;
+            int pageNumber = (page ?? 1);
             IEnumerable<MovieViewModel> movies = GetMovieListRequest();
             foreach (var item in movies)
             {
                 IEnumerable<CommentViewModel> comments = GetCommentListRequest(item.MovieId);
                 item.Comments = comments;
             }
-            return View(movies.Where(x => x.ReleaseDate >= DateTime.UtcNow).ToList());
+            if (!String.IsNullOrEmpty(key))
+            {
+                key = key.ToLower().Trim();
+                movies = movies.Where(mv => mv.MovieName.ToLower().Trim().Contains(key));
+            }
+            return View(movies.Where(x => x.ReleaseDate >= DateTime.UtcNow).Reverse().ToPagedList(pageNumber, pageSize));
         }
 
-        public IActionResult NowShowing()
+        public IActionResult NowShowing(int? page, string? key)
         {
+            if (page == null) page = 1;
+            int pageSize = 12;
+            int pageNumber = (page ?? 1);
             IEnumerable<MovieViewModel> movies = GetMovieListRequest();
             foreach (var item in movies)
             {
                 IEnumerable<CommentViewModel> comments = GetCommentListRequest(item.MovieId);
                 item.Comments = comments;
             }
-            return View(movies.Where(x => x.ReleaseDate <= DateTime.UtcNow).ToList());
+            if (!String.IsNullOrEmpty(key))
+            {
+                key = key.ToLower().Trim();
+                movies = movies.Where(mv => mv.MovieName.ToLower().Trim().Contains(key));
+            }
+            return View(movies.Where(x => x.ReleaseDate <= DateTime.UtcNow).Reverse().ToPagedList(pageNumber, pageSize));
         }
 
         public IActionResult TrailerWatch(int id)

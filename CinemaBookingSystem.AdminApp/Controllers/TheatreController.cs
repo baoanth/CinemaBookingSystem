@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
+using X.PagedList;
 
 namespace TheatreBookingSystem.AdminApp.Controllers
 {
@@ -22,11 +23,14 @@ namespace TheatreBookingSystem.AdminApp.Controllers
             _notyf = notyf;
         }
 
-        public ActionResult Index(int id)
+        public ActionResult Index(int id, int? page)
         {
+            if (page == null) page = 1;
+            int pageSize = 6;
+            int pageNumber = (page ?? 1);
             HttpContext.Session.SetInt32("currentCinemaId", id);
             IEnumerable<TheatreViewModel> list = GetTheatreListRequest(id);
-            return View(list);
+            return View(list.Reverse().ToPagedList(pageNumber, pageSize));
         }
 
         public IActionResult Details(int? id)

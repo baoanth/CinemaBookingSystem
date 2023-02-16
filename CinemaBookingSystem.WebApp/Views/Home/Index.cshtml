@@ -8,7 +8,7 @@
     <div class="container">
         <div class="hero__slider owl-carousel">
             @{
-                foreach (var item in Model.Where(x => x.BannerImg != null).OrderByDescending(y => y.ReleaseDate).Take(5))
+                foreach (var item in Model.Where(x => x.BannerImg != null && x.ReleaseDate < DateTime.Now).OrderByDescending(y => y.ReleaseDate).Take(6))
                 {
                     <div class="hero__items set-bg" data-setbg="@("/media/banners/" + item.BannerImg)">
                         <div class="row">
@@ -33,41 +33,6 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
-                <div class="trending__product">
-                    <div class="row">
-                        <div class="col-lg-8 col-md-8 col-sm-8">
-                            <div class="section-title">
-                                <h4>Mọi người đang xem</h4>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4">
-                            <div class="btn__all">
-                                <a href="#" class="primary-btn">Xem tất cả <span class="arrow_right"></span></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        @{
-                            foreach (var item in Model.Take(6))
-                            {
-                                <div class="col-lg-4 col-md-6 col-sm-6">
-                                    <div class="product__item">
-                                        <div class="product__item__pic set-bg" data-setbg="@("/media/thumpnails/" + item.ThumpnailImg)">
-                                            <div class="comment"><i class="fa fa-comments"></i> @item.Comments.Count()</div>
-                                            <div class="view"><i class="fa fa-clock-o"></i> @item.RunningTime phút</div>
-                                        </div>
-                                        <div class="product__item__text">
-                                            <ul>
-                                                <li>@item.Genres</li>
-                                            </ul>
-                                            <h5><a asp-action="Details" asp-controller="Movie" asp-route-id="@item.MovieId">@item.MovieName</a></h5>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                        }
-                    </div>
-                </div>
                 <div class="recent__product">
                     <div class="row">
                         <div class="col-lg-8 col-md-8 col-sm-8">
@@ -176,29 +141,12 @@
             </div>
             <div class="col-lg-4 col-md-6 col-sm-8">
                 <div class="product__sidebar">
-                    <div class="product__sidebar__view">
-                        <div class="section-title">
-                            <h5>Lượt xem cao</h5>
-                        </div>
-                        <div class="filter__gallery">
-                                @{
-                                    foreach (var item in Model.Take(5))
-                                    {
-                                        <div class="product__sidebar__view__item set-bg mix day years"
-                                         data-setbg="@("/media/thumpnails/" + item.ThumpnailImg)">
-                                            <div class="view"><i class="fa fa-eye"></i> @item.Comments.Count()</div>
-                                        <h5><a asp-action="Details" asp-controller="Movie" asp-route-id="@item.MovieId">@item.MovieName</a></h5>
-                                        </div>
-                                    }
-                                }
-                        </div>
-                    </div>
                     <div class="product__sidebar__comment">
                         <div class="section-title">
                             <h5>Xem gì hôm nay</h5>
                         </div>
                         @{
-                            foreach (var item in Model.Where(x => x.ReleaseDate < DateTime.Now).OrderByDescending(y => y.ReleaseDate).Take(5))
+                            foreach (var item in Model.Where(x => x.ReleaseDate < DateTime.Now).OrderByDescending(y => y.ReleaseDate).Take(6))
                             {
                                 <div class="product__sidebar__comment__item">
                                     <div class="product__sidebar__comment__item__pic">

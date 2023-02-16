@@ -1,11 +1,13 @@
-﻿@model IEnumerable<CinemaBookingSystem.ViewModels.MovieViewModel>;
+﻿@model IPagedList<CinemaBookingSystem.ViewModels.MovieViewModel>;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
     int num = 0;
-    int totalMovie = Model.Count();
+    int totalMovie = Model.TotalItemCount;
 }
 <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Movie/</span> List</h4>
@@ -21,13 +23,14 @@
                 </div>
                 <div class="card-body">
                     <a asp-action="Create" style="padding-left:30px !important"> <input type="submit" class="btn btn-primary" value="Thêm mới" /></a>
+                    <br />
+                    <br />
                     <div class="table-responsive text-nowrap">
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>STT</th>
                                     <th>Tên phim</th>
-                                    <th>Thời lượng</th>
                                     <th>Khởi chiếu</th>
                                     <th></th>
                                 </tr>
@@ -45,9 +48,6 @@
                                             
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.RunningTime) phút
-                                        </td>
-                                        <td>
                                             @item.ReleaseDate.ToString("dd/MM/yyyy")
                                         </td>
                                         <td>
@@ -62,13 +62,22 @@
                                 <tr>
                                     <th>STT</th>
                                     <th>Tên phim</th>
-                                    <th>Thời lượng</th>
                                     <th>Khởi chiếu</th>
                                     <th></th>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
+                    Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+                    <nav aria-label="Page navigation">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions(){
+                        DisplayLinkToIndividualPages = true,
+                        DisplayPageCountAndCurrentLocation = false,
+                        MaximumPageNumbersToDisplay = 10,
+                        LiElementClasses = new string[] { "page-item" },
+                        PageClasses = new string[] { "page-link" },
+                    })
+                    </nav>
                 </div>
             </div>
         </div>

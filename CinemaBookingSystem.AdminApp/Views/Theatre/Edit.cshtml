@@ -21,7 +21,7 @@
                     <small class="text-muted float-end text-danger">* là thông tin bắt buộc</small>
                 </div>
                 <div class="card-body">
-                    <form method="post" asp-action="Edit">
+                    <form method="post" asp-action="Edit" asp-controller="Theatre">
                         <div class="row mb-3" hidden="hidden">
                             <label class="col-sm-2 col-form-label" for="theatre-id">TheatreId<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
@@ -65,7 +65,7 @@
                     </form>
                     <div class="row justify-content-end">
                         <div class="col-sm-10">
-                            <a asp-action="Index" asp-route-id="@currentId"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
+                            <a asp-action="Index" asp-controller="Theatre" asp-route-id="@currentId"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
                         </div>
                     </div>
                 </div>

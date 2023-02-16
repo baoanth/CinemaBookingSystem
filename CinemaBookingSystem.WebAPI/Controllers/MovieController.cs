@@ -18,7 +18,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         private readonly IErrorService _errorService;
         private readonly IMapper _mapper;
 
-        public MovieController(IMovieService movieService,IErrorService errorService, IMapper mapper)
+        public MovieController(IMovieService movieService, IErrorService errorService, IMapper mapper)
         {
             _movieService = movieService;
             _errorService = errorService;

@@ -16,7 +16,7 @@
                 </div>
                 <h6 class="mb-0">Những chỗ ngồi thuộc lịch chiếu cũng sẽ bị xóa</h6>
                 <div class="card-body">
-                    <form method="post" asp-action="Delete" asp-route-id="@Model.ScreeningId">
+                    <form method="post" asp-action="Delete" asp-controller="Screening" asp-route-id="@Model.ScreeningId">
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" >Tên phim</label>
                             <div class="col-sm-10">
@@ -52,7 +52,7 @@
                         </div>
                     </form>
                     <hr />
-                    <a asp-action="Index"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
+                    <a asp-action="Index" asp-controller="Screening" asp-route-id="@Context.Session.GetInt32("currentTheatreId")"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
                 </div>
             </div>
         </div>

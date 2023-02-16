@@ -27,15 +27,18 @@
                 <div class="anime__details__title">
                     <h3>Chọn rạp bạn muốn xem</h3>
                 </div>
-                <div class="anime__details__btn">
-                    <br />
-                    @{
-                        foreach (var item in ViewBag.Cinemas as IEnumerable<CinemaBookingSystem.ViewModels.CinemaViewModel>)
-                        {
-                            <a class="follow-btn" asp-action="ScreeningChoose" asp-controller="Screening" asp-route-movieId="@Model.MovieId" asp-route-cinemaId="@item.CinemaId"><i class="fa fa-film"></i> @item.CinemaName</a>
-                            <text> &nbsp; &nbsp;</text>
-                        }
+                <div class="row">
+                @{
+                    foreach (var item in ViewBag.Cinemas as IEnumerable<CinemaBookingSystem.ViewModels.CinemaViewModel>)
+                    {
+                        <div class="col-lg-4 col-md-4">
+                            <div class="anime__details__btn">
+                                <br />
+                                <a class="follow-btn" asp-action="ScreeningChoose" asp-controller="Screening" asp-route-movieId="@Model.MovieId" asp-route-cinemaId="@item.CinemaId"><i class="fa fa-film"></i> @item.CinemaName</a>
+                            </div>
+                        </div>
                     }
+                 }
                 </div>
             </div>
         </div>

@@ -1,4 +1,6 @@
-﻿@model IEnumerable<CinemaBookingSystem.ViewModels.TheatreViewModel>;
+﻿@model IPagedList<CinemaBookingSystem.ViewModels.TheatreViewModel>;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
 @{
     ViewData["Title"] = "TheatreChoose";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -13,6 +15,7 @@
         <div class="col-xxl">
             <div class="card mb-4">
                 <div class="card-header d-flex align-items-center justify-content-between">
+                    <h4 class="mb-0">Rạp @Model.First().Cinema.CinemaName</h4><br />
                     <a asp-action="LandingPage"> <input type="submit" class="btn btn-primary" value="Trở về danh sách rạp" /></a>
                     <br />
                     <h5 class="mb-0">Hãy chọn phòng chiếu bạn muốn xem lịch chiếu</h5>
@@ -45,6 +48,16 @@
                         </tbody>
                     </table>
                 </div>
+                Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+                <nav aria-label="Page navigation">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions(){
+                    DisplayLinkToIndividualPages = true,
+                    DisplayPageCountAndCurrentLocation = false,
+                    MaximumPageNumbersToDisplay = 10,
+                    LiElementClasses = new string[] { "page-item" },
+                    PageClasses = new string[] { "page-link" },
+                    })
+                </nav>
             </div>
         </div>
     </div>

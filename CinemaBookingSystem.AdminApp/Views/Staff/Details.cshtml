@@ -82,8 +82,8 @@
                     </form>
                     <div class="row justify-content-end">
                         <div class="col-sm-10">
-                            <a asp-action="Edit" asp-route-id="@Model.UserId"> <input type="submit" class="btn btn-danger w-100" value="Chỉnh sửa" /></a>&ensp;
-                            <a asp-action="Index"> <input type="submit" class="btn btn-primary w-100" value="Trở về danh sách" /></a>
+                            <a asp-action="Edit" asp-controller="Staff" asp-route-id="@Model.UserId"> <input type="submit" class="btn btn-danger w-100" value="Chỉnh sửa" /></a>&ensp;
+                            <a asp-action="Index" asp-controller="Staff"> <input type="submit" class="btn btn-primary w-100" value="Trở về danh sách" /></a>
                         </div>
                     </div>
                 </div>
