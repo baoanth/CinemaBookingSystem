@@ -24,6 +24,11 @@ namespace CinemaBookingSystem.WebApp.Controllers
         public IActionResult Index()
         {
             IEnumerable<MovieViewModel> list = GetMovieListRequest();
+            foreach (var item in list)
+            {
+                IEnumerable<CommentViewModel> comments = GetCommentListRequest(item.MovieId);
+                item.Comments = comments;
+            }
             return View(list);
         }
 
@@ -46,6 +51,27 @@ namespace CinemaBookingSystem.WebApp.Controllers
         {
             ViewBag.StatusCode = statusCode;
             return View();
+        }
+
+        private IEnumerable<CommentViewModel> GetCommentListRequest(object id)
+        {
+            IEnumerable<CommentViewModel> list = null;
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + $"comment/getall/{id}");
+            request.Method = HttpMethod.Get;
+
+            HttpResponseMessage response = _client.SendAsync(request).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                string body = response.Content.ReadAsStringAsync().Result;
+                list = JsonConvert.DeserializeObject<IEnumerable<CommentViewModel>>(body);
+            }
+            else
+            {
+                _notyf.Error("Không thể lấy thông tin bình luận do lỗi server");
+                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+            }
+            return list.OrderBy(x => x.CommentedAt);
         }
 
         public IEnumerable<MovieViewModel> GetMovieListRequest()

@@ -2,6 +2,7 @@
 using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
@@ -31,12 +32,22 @@ namespace CinemaBookingSystem.WebApp.Controllers
         public IActionResult ComingSoon()
         {
             IEnumerable<MovieViewModel> movies = GetMovieListRequest();
+            foreach (var item in movies)
+            {
+                IEnumerable<CommentViewModel> comments = GetCommentListRequest(item.MovieId);
+                item.Comments = comments;
+            }
             return View(movies.Where(x => x.ReleaseDate >= DateTime.UtcNow).ToList());
         }
 
         public IActionResult NowShowing()
         {
             IEnumerable<MovieViewModel> movies = GetMovieListRequest();
+            foreach (var item in movies)
+            {
+                IEnumerable<CommentViewModel> comments = GetCommentListRequest(item.MovieId);
+                item.Comments = comments;
+            }
             return View(movies.Where(x => x.ReleaseDate <= DateTime.UtcNow).ToList());
         }
 
@@ -164,7 +175,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
                 _notyf.Error("Không thể lấy thông tin bình luận do lỗi server");
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
-            return list.OrderBy(x => x.CommentedAt);
+            return list.OrderByDescending(x => x.CommentedAt);
         }
     }
 }

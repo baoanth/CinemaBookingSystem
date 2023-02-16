@@ -27,7 +27,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         public ActionResult Index()
         {
             IEnumerable<MovieViewModel>? list = GetMovieList();
-            return View(list);
+            return View(list.Reverse());
         }
 
         public IActionResult Details(int? id)

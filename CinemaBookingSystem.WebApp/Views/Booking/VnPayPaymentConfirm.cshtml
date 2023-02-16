@@ -1,15 +1,17 @@
 ﻿
 @{
-    ViewData["Title"] = "PaymentFailed";
+    ViewData["Title"] = "VnPayPaymentConfirm";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <section class="anime-details spad">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12 col-md-12">
-                <div class="anime__details__title text-center">
-                    <h3>Thanh toán thất bại. Có lỗi xảy ra trong quá trình xử lý hóa đơn</h3>
+            <div class="col-lg-12 col-md-12 text-center">
+                <div class="anime__details__title">
+                    <h3>@ViewBag.Message</h3>
+                    <br />
+                    <h4 style="color:white">Xem lại các thông tin đặt vé của bạn <a asp-action="Index" asp-controller="ClientBooking">tại đây</a></h4>
                 </div>
                 <div class="anime__details__btn">
                     <a class="follow-btn" asp-action="Index" asp-controller="Home">Trở về trang chủ</a>
@@ -18,3 +20,4 @@
         </div>
     </div>
 </section>
+
