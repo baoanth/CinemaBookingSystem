@@ -40,7 +40,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
                 key = key.ToLower().Trim();
                 movies = movies.Where(mv => mv.MovieName.ToLower().Trim().Contains(key));
             }
-            return View(movies.Where(x => x.ReleaseDate >= DateTime.UtcNow).Reverse().ToPagedList(pageNumber, pageSize));
+            return View(movies.Where(x => x.ReleaseDate >= DateTime.UtcNow).OrderByDescending(x => x.ReleaseDate).ToPagedList(pageNumber, pageSize));
         }
 
         public IActionResult NowShowing(int? page, string? key)
@@ -59,7 +59,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
                 key = key.ToLower().Trim();
                 movies = movies.Where(mv => mv.MovieName.ToLower().Trim().Contains(key));
             }
-            return View(movies.Where(x => x.ReleaseDate <= DateTime.UtcNow).Reverse().ToPagedList(pageNumber, pageSize));
+            return View(movies.Where(x => x.ReleaseDate <= DateTime.UtcNow).OrderByDescending(x => x.ReleaseDate).ToPagedList(pageNumber, pageSize));
         }
 
         public IActionResult TrailerWatch(int id)

@@ -2,6 +2,7 @@
 using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using X.PagedList;
 
 namespace CinemaBookingSystem.WebApp.Controllers
 {
@@ -20,11 +21,19 @@ namespace CinemaBookingSystem.WebApp.Controllers
             _notyf = notyf;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int? page, string? key)
         {
-            IEnumerable<CinemaViewModel> list = GetCinemaList();
+            if (page == null) page = 1;
+            int pageSize = 8;
+            int pageNumber = (page ?? 1);
 
-            return View(list.OrderBy(x => x.City));
+            IEnumerable<CinemaViewModel> list = GetCinemaList();
+            if (!String.IsNullOrEmpty(key))
+            {
+                key = key.ToLower().Trim();
+                list = list.Where(mv => mv.CinemaName.ToLower().Trim().Contains(key));
+            }
+            return View(list.OrderBy(x => x.City).ToPagedList(pageNumber, pageSize));
         }
 
         public IActionResult Details(int? id)

@@ -68,7 +68,7 @@
                 @if (Model.TotalItemCount != 0)
                 {
                     <div class="product__pagination">
-                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions(){
+                        @Html.PagedListPager(Model, page => Url.Action("ComingSoon", new { page }), new PagedListRenderOptions(){
                     DisplayLinkToIndividualPages = true,
                     DisplayPageCountAndCurrentLocation = false,
                     MaximumPageNumbersToDisplay = 10,
