@@ -260,10 +260,9 @@ namespace CinemaBookingSystem.WebApp.Controllers
                 //lấy toàn bộ dữ liệu được trả về
                 foreach (var s in vnpayData)
                 {
-                    string val = s.ToString();
-                    if (!string.IsNullOrEmpty(val) && val.StartsWith("vnp_"))
+                    if (!string.IsNullOrEmpty(s.Key) && s.Key.StartsWith("vnp_"))
                     {
-                        pay.AddResponseData(val, vnpayData[val]);
+                        pay.AddResponseData(s.Key, s.Value);
                     }
                 }
 
@@ -276,17 +275,18 @@ namespace CinemaBookingSystem.WebApp.Controllers
 
                 if (checkSignature)
                 {
+                    string errorCode = HttpContext.Request.Query["vnp_ResponseCode"].ToString();
                     if (vnp_ResponseCode == "00")
                     {
                         //Thanh toán thành công
                         SavePayment();
-                        ViewBag.Message = "Thanh toán thành công hóa đơn " + orderId + " | Mã giao dịch: " + vnpayTranId;
+                        ViewBag.Message = "Thanh toán thành công qua VNPAY hóa đơn " + orderId + " | Mã giao dịch: " + vnpayTranId + ", cảm ơn bạn đã sử dụng dịch vụ đặt vé của CINEMAX";
                     }
                     else
                     {
                         //Thanh toán không thành công. Mã lỗi: vnp_ResponseCode
                         DeleteBooking();
-                        ViewBag.Message = "Có lỗi xảy ra trong quá trình xử lý hóa đơn " + orderId + " | Mã giao dịch: " + vnpayTranId + " | Mã lỗi: " + vnp_ResponseCode;
+                        ViewBag.Message = "Có lỗi xảy ra trong quá trình xử lý hóa đơn VNPAY: " + orderId + " | Mã giao dịch: " + vnpayTranId + " | Mã lỗi: " + vnp_ResponseCode;
                     }
                 }
                 else

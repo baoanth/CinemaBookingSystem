@@ -49,7 +49,14 @@
                                             <span>@num</span>
                                         </td>
                                         <td>
-                                            <a asp-action="Details" asp-controller="Booking" asp-route-id="@item.BookingId"> @Html.DisplayFor(modelItem => item.VerifyCode)</a>
+                                            @if (!String.IsNullOrEmpty(item.VerifyCode))
+                                            {
+                                                <a asp-action="Details" asp-controller="Booking" asp-route-id="@item.BookingId"> @Html.DisplayFor(modelItem => item.VerifyCode)</a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="Details" asp-controller="Booking" asp-route-id="@item.BookingId"> Đơn chưa thanh toán </a>
+                                            }
                                         </td>
                                         <td>
                                             @item.BookedAt.ToString("HH:mm dd/MM/yyyy")

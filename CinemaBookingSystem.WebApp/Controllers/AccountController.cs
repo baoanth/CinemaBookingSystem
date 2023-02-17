@@ -101,7 +101,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             }
             else
             {
-                _notyf.Error("Không thể đăng ký do lỗi server", 4);
+                _notyf.Error("Tài khoản đã có người sử dụng", 4);
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
             return View(user);

@@ -12,7 +12,7 @@ namespace CinemaBookingSystem.ViewModels
         [Required(ErrorMessage = "Họ và tên là thông tin bắt buộc *")]
         public string FullName { get; set; }
         [Required(ErrorMessage = "Ngày sinh là thông tin bắt buộc *")]
-        public DateTime DOB { get; set; }
+        public DateTime? DOB { get; set; }
         [Required(ErrorMessage = "Email là thông tin bắt buộc *")]
         [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "E-mail không hợp lệ")]
         public string Email { get; set; }

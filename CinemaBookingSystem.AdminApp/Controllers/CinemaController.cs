@@ -89,7 +89,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể thực hiện do lỗi server hoặc thông tin chưa hợp lệ", 4);
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
+                
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
             return View();
@@ -107,7 +107,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể tìm thấy thông tin từ server", 4);
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
+                
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
                 
             }
@@ -127,7 +127,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể thực hiện do lỗi server", 4);
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
+                
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
             return View(cinema);
@@ -145,7 +145,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể tìm thấy thông tin từ server", 4);
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
+                
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
                 
             }
@@ -165,7 +165,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể thực hiện do lỗi server", 4);
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
+                
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
                 return RedirectToAction("Index");
             }

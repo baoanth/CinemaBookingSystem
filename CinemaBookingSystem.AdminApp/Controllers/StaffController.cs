@@ -28,7 +28,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             if (page == null) page = 1;
             int pageSize = 6;
             int pageNumber = (page ?? 1);
-            
+
             IEnumerable<UserViewModel> list = null;
             HttpResponseMessage response = GetUserList();
             if (response.IsSuccessStatusCode)
@@ -64,7 +64,6 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 _notyf.Error("Không thể tìm thấy thông tin từ server");
                 _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                
             }
             return View(user);
         }
@@ -100,10 +99,23 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             }
             else
             {
-                _notyf.Error("Không thể thực hiện do lỗi server hoặc thông tin chưa hợp lệ", 4);
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
+                _notyf.Error("Thông tin chưa hợp lệ hoặc tài khoản đã được sử dụng", 4);
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
+            IEnumerable<RoleViewModel> roleList = null;
+            HttpResponseMessage roleResponse = GetRoleList();
+            if (roleResponse.IsSuccessStatusCode)
+            {
+                string body = roleResponse.Content.ReadAsStringAsync().Result;
+                roleList = JsonConvert.DeserializeObject<IEnumerable<RoleViewModel>>(body);
+            }
+            else
+            {
+                _notyf.Error("Không thể tìm thấy thông tin rạp từ server");
+
+                Console.WriteLine("{0} ({1})", (int)roleResponse.StatusCode, roleResponse.ReasonPhrase);
+            }
+            ViewBag.RoleList = roleList;
             return View(user);
         }
 
@@ -119,9 +131,8 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể tìm thấy thông tin từ server", 4);
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
+
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                
             }
 
             IEnumerable<RoleViewModel> roleList = null;
@@ -134,7 +145,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể tìm thấy thông tin rạp từ server");
-                _notyf.Error($"Status code: {(int)roleResponse.StatusCode}, Message: {roleResponse.ReasonPhrase}");
+
                 Console.WriteLine("{0} ({1})", (int)roleResponse.StatusCode, roleResponse.ReasonPhrase);
             }
             ViewBag.RoleList = roleList;
@@ -154,9 +165,23 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể thực hiện do lỗi server", 4);
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
+
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
+            IEnumerable<RoleViewModel> roleList = null;
+            HttpResponseMessage roleResponse = GetRoleList();
+            if (roleResponse.IsSuccessStatusCode)
+            {
+                string body = roleResponse.Content.ReadAsStringAsync().Result;
+                roleList = JsonConvert.DeserializeObject<IEnumerable<RoleViewModel>>(body);
+            }
+            else
+            {
+                _notyf.Error("Không thể tìm thấy thông tin rạp từ server");
+
+                Console.WriteLine("{0} ({1})", (int)roleResponse.StatusCode, roleResponse.ReasonPhrase);
+            }
+            ViewBag.RoleList = roleList;
             return View(user);
         }
 
@@ -172,9 +197,8 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể tìm thấy thông tin từ server", 4);
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
+
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                
             }
             return View(user);
         }
@@ -192,7 +216,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể thực hiện do lỗi server", 4);
-                _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}", 4);
+
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
                 return RedirectToAction("Index");
             }

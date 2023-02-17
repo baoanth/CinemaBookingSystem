@@ -104,7 +104,15 @@
                                             total += item.ScreeningPosition.Price;
                                         }
                                     }
-                                    <h4>Tổng thanh toán: @string.Format("{0:#,##0}", total)đ (đã thanh toán bằng @Model.First().Booking.Payment.PaymentMethod)</h4>
+                                    @if (String.IsNullOrEmpty(Model.First().Booking.VerifyCode))
+                                    {
+                                        <h4>Tổng thanh toán: @string.Format("{0:#,##0}", total)đ (thanh toán thất bại)</h4>
+                                    }
+                                    else
+                                    {
+                                        <h4>Tổng thanh toán: @string.Format("{0:#,##0}", total)đ (đã thanh toán bằng @Model.First().Booking.Payment.PaymentMethod)</h4>
+
+                                    }
                                 </div>
                             </div>
                         </div>
