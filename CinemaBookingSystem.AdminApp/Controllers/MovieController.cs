@@ -25,12 +25,17 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page, string? key)
         {
             if (page == null) page = 1;
             int pageSize = 6;
             int pageNumber = (page ?? 1);
             IEnumerable<MovieViewModel>? list = GetMovieList();
+            if (!String.IsNullOrEmpty(key))
+            {
+                key = key.ToLower().Trim();
+                list = list.Where(x => x.MovieName.ToLower().Trim().Contains(key));
+            }
             return View(list.Reverse().ToPagedList(pageNumber, pageSize));
         }
 

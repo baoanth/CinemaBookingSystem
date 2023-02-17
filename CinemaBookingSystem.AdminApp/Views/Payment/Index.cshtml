@@ -21,8 +21,17 @@
                     <hr />
                     <h5 class="card-header">Phương thức hiện có : @totalMethod</h5>
                 </div>
+                <form method="post">
+                    <div class="row">
+                        <div class="col-sm-8" style="padding-left:30px !important">
+                            <input type="text" name="key" placeholder="Tìm kiếm..." class="form-control" />
+                        </div>
+                        <button type="submit" class="col-sm-1 btn btn-primary"><i class="fa fa-search"></i></button>
+                    </div>
+                </form>
+                <br />
+                <a asp-action="Create" asp-controller="Payment" style="padding-left:30px !important"> <input type="submit" class="btn btn-primary" value="Thêm mới" /></a>
                 <div class="card-body">
-                    <a asp-action="Create" style="padding-left:20px !important"> <input type="submit" class="btn btn-primary" value="Thêm mới" /></a>
                     <div class="table-responsive text-nowrap">
                         <table class="table">
                             <thead>

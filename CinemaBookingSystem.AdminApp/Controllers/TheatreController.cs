@@ -23,13 +23,18 @@ namespace TheatreBookingSystem.AdminApp.Controllers
             _notyf = notyf;
         }
 
-        public ActionResult Index(int id, int? page)
+        public ActionResult Index(int id, int? page, string? key)
         {
             if (page == null) page = 1;
             int pageSize = 6;
             int pageNumber = (page ?? 1);
             HttpContext.Session.SetInt32("currentCinemaId", id);
             IEnumerable<TheatreViewModel> list = GetTheatreListRequest(id);
+            if (!String.IsNullOrEmpty(key))
+            {
+                key = key.ToLower().Trim();
+                list = list.Where(x => x.TheatreName.ToLower().Trim().Contains(key));
+            }
             return View(list.Reverse().ToPagedList(pageNumber, pageSize));
         }
 

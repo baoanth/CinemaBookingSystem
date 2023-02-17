@@ -23,7 +23,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             _notyf = notyf;
         }
 
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page, string? key)
         {
             if (page == null) page = 1;
             int pageSize = 6;
@@ -41,6 +41,11 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 _notyf.Error("Không thể lấy thông tin do lỗi server");
                 _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+            }
+            if (!String.IsNullOrEmpty(key))
+            {
+                key = key.ToLower().Trim();
+                list = list.Where(x => x.FullName.ToLower().Trim().Contains(key));
             }
             return View(list.Reverse().ToPagedList(pageNumber, pageSize));
         }

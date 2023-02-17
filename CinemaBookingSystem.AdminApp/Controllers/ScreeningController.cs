@@ -25,32 +25,46 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             _notyf = notyf;
         }
 
-        public ActionResult LandingPage(int? page)
+        public ActionResult LandingPage(int? page, string? key)
         {
             if (page == null) page = 1;
             int pageSize = 6;
             int pageNumber = (page ?? 1);
             IEnumerable<CinemaViewModel> cinemaList = GetCinemaListRequest();
+            if (!String.IsNullOrEmpty(key))
+            {
+                key = key.ToLower().Trim();
+                cinemaList = cinemaList.Where(x => x.CinemaName.ToLower().Trim().Contains(key));
+            }
             return View(cinemaList.Reverse().ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult TheatreChoose(int id, int? page)
+        public ActionResult TheatreChoose(int id, int? page, string? key)
         {
             HttpContext.Session.SetInt32("currentCinemaId", id);
             if (page == null) page = 1;
             int pageSize = 6;
             int pageNumber = (page ?? 1);
             IEnumerable<TheatreViewModel> theatreList = GetTheatreListRequest(id);
+            if (!String.IsNullOrEmpty(key))
+            {
+                key = key.ToLower().Trim();
+                theatreList = theatreList.Where(x => x.TheatreName.ToLower().Trim().Contains(key));
+            }
             return View(theatreList.Reverse().ToPagedList(pageNumber, pageSize));
         }
 
-        public ActionResult Index(int id, int? page)
+        public ActionResult Index(int id, int? page, DateTime? key)
         {
             HttpContext.Session.SetInt32("currentTheatreId", id);
             if (page == null) page = 1;
             int pageSize = 6;
             int pageNumber = (page ?? 1);
             IEnumerable<ScreeningViewModel> list = GetScreeningListRequest(id);
+            if (!String.IsNullOrEmpty(key.ToString()))
+            {
+                list = list.Where(x => x.ShowTime.Date == key.Value.Date);
+            }
             return View(list.Reverse().ToPagedList(pageNumber, pageSize));
         }
 
@@ -80,7 +94,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             if (screening.ShowTime < DateTime.Now.AddDays(1))
             {
                 _notyf.Error("Thời gian chiếu không hợp lệ! Thời gian hợp lệ không được nhỏ hơn 1 ngày so với thời gian hiện tại", 5);
-                return View(screening);
+                return View();
             }
             //Setting attribute for screening schedule
             int? currentTheatreId = HttpContext.Session.GetInt32("currentTheatreId");
@@ -103,7 +117,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 _notyf.Error("Không thể thực hiện do lỗi server hoặc thông tin chưa hợp lệ", 4);
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
-            return View(screening);
+            return View();
         }
 
         [HttpPost]

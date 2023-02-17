@@ -19,6 +19,14 @@
                     <br />
                     <h5 class="mb-0">Hãy chọn rạp bạn muốn xem lịch chiếu</h5>
                 </div>
+                <form method="post">
+                    <div class="row">
+                        <div class="col-sm-8" style="padding-left:30px !important">
+                            <input type="text" name="key" placeholder="Tìm kiếm..." class="form-control" />
+                        </div>
+                        <button type="submit" class="col-sm-1 btn btn-primary"><i class="fa fa-search"></i></button>
+                    </div>
+                </form>
                 <div class="card-body">
                     <table class="table">
                         <thead>
@@ -49,7 +57,7 @@
                 </div>
                 Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
                 <nav aria-label="Page navigation">
-                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions(){
+                    @Html.PagedListPager(Model, page => Url.Action("LandingPage", new { page }), new PagedListRenderOptions(){
                     DisplayLinkToIndividualPages = true,
                     DisplayPageCountAndCurrentLocation = false,
                     MaximumPageNumbersToDisplay = 10,

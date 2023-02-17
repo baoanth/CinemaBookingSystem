@@ -21,12 +21,20 @@
                     <h4 class="mb-0">DANH SÁCH SUẤT CHIẾU</h4>
                     <h5 class="card-header">Suất chiếu hiện có : @totalScreening</h5>
                 </div>
-                <div class="card-body">
-                    <div style="display:flex;">
-                        <a asp-action="TheatreChoose" asp-controller="Screening" asp-route-id="@currentId" style="padding-left:20px !important"> <input type="submit" class="btn btn-primary" value="Trở về danh sách phòng chiếu" /></a>
-                        <a asp-action="Create" asp-controller="Screening" style="padding-left:20px !important"> <input type="submit" class="btn btn-primary" value="Thêm mới" /></a>
+                <form method="post">
+                    <div class="row">
+                        <div class="col-sm-8" style="padding-left:30px !important">
+                            <input type="date" name="key" placeholder="Tìm kiếm..." class="form-control" />
+                        </div>
+                        <button type="submit" class="col-sm-1 btn btn-primary"><i class="fa fa-search"></i></button>
                     </div>
-                    <br />
+                </form>
+                <br />
+                <div style="display:flex;">
+                    <a asp-action="TheatreChoose" asp-controller="Screening" asp-route-id="@currentId" style="padding-left:20px !important"> <input type="submit" class="btn btn-primary" value="Trở về danh sách phòng chiếu" /></a>
+                    <a asp-action="Create" asp-controller="Screening" style="padding-left:20px !important"> <input type="submit" class="btn btn-primary" value="Thêm mới" /></a>
+                </div>                
+                <div class="card-body">
                     <div class="table-responsive text-nowrap">
                         <table class="table">
                             <thead>
