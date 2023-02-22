@@ -26,6 +26,15 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("getall")]
+        public ActionResult GetAll([FromHeader, Required] string CBSToken)
+        {
+            var list = _bookingDetailService.GetAll();
+            var listVm = _mapper.Map<IEnumerable<BookingDetailViewModel>>(list);
+            return Ok(listVm);
+        }
+
+        [HttpGet]
         [Route("getallbybooking/{bookingId}")]
         public ActionResult GetAllByBooking([FromHeader, Required] string CBSToken,int bookingId)
         {

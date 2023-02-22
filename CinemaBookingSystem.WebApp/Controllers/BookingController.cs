@@ -96,7 +96,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
         {
             BookingViewModel booking = new BookingViewModel()
             {
-                IsPayed = false,
+                IsPaid = false,
                 UserId = (int)HttpContext.Session.GetInt32("_clientid"),
                 PaymentId = paymentId,
                 BookedAt = DateTime.Now,
@@ -194,7 +194,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             if (bookingId != null)
             {
                 BookingViewModel booking = GetSingleBookingRequest(bookingId);
-                booking.IsPayed = true;
+                booking.IsPaid = true;
                 booking.VerifyCode = Guid.NewGuid().ToString();
                 UpdateBookingRequest(booking);
 

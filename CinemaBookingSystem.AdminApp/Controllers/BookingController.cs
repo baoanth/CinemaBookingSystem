@@ -26,7 +26,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             _notyf = notyf;
         }
 
-        public ActionResult Index(int? page, string? key)
+        public ActionResult Index(int? page, string? key, DateTime? bookingdate)
         {
             if (page == null) page = 1;
             int pageSize = 6;
@@ -48,6 +48,10 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             {
                 key = key.ToLower().Trim();
                 list = list.Where(x => x.VerifyCode.ToLower().Trim().Contains(key));
+            }
+            if (!String.IsNullOrEmpty(bookingdate.ToString()))
+            {
+                list = list.Where(x => x.BookedAt.Date == bookingdate.Value.Date);
             }
             return View(list.Reverse().ToPagedList(pageNumber, pageSize));
         }

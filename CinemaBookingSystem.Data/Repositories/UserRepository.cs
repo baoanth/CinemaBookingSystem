@@ -15,10 +15,6 @@ namespace CinemaBookingSystem.Data.Repositories
 
         IEnumerable<User> GetByRole(int roleId);
 
-        IEnumerable<User> Search(string keyworks);
-
-        IEnumerable<User> GetAllStaff();
-
         User GetByUsername(string username);
     }
 
@@ -65,21 +61,9 @@ namespace CinemaBookingSystem.Data.Repositories
             return DbContext.Users.Where(x => x.Username.ToLower().Trim() == str).FirstOrDefault();
         }
 
-        public IEnumerable<User> Search(string keyworks)
-        {
-            var key = LowerTrim(keyworks);
-            var user = DbContext.Users.Where(x => key.Contains(x.FullName.ToLower().Trim())).ToList();
-            return user;
-        }
-
         public string LowerTrim(string str)
         {
             return str.ToLower().Trim();
-        }
-
-        public IEnumerable<User> GetAllStaff()
-        {
-            return DbContext.Users.Where(x => x.RoleID == 1 || x.RoleID == 2).ToList();
         }
     }
 }

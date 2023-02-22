@@ -8,14 +8,14 @@ using X.PagedList;
 
 namespace CinemaBookingSystem.AdminApp.Controllers
 {
-    public class StaffController : Controller
+    public class UserController : Controller
     {
         private Uri _baseUrl = new Uri("https://localhost:44322/api/user");
         private HttpClient _client;
         private const string APIKEY = "movienew";
         private readonly INotyfService _notyf;
 
-        public StaffController(INotyfService notyf)
+        public UserController(INotyfService notyf)
         {
             _client = new HttpClient();
             _client.BaseAddress = _baseUrl;
@@ -226,7 +226,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         public HttpResponseMessage GetUserList()
         {
             HttpRequestMessage request = new HttpRequestMessage();
-            request.RequestUri = new Uri(_baseUrl + $"/getallstaff");
+            request.RequestUri = new Uri(_baseUrl + $"/getall");
             request.Method = HttpMethod.Get;
 
             return _client.SendAsync(request).Result;

@@ -16,7 +16,7 @@
                     <h5 class="mb-0">Mọi thao tác không thể hoàn tác, bạn có chắc chắn muốn xóa phòng chiếu @Html.DisplayFor(model => model.TheatreName) ra khỏi danh sách?</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" asp-action="Delete" asp-controller="Staff" asp-route-id="@Model.TheatreId">
+                    <form method="post" asp-action="Delete" asp-controller="User" asp-route-id="@Model.TheatreId">
                         <div class="row justify-content-end">
                             <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
                         </div>

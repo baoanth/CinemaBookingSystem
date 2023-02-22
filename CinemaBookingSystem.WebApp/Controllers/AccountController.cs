@@ -97,7 +97,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Đăng ký thành công tài khoản: {user.Username}, hãy tiến hành đăng nhập bằng tài khoản mới!", 3);
-                return RedirectToAction("Account", "Login");
+                return RedirectToAction("Login", "Account");
             }
             else
             {

@@ -48,15 +48,6 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("getallstaff")]
-        public ActionResult GetAllStaff([FromHeader, Required] string CBSToken)
-        {
-            var listUser = _userService.GetAllStaff();
-            var listUserVm = _mapper.Map<IEnumerable<UserViewModel>>(listUser);
-            return Ok(listUserVm);
-        }
-
-        [HttpGet]
         [Route("getbyrole")]
         public ActionResult GetByRole([FromHeader, Required] string CBSToken, int roleId)
         {
@@ -79,19 +70,6 @@ namespace CinemaBookingSystem.WebAPI.Controllers
             {
                 var userVm = _mapper.Map<UserViewModel>(user);
                 return Ok(userVm);
-            }
-        }
-
-        [HttpGet]
-        [Route("search")]
-        public ActionResult Search([FromHeader, Required] string CBSToken, string keywords)
-        {
-            var listUser = _userService.Search(keywords);
-            if (listUser.Count() <= 0) return NotFound("There is no user!");
-            else
-            {
-                var listUserVm = _mapper.Map<IEnumerable<UserViewModel>>(listUser);
-                return Ok(listUserVm);
             }
         }
 

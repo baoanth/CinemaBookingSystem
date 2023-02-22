@@ -14,7 +14,7 @@
                         BookingId = c.Int(nullable: false, identity: true),
                         PaymentId = c.Int(nullable: false),
                         BookedAt = c.DateTime(nullable: false),
-                        IsPayed = c.Boolean(nullable: false),
+                        IsPaid = c.Boolean(nullable: false),
                         UserId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.BookingId)

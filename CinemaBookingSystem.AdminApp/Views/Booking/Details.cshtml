@@ -17,43 +17,72 @@
                 <div class="card-body">
                     <form method="post">
                         <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label" for="movie-name">Tên phim</label>
+                            <label class="col-sm-2 col-form-label" >Tài khoản khách hàng</label>
+                            <div class="col-sm-10">
+                                @Model.First().Booking.User.Username
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" >Họ tên</label>
+                            <div class="col-sm-10">
+                                @Model.First().Booking.User.FullName
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" >Email khách hàng</label>
+                            <div class="col-sm-10">
+                                @Model.First().Booking.User.Email
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" >Số điện thoại khách hàng</label>
+                            <div class="col-sm-10">
+                                @Model.First().Booking.User.PhoneNumber
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <hr />
+                <div class="card-body">
+                    <form method="post">
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" >Tên phim</label>
                             <div class="col-sm-10">
                                 @Model.First().ScreeningPosition.Screening.Movie.MovieName
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label" for="movie-name">Ngày chiếu</label>
+                            <label class="col-sm-2 col-form-label" >Ngày chiếu</label>
                             <div class="col-sm-10">
                                 @Model.First().ScreeningPosition.Screening.ShowTime.ToString("dd/MM/yyyy")
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label" for="movie-name">Giờ chiếu</label>
+                            <label class="col-sm-2 col-form-label" >Giờ chiếu</label>
                             <div class="col-sm-10">
                                 @Model.First().ScreeningPosition.Screening.ShowTime.ToString("HH:mm") (Thời gian chiếu: @Model.First().ScreeningPosition.Screening.Movie.RunningTime phút)
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label" for="movie-name">Tại rạp</label>
+                            <label class="col-sm-2 col-form-label" >Tại rạp</label>
                             <div class="col-sm-10">
                                 @Model.First().ScreeningPosition.Screening.Theatre.Cinema.CinemaName
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label" for="movie-name">Phòng chiếu</label>
+                            <label class="col-sm-2 col-form-label" >Phòng chiếu</label>
                             <div class="col-sm-10">
                                 @Model.First().ScreeningPosition.Screening.Theatre.TheatreName
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label" for="movie-name">Tổng số ghế</label>
+                            <label class="col-sm-2 col-form-label" >Tổng số ghế</label>
                             <div class="col-sm-10">
                                 @Model.Count()
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label" for="movie-name">Ghế chọn</label>
+                            <label class="col-sm-2 col-form-label" >Ghế chọn</label>
                             <div class="col-sm-10">
                                 @foreach (var item in Model)
                                 {
@@ -71,7 +100,7 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label" for="movie-name">Tổng thanh toán</label>
+                            <label class="col-sm-2 col-form-label" >Tổng thanh toán</label>
                             <div class="col-sm-10">
                                 @{
                                     int total = 0;

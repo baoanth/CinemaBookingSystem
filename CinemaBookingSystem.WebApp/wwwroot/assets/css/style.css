@@ -125,6 +125,7 @@ ol {
 	padding-left: 20px;
 	position: relative;
 	font-family: "Oswald", sans-serif;
+	line-height: 1.5;
 }
 
 .section-title h4:after,

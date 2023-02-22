@@ -72,7 +72,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
         {
             MovieViewModel movie = GetMovieDetailsRequest(id);
             IEnumerable<MovieViewModel> movies = GetMovieListRequest();
-            movies = movies.Where(x => x.MovieId != movie.MovieId);
+            movies = movies.Where(x => x.MovieId != movie.MovieId && x.ReleaseDate < DateTime.Now).OrderByDescending(x => x.ReleaseDate).Take(5);
             ViewBag.Movies = movies;
             IEnumerable<CommentViewModel> comments = GetCommentListRequest(id);
             movie.Comments = comments;

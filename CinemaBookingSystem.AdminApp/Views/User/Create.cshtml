@@ -1,89 +1,94 @@
 ﻿@model CinemaBookingSystem.ViewModels.UserViewModel;
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Staff/</span> Profile</h4>
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">User/</span> Create</h4>
     <!-- Basic Layout & Basic with Icons -->
     <div class="row">
         <!-- Basic Layout -->
         <div class="col-xxl">
             <div class="card mb-4">
                 <div class="card-header d-flex align-items-center justify-content-between">
-                    <h5 class="mb-0">Thông tin người dùng</h5>
+                    <h5 class="mb-0">Thêm người dùng hệ thống</h5>
+                    <small class="text-muted float-end text-danger">* là thông tin bắt buộc</small>
                 </div>
                 <div class="card-body">
-                    <form>
-                        <div class="row mb-3" hidden="hidden">
-                            <label class="col-sm-2 col-form-label" for="user-id">User ID<span class="text-danger"> *</span></label>
-                            <div class="col-sm-10">
-                                <input type="text" asp-for=UserId class="form-control" id="user-id" readonly="readonly" />
-                                <span asp-validation-for="UserId" class="text-danger"></span>
-                            </div>
-                        </div>
+                    <form method="post" asp-action="Create" asp-controller="User">
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="user-name">Tên đăng nhập<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for=Username class="form-control" id="user-name" readonly="readonly" />
+                                <input type="text" asp-for=Username class="form-control" id="user-name" />
                                 <span asp-validation-for="Username" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="password">Mật khẩu<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" readonly="readonly" asp-for=Password class="form-control" id="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
+                                <input type="password" asp-for=Password class="form-control" id="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" />
                                 <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="fullname">Họ tên<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for=FullName class="form-control" id="fullname" readonly="readonly" placeholder="840000..." />
+                                <input type="text" asp-for=FullName class="form-control" id="fullname" />
                                 <span asp-validation-for="FullName" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="dob">Ngày sinh<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="date" asp-for="DOB" class="form-control" id="dob" readonly="readonly" />
+                                <input type="date" asp-for="DOB" class="form-control" id="dob" />
                                 <span asp-validation-for="DOB" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="email">Email<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for="Email" class="form-control" id="email" readonly="readonly" />
+                                <input type="text" asp-for="Email" class="form-control" id="email" />
                                 <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="phone-number">Số điện thoại<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for="PhoneNumber" class="form-control" id="phone-number" readonly="readonly" />
+                                <input type="text" asp-for="PhoneNumber" class="form-control" id="phone-number" />
                                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="address">Địa chỉ<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for="Address" class="form-control" id="address" readonly="readonly" />
+                                <input type="text" asp-for="Address" class="form-control" id="address" />
                                 <span asp-validation-for="Address" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="row mb-3" hidden="hidden">
-                            <label class="col-sm-2 col-form-label" for="role">RoleId<span class="text-danger"> *</span></label>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="role-select">Quyền hệ thống<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for="RoleId" class="form-control" id="role" readonly="readonly" />
+                                <select id="role-select" class="form-select" asp-for="RoleId">
+                                    @{
+                                        foreach (var item in ViewBag.RoleList)
+                                        {
+                                            <option value="@item.RoleId">@item.RoleName</option>
+                                        }
+                                    }
+                                </select>
                                 <span asp-validation-for="RoleId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row justify-content-end">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-success w-100" value="Tạo tài khoản">Tạo tài khoản</button> &ensp;
                             </div>
                         </div>
                     </form>
                     <div class="row justify-content-end">
                         <div class="col-sm-10">
-                            <a asp-action="Edit" asp-controller="Staff" asp-route-id="@Model.UserId"> <input type="submit" class="btn btn-danger w-100" value="Chỉnh sửa" /></a>&ensp;
-                            <a asp-action="Index" asp-controller="Staff"> <input type="submit" class="btn btn-primary w-100" value="Trở về danh sách" /></a>
+                            <a asp-action="Index" asp-controller="User"> <input type="submit" class="btn btn-primary w-100" value="Trở về danh sách" /></a>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,15 @@
-﻿@{
+﻿@model IEnumerable<CinemaBookingSystem.ViewModels.BookingDetailViewModel>
+@{
     ViewData["Title"] = "Home Page";
     string? fullName = Context.Session.GetString("_fullname");
+}
+
+@{
+    int totalMonth = 0;
+    foreach (var item in Model)
+    {
+        totalMonth += item.ScreeningPosition.Price;
+    }
 }
 
 <div class="container-xxl flex-grow-1 container-p-y">
@@ -39,33 +48,16 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class="d-flex flex-column align-items-center gap-1">
                             <br>
-                            <h3 class="mb-2">8,258</h3>
+                            <h3 class="mb-2">@Model.Count()</h3>
                             <span>Số vé bán ra</span>
                         </div>
                         <div class="d-flex flex-column align-items-center gap-1">
                             <br>
-                            <h3 class="mb-2">82,258,000 đ</h3>
+                            
+                            <h3 class="mb-2">@string.Format("{0:#,##0}", totalMonth) đ</h3>
                             <span>Tổng tiền vé</span>
                         </div>
                     </div>
-                    <h5 class="mb-2">Phim top doanh số</h5>
-                    <ul class="p-0 m-0">
-                        <li class="d-flex mb-4 pb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <span class="avatar-initial rounded bg-label-primary">
-                                    <i class="bx bx-mobile-alt"></i>
-                                </span>
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <h6 class="mb-0">Electronic</h6>
-                                </div>
-                                <div class="user-progress">
-                                    <small class="fw-semibold">82.5k</small>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
@@ -81,33 +73,15 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class="d-flex flex-column align-items-center gap-1">
                             <br>
-                            <h3 class="mb-2">8,258</h3>
+                            <h3 class="mb-2">@Model.Count()</h3>
                             <span>Số vé bán ra</span>
                         </div>
                         <div class="d-flex flex-column align-items-center gap-1">
                             <br>
-                            <h3 class="mb-2">82,258,000 đ</h3>
+                            <h3 class="mb-2">@string.Format("{0:#,##0}", totalMonth) đ</h3>
                             <span>Tổng tiền vé</span>
                         </div>
                     </div>
-                    <h5 class="mb-2">Phim top doanh số</h5>
-                    <ul class="p-0 m-0">
-                        <li class="d-flex mb-4 pb-1">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <span class="avatar-initial rounded bg-label-primary">
-                                    <i class="bx bx-film"></i>
-                                </span>
-                            </div>
-                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                <div class="me-2">
-                                    <h6 class="mb-0">Electronic</h6>
-                                </div>
-                                <div class="user-progress">
-                                    <small class="fw-semibold">82.5k</small>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>

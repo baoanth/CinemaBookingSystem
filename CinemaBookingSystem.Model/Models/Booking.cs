@@ -14,7 +14,7 @@ namespace CinemaBookingSystem.Model.Models
         [Required]
         public DateTime BookedAt { get; set; }
         [Required]
-        public bool IsPayed { get; set; }
+        public bool IsPaid { get; set; }
         [ForeignKey("PaymentId")]
         public virtual Payment Payment { get; set; }
         [Required]

@@ -26,8 +26,6 @@
             <div class="row">
                 <div class="col-lg-3">
                     <div class="anime__details__pic set-bg" data-setbg="@("/media/thumpnails/" + Model.ThumpnailImg)">
-                        <div class="comment"><i class="fa fa-comments"></i> @Model.Comments.Count()</div>
-                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
                     </div>
                 </div>
                 <div class="col-lg-9">
@@ -35,9 +33,6 @@
                         <div class="anime__details__title">
                             <h3>@Model.MovieName</h3>
                             <span>@Model.Genres</span>
-                        </div>
-                        <div class="anime__details__rating">
-                            <span>0 lượt xem</span>
                         </div>
                         <p>
                             @Model.Description
@@ -135,7 +130,6 @@
                         foreach (var item in ViewBag.Movies as IEnumerable<CinemaBookingSystem.ViewModels.MovieViewModel>)
                         {
                             <div class="product__sidebar__view__item set-bg" data-setbg="@("/media/thumpnails/" + item.ThumpnailImg)">
-                                <div class="view"><i class="fa fa-eye"></i> 9141</div>
                                 <h5><a asp-action="Details" asp-controller="Movie" asp-route-id="@item.MovieId">@item.MovieName</a></h5>
                             </div>
                         }
