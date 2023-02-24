@@ -23,7 +23,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             _notyf = notyf;
         }
 
-        public ActionResult Index(int? page, string? key)
+        public ActionResult Index(int? page, string? fullname, string? username, string? role)
         {
             if (page == null) page = 1;
             int pageSize = 6;
@@ -43,10 +43,20 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
-            if (!String.IsNullOrEmpty(key))
+            if (!String.IsNullOrEmpty(fullname))
             {
-                key = key.ToLower().Trim();
-                list = list.Where(x => x.FullName.ToLower().Trim().Contains(key));
+                fullname = fullname.ToLower().Trim();
+                list = list.Where(x => x.FullName.ToLower().Trim().Contains(fullname));
+            }
+            if (!String.IsNullOrEmpty(username))
+            {
+                username = username.ToLower().Trim();
+                list = list.Where(x => x.Username == username);
+            }
+            if (!String.IsNullOrEmpty(role))
+            {
+                role = role.ToLower().Trim();
+                list = list.Where(x => x.Role.RoleName.ToLower().Trim().Contains(role));
             }
             return View(list.Reverse().ToPagedList(pageNumber, pageSize));
         }

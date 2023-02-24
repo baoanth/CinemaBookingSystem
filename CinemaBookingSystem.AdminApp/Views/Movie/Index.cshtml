@@ -10,7 +10,6 @@
     int totalMovie = Model.TotalItemCount;
 }
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Movie/</span> List</h4>
     <!-- Basic Layout & Basic with Icons -->
     <div class="row">
         <!-- Basic Layout -->
@@ -23,8 +22,23 @@
                 </div>
                 <form method="post">
                     <div class="row">
+                        <label class="col-sm-3 col-form-label" style="padding-left:30px !important">Lọc theo ngày khởi chiếu:</label>
+                        <label class="col-sm-1 col-form-label" for="from">Từ ngày</label>
+                        <div class="col-sm-2">
+                            <input type="date" name="from" class="form-control" />
+                        </div>
+                        <label class="col-sm-1 col-form-label" for="to">đến</label>
+                        <div class="col-sm-2">
+                            <input type="date" name="to" class="form-control" />
+                        </div>
+                        <button type="submit" class="col-sm-1 btn btn-primary">Lọc</button>
+                    </div>
+                </form>
+                <br />
+                <form method="post">
+                    <div class="row">
                         <div class="col-sm-8" style="padding-left:30px !important">
-                            <input type="text" name="key" placeholder="Tìm kiếm..." class="form-control" />
+                            <input type="text" name="key" placeholder="Tìm kiếm bằng tên phim" class="form-control" />
                         </div>
                         <button type="submit" class="col-sm-1 btn btn-primary"><i class="fa fa-search"></i></button>
                     </div>

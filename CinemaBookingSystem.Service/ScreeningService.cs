@@ -6,7 +6,7 @@ namespace CinemaBookingSystem.Service
 {
     public interface IScreeningService
     {
-        void Add(Screening screening);
+        bool Add(Screening screening);
 
         void Delete(int id);
 
@@ -34,9 +34,26 @@ namespace CinemaBookingSystem.Service
             _unitOfWork = unitOfWork;
         }
 
-        public void Add(Screening screening)
+        public bool Add(Screening screening)
         {
-            _screeningRepository.Add(screening);
+            bool check = _screeningRepository.GetAll().Where(x => x.TheatreId == screening.TheatreId).Any(x => (x.ShowTime <= screening.ShowTime
+            && x.ShowTime.AddMinutes(x.Movie.RunningTime + 30) >= screening.ShowTime)
+            || (x.ShowTime <= screening.ShowTime.AddMinutes(screening.Movie.RunningTime + 30)
+            && x.ShowTime.AddMinutes(x.Movie.RunningTime + 30) >= screening.ShowTime.AddMinutes(screening.Movie.RunningTime + 30)));
+            /*            foreach (var item in list)
+                        {
+                            DateTime startShow = item.ShowTime;
+                            DateTime endShow = item.ShowTime.AddMinutes(item.Movie.RunningTime + 30);
+                            if (screening.ShowTime < endShow && screening.ShowTime > startShow && screening.TheatreId == item.TheatreId)
+                            {
+                                return false;
+                            }
+                        }*/
+            if (!check)
+            {
+                _screeningRepository.Add(screening);
+            }
+            return !check;
         }
 
         public void Delete(int id)

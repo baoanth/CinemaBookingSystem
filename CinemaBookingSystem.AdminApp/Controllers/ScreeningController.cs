@@ -1,9 +1,8 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using X.PagedList;
@@ -25,47 +24,30 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             _notyf = notyf;
         }
 
-        public ActionResult LandingPage(int? page, string? key)
+        public ActionResult Index(int? page, DateTime? key, string? Theatre)
         {
+            IEnumerable<CinemaViewModel> cinemas = GetCinemaListRequest();
+            ViewBag.Cinemas = new SelectList(cinemas, "CinemaId", "CinemaName");
             if (page == null) page = 1;
             int pageSize = 6;
             int pageNumber = (page ?? 1);
-            IEnumerable<CinemaViewModel> cinemaList = GetCinemaListRequest();
-            if (!String.IsNullOrEmpty(key))
-            {
-                key = key.ToLower().Trim();
-                cinemaList = cinemaList.Where(x => x.CinemaName.ToLower().Trim().Contains(key));
-            }
-            return View(cinemaList.Reverse().ToPagedList(pageNumber, pageSize));
-        }
-
-        public ActionResult TheatreChoose(int id, int? page, string? key)
-        {
-            HttpContext.Session.SetInt32("currentCinemaId", id);
-            if (page == null) page = 1;
-            int pageSize = 6;
-            int pageNumber = (page ?? 1);
-            IEnumerable<TheatreViewModel> theatreList = GetTheatreListRequest(id);
-            if (!String.IsNullOrEmpty(key))
-            {
-                key = key.ToLower().Trim();
-                theatreList = theatreList.Where(x => x.TheatreName.ToLower().Trim().Contains(key));
-            }
-            return View(theatreList.Reverse().ToPagedList(pageNumber, pageSize));
-        }
-
-        public ActionResult Index(int id, int? page, DateTime? key)
-        {
-            HttpContext.Session.SetInt32("currentTheatreId", id);
-            if (page == null) page = 1;
-            int pageSize = 6;
-            int pageNumber = (page ?? 1);
-            IEnumerable<ScreeningViewModel> list = GetScreeningListRequest(id);
+            IEnumerable<ScreeningViewModel> list = GetScreeningListRequest();
             if (!String.IsNullOrEmpty(key.ToString()))
             {
                 list = list.Where(x => x.ShowTime.Date == key.Value.Date);
             }
-            return View(list.Reverse().ToPagedList(pageNumber, pageSize));
+            if (!String.IsNullOrEmpty(Theatre))
+            {
+                list = list.Where(x => x.TheatreId == Convert.ToInt32(Theatre));
+            }
+            return View(list.OrderByDescending(x => x.ShowTime).ToPagedList(pageNumber, pageSize));
+        }
+
+        public JsonResult GetTheatre(string id)
+        {
+            List<SelectListItem> theatres = new List<SelectListItem>();
+            var theatresList = GetTheatreListRequest(Convert.ToInt32(id));
+            return Json(theatresList.ToList());
         }
 
         public ActionResult Details(int id)
@@ -114,7 +96,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             }
             else
             {
-                _notyf.Error("Không thể thực hiện do lỗi server hoặc thông tin chưa hợp lệ", 4);
+                _notyf.Error("Không thể thêm vì trùng lịch chiếu", 4);
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
             return View();
@@ -214,11 +196,11 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         }
 
         //Response message from API
-        public IEnumerable<ScreeningViewModel> GetScreeningListRequest(int id)
+        public IEnumerable<ScreeningViewModel> GetScreeningListRequest()
         {
             IEnumerable<ScreeningViewModel>? screenings = null;
             HttpRequestMessage request = new HttpRequestMessage();
-            request.RequestUri = new Uri(_baseUrl + $"/getallbytheatre/{id}");
+            request.RequestUri = new Uri(_baseUrl + $"/getall");
             request.Method = HttpMethod.Get;
             request.Headers.Add("CBSToken", APIKEY);
 

@@ -11,7 +11,6 @@
     int totalBooking = Model.TotalItemCount;
 }
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Booking/</span> List</h4>
     <!-- Basic Layout & Basic with Icons -->
     <div class="row">
         <!-- Basic Layout -->
@@ -24,14 +23,12 @@
                 </div>
                 <form method="post">
                     <div class="row">
-                        <div class="col-sm-8" style="padding-left:30px !important">
+                        <div class="col-sm-5" style="padding-left:30px !important">
                             <input type="text" name="key" placeholder="Tìm kiếm theo mã xác thực" class="form-control" />
                         </div>
-                        <br />
-                        <div class="col-sm-8" style="padding-left:30px !important">
-                            <input type="date" name="bookingdate" placeholder="Tìm kiếm..." class="form-control" />
+                        <div class="col-sm-5">
+                            <input type="date" name="bookingdate" class="form-control" />
                         </div>
-                        <br />
                         <button type="submit" class="col-sm-1 btn btn-primary"><i class="fa fa-search"></i></button>
                     </div>
                 </form>

@@ -83,9 +83,15 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                 try
                 {
                     var screening = _mapper.Map<Screening>(screeningVm);
-                    _screeningService.Add(screening);
-                    _screeningService.SaveChanges();
-                    return Created("Create successfully", screening);
+                    if (!_screeningService.Add(screening))
+                    {
+                        return BadRequest();
+                    }
+                    else
+                    {
+                        _screeningService.SaveChanges();
+                        return Created("Create successfully", screening);
+                    } 
                 }
                 catch (DbEntityValidationException ex)
                 {

@@ -25,7 +25,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             _notyf = notyf;
         }
 
-        public ActionResult Index(int? page, string? key)
+        public ActionResult Index(int? page, string? key, string? city, string? region)
         {
             if (page == null) page = 1;
             int pageSize = 6;
@@ -49,7 +49,15 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 key = key.ToLower().Trim();
                 list = list.Where(x => x.CinemaName.ToLower().Trim().Contains(key));
             }
-            return View(list.Reverse().ToPagedList(pageNumber, pageSize));
+            if (!String.IsNullOrEmpty(city))
+            {
+                list = list.Where(x => x.City == city);
+            }
+            if (!String.IsNullOrEmpty(region))
+            {
+                list = list.Where(x => x.Region == region);
+            }
+            return View(list.OrderBy(x => x.CinemaName).ToPagedList(pageNumber, pageSize));
         }
 
         public IActionResult Details(int? id)

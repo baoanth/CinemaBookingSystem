@@ -9,7 +9,6 @@
 }
 
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">User/</span> List</h4>
     <!-- Basic Layout & Basic with Icons -->
     <div class="row">
         <!-- Basic Layout -->
@@ -22,8 +21,18 @@
                 </div>
                 <form method="post">
                     <div class="row">
-                        <div class="col-sm-8" style="padding-left:30px !important">
-                            <input type="text" name="key" placeholder="Tìm kiếm theo tên" class="form-control" />
+                        <div class="col-sm-3" style="padding-left:30px !important">
+                            <input type="text" name="fullname" placeholder="Nhập tên" class="form-control" />
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="text" name="username" placeholder="Nhập tài khoản" class="form-control" />
+                        </div>
+                        <div class="col-sm-3">
+                            <select name="role" class="form-select">
+                                <option value="">Quyền hệ thống</option>
+                                <option value="System Administrator">Quản trị viên</option>
+                                <option value="Normal User">Khách hàng</option>
+                            </select>
                         </div>
                         <button type="submit" class="col-sm-1 btn btn-primary"><i class="fa fa-search"></i></button>
                     </div>

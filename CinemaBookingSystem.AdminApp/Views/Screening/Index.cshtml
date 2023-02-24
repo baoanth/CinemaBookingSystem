@@ -8,47 +8,56 @@
 @{
     int num = 0;
     int totalScreening = Model.TotalItemCount;
-    int? currentId = Context.Session.GetInt32("currentCinemaId");
 }
 <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Screening/</span> List</h4>
     <!-- Basic Layout & Basic with Icons -->
     <div class="row">
         <!-- Basic Layout -->
         <div class="col-xxl">
             <div class="card mb-4">
                 <div class="card-header d-flex align-items-center justify-content-between">
-                    <h4 class="mb-0">DANH SÁCH SUẤT CHIẾU PHÒNG CHIẾU</h4>
+                    <h4 class="mb-0">DANH SÁCH SUẤT CHIẾU</h4>
                     <h5 class="card-header">Suất chiếu hiện có : @totalScreening</h5>
                 </div>
                 <form method="post">
                     <div class="row">
-                        <div class="col-sm-8" style="padding-left:30px !important">
-                            <input type="date" name="key" placeholder="Tìm kiếm..." class="form-control" />
+                        <div class="col-sm-4" style="padding-left:30px !important">
+                            @Html.DropDownList("Cinema", ViewBag.Cinemas as SelectList, "Hãy chọn rạp", new { @class="form-select"})
+                        </div>
+                        <div class="col-sm-4">
+                            @Html.DropDownList("Theatre", new SelectList(string.Empty, "theatreId", "theatreName"), "Hãy chọn phòng chiếu", new { @class = "form-select" })
+                        </div>
+                        <button type="submit" class="col-sm-1 btn btn-primary">Lọc</button>
+                    </div>
+                </form>
+                <br />
+                <form method="post">
+                    <div class="row">
+                        <label class="col-sm-3 col-form-label"style="padding-left:30px !important">Tìm kiếm theo ngày chiếu</label>
+                        <div class="col-sm-2">
+                            <input type="date" name="key" class="form-control" />
                         </div>
                         <button type="submit" class="col-sm-1 btn btn-primary"><i class="fa fa-search"></i></button>
                     </div>
                 </form>
                 <br />
-                <div style="display:flex;">
-                    <a asp-action="TheatreChoose" asp-controller="Screening" asp-route-id="@currentId" style="padding-left:20px !important"> <input type="submit" class="btn btn-primary" value="Trở về danh sách phòng chiếu" /></a>
-                    <a asp-action="Create" asp-controller="Screening" style="padding-left:20px !important"> <input type="submit" class="btn btn-primary" value="Thêm mới" /></a>
-                </div>                
+                    <a asp-action="Create" asp-controller="Screening" style="padding-left:20px !important"> <input type="submit" class="btn btn-primary" value="Thêm mới" /></a>                
                 <div class="card-body">
                     <div class="table-responsive text-nowrap">
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th>STT</th>
-                                    <th>Tên phim</th>
-                                    <th>Ngày chiếu</th>
-                                    <th>Giờ chiếu</th>
+                                    <th>Rạp</th>
+                                    <th>Phòng chiếu</th>
+                                    <th>Thời gian chiếu</th>
+                                    <th>Thời gian kết thúc</th>
                                     <th>Trạng thái</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model.Reverse())
+                                @foreach (var item in Model)
                                 {
                                     num++;
                                     <tr>
@@ -56,13 +65,16 @@
                                             <span>@num</span>
                                         </td>
                                         <td>
-                                            @item.Movie.MovieName
+                                            @item.Theatre.Cinema.CinemaName
                                         </td>
                                         <td>
-                                            @item.ShowTime.ToString("dd/MM/yyyy")
+                                            @item.Theatre.TheatreName
                                         </td>
                                         <td>
-                                            @item.ShowTime.ToString("HH:mm")
+                                            @item.ShowTime.ToString("HH:mm dd/MM/yyyy")
+                                        </td>
+                                        <td>
+                                            @item.ShowTime.AddMinutes(item.Movie.RunningTime + 30).ToString("HH:mm dd/MM/yyyy")
                                         </td>
                                         <td>
                                             @{
@@ -77,13 +89,22 @@
                                             }
                                         </td>
                                         <td>
-                                            <a asp-action="ScreeningPositionsDetails" asp-controller="Screening" asp-route-id="@item.ScreeningId"> <input type="submit" value="Xem thông tin chỗ ngồi" class="btn btn-primary" /></a>
-                                            &nbsp&nbsp
-                                            <a asp-action="Details" asp-controller="Screening" asp-route-id="@item.ScreeningId"> <input type="submit" value="Xem chi tiết" class="btn btn-primary" /></a>
-                                            &nbsp&nbsp
-                                            <a asp-action="Edit" asp-controller="Screening" asp-route-id="@item.ScreeningId"> <input type="submit" value="Chỉnh sửa" class="btn btn-warning" /></a>
-                                            &nbsp&nbsp
-                                            <a asp-action="Delete" asp-controller="Screening" asp-route-id="@item.ScreeningId"> <input type="submit" value="Xóa" class="btn btn-danger" /></a>
+                                            @if (item.ShowTime < DateTime.Now)
+                                            {
+                                                <a asp-action="ScreeningPositionsDetails" asp-controller="Screening" asp-route-id="@item.ScreeningId"> <input type="submit" value="Xem thông tin chỗ ngồi" class="btn btn-primary" /></a>
+                                                <text>&nbsp&nbsp</text>
+                                                <a asp-action = "Details" asp-controller = "Screening" asp-route-id = "@item.ScreeningId"><input type="submit" value="Xem chi tiết" class="btn btn-primary"/></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-action="ScreeningPositionsDetails" asp-controller="Screening" asp-route-id="@item.ScreeningId"> <input type="submit" value="Xem thông tin chỗ ngồi" class="btn btn-primary" /></a>
+                                                <text>&nbsp&nbsp</text>
+                                                <a asp-action="Details" asp-controller="Screening" asp-route-id="@item.ScreeningId"> <input type="submit" value="Xem chi tiết" class="btn btn-primary" /></a>
+                                                <text>&nbsp&nbsp</text>
+                                                <a asp-action="Edit" asp-controller="Screening" asp-route-id="@item.ScreeningId"> <input type="submit" value="Chỉnh sửa" class="btn btn-warning" /></a>
+                                                <text>&nbsp&nbsp</text>
+                                                <a asp-action="Delete" asp-controller="Screening" asp-route-id="@item.ScreeningId"> <input type="submit" value="Xóa" class="btn btn-danger" /></a>
+                                            }
                                         </td>
                                     </tr>
                                 }
@@ -91,9 +112,10 @@
                             <tfoot class="table-border-bottom-0">
                                 <tr>
                                     <th>STT</th>
-                                    <th>Tên phim</th>
-                                    <th>Ngày chiếu</th>
-                                    <th>Giờ chiếu</th>
+                                    <th>Rạp</th>
+                                    <th>Phòng chiếu</th>
+                                    <th>Thời gian chiếu</th>
+                                    <th>Thời gian kết thúc</th>
                                     <th>Trạng thái</th>
                                     <th></th>
                                 </tr>
@@ -115,4 +137,32 @@
         </div>
     </div>
 </div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Country Dropdown Selectedchange event
+        $("#Cinema").change(function () {
+            $("#Theatre").empty();
+            $.ajax({
+                type: 'POST',
+                url: '/Screening/GetTheatre', // Calling json method
+                dataType: 'json',
+                data: { id: $("#Cinema").val() },
+                // Get Selected Country ID.
+                success: function (theatres) {
+                    console.log(theatres);
+                    $.each(theatres, function (i, theatre) {
+                        $("#Theatre").append('<option value="' + theatre.theatreId + '">' +
+                            theatre.theatreName + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve states.' + ex);
+                }
+            });
+            return false;
+        })
+    });
+</script>  

@@ -25,7 +25,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        public ActionResult Index(int? page, string? key)
+        public ActionResult Index(int? page, string? key, DateTime? from, DateTime? to)
         {
             if (page == null) page = 1;
             int pageSize = 6;
@@ -35,6 +35,19 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             {
                 key = key.ToLower().Trim();
                 list = list.Where(x => x.MovieName.ToLower().Trim().Contains(key));
+            }
+            if (!String.IsNullOrEmpty(from.ToString()))
+            {
+                DateTime toDate = (to ?? DateTime.Now);
+                if (from > toDate)
+                {
+                    _notyf.Warning("Ngày không hợp lệ",5);
+                }
+                else
+                {
+                    list = list.Where(x => x.ReleaseDate.Date >= from.Value.Date && x.ReleaseDate.Date <= toDate.Date);
+                }
+
             }
             return View(list.Reverse().ToPagedList(pageNumber, pageSize));
         }
