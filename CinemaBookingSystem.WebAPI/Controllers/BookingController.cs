@@ -56,6 +56,19 @@ namespace CinemaBookingSystem.WebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("getbyverifycode/{verifycode}")]
+        public ActionResult GetByVerifyCode([FromHeader, Required] string CBSToken, string verifycode)
+        {
+            var booking = _bookingService.GetByVerifyCode(verifycode);
+            if (booking == null) return BadRequest("The input code doesn't exist!");
+            else
+            {
+                var bookingVm = _mapper.Map<BookingViewModel>(booking);
+                return Ok(bookingVm);
+            }
+        }
+
         [HttpPost]
         [Route("create")]
         public ActionResult Post([FromHeader, Required] string CBSToken, [FromBody] BookingViewModel bookingVm)

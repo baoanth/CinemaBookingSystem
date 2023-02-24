@@ -81,13 +81,19 @@
                     @{
                         if (Model.Comments != null)
                         {
-                            foreach (var item in Model.Comments.OrderBy(x => x.CommentedAt))
+                            foreach (var item in Model.Comments.OrderByDescending(x => x.CommentedAt))
                             {
                                 <div class="anime__review__item">
                                     <div class="anime__review__item__pic">
                                         <img src="~/assets/img/usericon.png" alt="">
                                     </div>
                                     <div class="anime__review__item__text">
+                                        @if (item.CommentedBy == Context.Session.GetInt32("_clientid"))
+                                            {
+                                            <div style="display:flex; float:right">
+                                                <a asp-action="DeleteComment" asp-controller="Movie" asp-route-id="@item.CommentId" asp-route-movieid="@item.MovieId"><i class="fa fa-times" style="color:red"></i></a>
+                                            </div> 
+                                            }   
                                         <h6>@item.CommentedUser.FullName - <span>@item.CommentedAt.ToString("HH:mm dd/MM/yyyy")</span></h6>
                                         <p>
                                             @item.Content
@@ -114,7 +120,7 @@
                         else
                         {
                             <div class="section-title">
-                                <h5>Hãy <a asp-action="Index" asp-controller="Signup">đăng ký</a> hoặc <a asp-action="Index" asp-controller="Login">đăng nhập</a> rồi để lại bình luận của bạn về phim nhé</h5>
+                                <h5>Hãy <a asp-action="Signup" asp-controller="Account">đăng ký</a> hoặc <a asp-action="Login" asp-controller="Account">đăng nhập</a> rồi để lại bình luận của bạn về phim nhé</h5>
                             </div>
                         }
                     }

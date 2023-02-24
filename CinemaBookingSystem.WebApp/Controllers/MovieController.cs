@@ -79,6 +79,21 @@ namespace CinemaBookingSystem.WebApp.Controllers
             return View(movie);
         }
 
+        public IActionResult DeleteComment(int id, int movieid)
+        {
+            HttpResponseMessage response = DeleteCommentRequest(id);
+            if (response.IsSuccessStatusCode)
+            {
+                _notyf.Success($"Xóa bình luận thành công", 3);
+            }
+            else
+            {
+                _notyf.Error("Không thể thực hiện do lỗi server", 4);
+                Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+            }
+            return RedirectToAction("Details", "Movie", new {id = movieid});
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Comment(string content, int movieId)
@@ -164,6 +179,15 @@ namespace CinemaBookingSystem.WebApp.Controllers
             request.RequestUri = new Uri(_baseUrl + "comment/create");
             request.Method = HttpMethod.Post;
             request.Content = content;
+
+            return _client.SendAsync(request).Result;
+        }
+
+        public HttpResponseMessage DeleteCommentRequest(int id)
+        {
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + $"comment/delete/{id}");
+            request.Method = HttpMethod.Delete;
 
             return _client.SendAsync(request).Result;
         }

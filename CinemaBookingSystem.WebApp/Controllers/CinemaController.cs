@@ -21,7 +21,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             _notyf = notyf;
         }
 
-        public IActionResult Index(int? page, string? key)
+        public IActionResult Index(int? page, string? key, string? region)
         {
             if (page == null) page = 1;
             int pageSize = 8;
@@ -32,6 +32,10 @@ namespace CinemaBookingSystem.WebApp.Controllers
             {
                 key = key.ToLower().Trim();
                 list = list.Where(mv => mv.CinemaName.ToLower().Trim().Contains(key));
+            }
+            if (!String.IsNullOrEmpty(region))
+            {
+                list = list.Where(mv => mv.Region == region);
             }
             return View(list.OrderBy(x => x.City).ToPagedList(pageNumber, pageSize));
         }

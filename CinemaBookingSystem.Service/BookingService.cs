@@ -18,6 +18,8 @@ namespace CinemaBookingSystem.Service
 
         Booking GetById(int id);
 
+        Booking GetByVerifyCode(string verifyCode);
+
         void SaveChanges();
     }
 
@@ -65,6 +67,11 @@ namespace CinemaBookingSystem.Service
         public void Update(Booking booking)
         {
             _bookingRepository.Update(booking);
+        }
+
+        public Booking GetByVerifyCode(string verifyCode)
+        {
+            return _bookingRepository.GetByVerifyCode(verifyCode);
         }
     }
 }

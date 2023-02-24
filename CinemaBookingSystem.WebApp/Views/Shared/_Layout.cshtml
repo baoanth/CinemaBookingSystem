@@ -58,7 +58,14 @@
                                         <li><a asp-controller="Movie" asp-action="ComingSoon">Phim sắp chiếu</a></li>
                                     </ul>
                                 </li>
-                                <li><a asp-action="Index" asp-controller="Cinema">Rạp</a></li>
+                                <li>
+                                    <a asp-controller="Cinema" asp-action="Index">Rạp<span class="arrow_carrot-down"></span></a>
+                                    <ul class="dropdown">
+                                        <li><a asp-controller="Cinema" asp-action="Index" asp-route-region="Miền Bắc">Miền Bắc</a></li>
+                                        <li><a asp-controller="Cinema" asp-action="Index" asp-route-region="Miền Trung">Miền Trung</a></li>
+                                        <li><a asp-controller="Cinema" asp-action="Index" asp-route-region="Miền Nam">Miền Nam</a></li>
+                                    </ul>
+                                </li>
                                 <li>
                                     <a asp-action="Index" asp-controller="Article">Tin mới</a>
                                 </li>

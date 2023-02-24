@@ -75,6 +75,35 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             return View(bookingDetail);
         }
 
+        public IActionResult Verify()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Verify(string verifycode)
+        {
+            if (String.IsNullOrEmpty(verifycode))
+            {
+                _notyf.Error("Hãy nhập mã xác thực!", 4);
+            }
+            else
+            {
+                HttpResponseMessage response = GetBookingByCodeRequest(verifycode);
+                if (response.IsSuccessStatusCode)
+                {
+                    string body = response.Content.ReadAsStringAsync().Result;
+                    BookingDetailViewModel bookingDetail = JsonConvert.DeserializeObject<BookingDetailViewModel>(body);
+                    return RedirectToAction("Details", "Booking", new { id = bookingDetail.BookingId });
+                }
+                else
+                {
+                    _notyf.Warning("Không tìm thấy đơn đặt vé nào", 4);
+                }
+            }
+            return View();
+        }
+
         //Response message
         public HttpResponseMessage GetBookingListRequest()
         {
@@ -91,6 +120,14 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             request.RequestUri = new Uri(_baseUrl + $"bookingdetail/getallbybooking/{id}");
             request.Method = HttpMethod.Get;
 
+            return _client.SendAsync(request).Result;
+        }
+
+        public HttpResponseMessage GetBookingByCodeRequest(string code)
+        {
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + $"booking/getbyverifycode/{code}");
+            request.Method = HttpMethod.Get;
             return _client.SendAsync(request).Result;
         }
     }

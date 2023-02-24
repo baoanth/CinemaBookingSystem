@@ -35,6 +35,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             {
                 string body = response.Content.ReadAsStringAsync().Result;
                 list = JsonConvert.DeserializeObject<IEnumerable<UserViewModel>>(body);
+                list = list.Where(x => x.UserId != HttpContext.Session.GetInt32("_id"));
             }
             else
             {
