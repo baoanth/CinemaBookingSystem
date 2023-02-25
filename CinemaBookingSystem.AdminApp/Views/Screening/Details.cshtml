@@ -27,15 +27,21 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label">Giờ chiếu</label>
+                            <label class="col-sm-2 col-form-label">Ngày chiếu</label>
                             <div class="col-sm-10">
                                 @Model.ShowTime.ToString("dd/MM/yyyy")
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label class="col-sm-2 col-form-label">Ngày chiếu</label>
+                            <label class="col-sm-2 col-form-label">Giờ chiếu</label>
                             <div class="col-sm-10">
                                 @Model.ShowTime.ToString("HH:mm")
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Giờ kết thúc</label>
+                            <div class="col-sm-10">
+                                @Model.ShowTime.AddMinutes(Model.Movie.RunningTime + 30).ToString("HH:mm")
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -60,7 +66,7 @@
                                     }
                                     else
                                     {
-                                        <span class="badge bg-label-primary me-1">Sắp chiếu</span>
+                                        <span class="badge bg-label-warning me-1">Sắp chiếu</span>
                                     }
                                 }
                             </div>
@@ -72,7 +78,7 @@
                              &ensp;
                             <a asp-action="ScreeningPositionsDetails" asp-controller="Screening" asp-route-id="@Model.ScreeningId"> <input type="submit" value="Xem thông tin chỗ ngồi" class="btn btn-primary" /></a>
                             &ensp;
-                            @if (!(Model.ShowTime <= DateTime.Now))
+                            @if (!(Model.ShowTime <= DateTime.Now.AddDays(7)))
                             {
                                 <a asp-action="Edit" asp-controller="Screening" asp-route-id="@Model.ScreeningId"> <input type="submit" class="btn btn-warning" value="Chỉnh sửa" /></a>
                                 <text>&ensp;</text>

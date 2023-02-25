@@ -458,18 +458,25 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         {
             if (!String.IsNullOrEmpty(Theatre))
             {
+                var theatre = GetTheatreDetailsRequest(Convert.ToInt32(Theatre));
+                ViewBag.Theatre = theatre.TheatreName;
+                ViewBag.Cinema = theatre.Cinema.CinemaName;
                 return View(Convert.ToInt32(Theatre));
             }
-            return View();
+            else
+            {
+                _notyf.Error("Hãy chọn phòng chiếu để xem lịch", 4);
+            }
+            return RedirectToAction("Index","Screening");
         }
-        public JsonResult JsonScreeningCalendar(double? start, double? end, int? id)
+        public JsonResult JsonScreeningCalendar(DateTime? start, DateTime? end, int? id)
         {
             DateTime aDateTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
             DateTime retDateTime = aDateTime.AddMonths(1).AddDays(-1);
-            if (start != null && end != null)
+            if (start.HasValue && end.HasValue)
             {
-                aDateTime = UnixTimeStampToDateTime(start.Value);
-                retDateTime = UnixTimeStampToDateTime(end.Value);
+                aDateTime = start.Value;
+                retDateTime = end.Value;
             }
             var details = GetScreeningListRequest()
                 .Where(x => x.ShowTime >= aDateTime

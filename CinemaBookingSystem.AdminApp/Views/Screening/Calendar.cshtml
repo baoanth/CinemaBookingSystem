@@ -1,4 +1,4 @@
-﻿@model int;
+﻿@model string;
 @using X.PagedList.Mvc.Core;
 @using X.PagedList.Web.Common;
 @{
@@ -15,6 +15,11 @@
     .DaChieu {
         background-color: green !important;
     }
+
+    .DangChieu {
+        background-color: royalblue !important;
+    }
+
     .swal2-content {
         text-align: left;
     }
@@ -22,29 +27,48 @@
     .swal2-footer {
         font-size: 1.3em;
     }
-    .fc-content{
-        color:white;
+
+    .fc-content {
+        color: white;
     }
-    .fc-center{
-        text-transform:uppercase !important;
+
+    .fc-center {
+        text-transform: uppercase !important;
     }
 </style>
-<div class="row">
-    <a asp-action="Index" asp-controller="Screening" style="padding-left:30px !important">Trở về</a>
-</div>
-<div class="row">
-    <div class="col-sm-10">
-        <div id="calendar"></div>
-    </div>
-    <div class="col-sm-2">
-        <div>
-            <ul class="list-unstyled spaced">
-                <li><i class="ace-icon fa fa-circle" style="color: green"></i>Đã chiếu</li>
-                <li><i class="ace-icon fa fa-circle" style="color: #F89406"></i>Chưa chiếu</li>
-            </ul>
+<div class="container-xxl flex-grow-1 container-p-y">
+    <!-- Basic Layout & Basic with Icons -->
+    <div class="row">
+        <!-- Basic Layout -->
+        <div class="col-xxl">
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center justify-content-between">
+                    <h4 class="mb-0">Phòng chiếu: @ViewBag.Theatre | Rạp: @ViewBag.Cinema </h4>
+                </div>
+                <a asp-action="Index" asp-controller="Screening" style="padding-left:30px !important">Trở về</a>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div>
+                                <ul class="list-unstyled spaced">
+                                    <li><i class="ace-icon fa fa-circle" style="color: green"></i> Đã chiếu</li>
+                                    <li><i class="ace-icon fa fa-circle" style="color: #F89406"></i> Chưa chiếu</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>'
 
@@ -86,7 +110,7 @@
             height: 750,
             contentHeight: 'auto',
             buttonIcons: false, // show the prev/next text
-            weekNumbers: true,
+            weekNumbers: false,
             navLinks: true, // can click day/week names to navigate views
             editable: false,
             eventLimit: true,
