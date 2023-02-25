@@ -5,6 +5,7 @@ namespace CinemaBookingSystem.Data.Repositories
 {
     public interface IScreeningRepository : IRepository<Screening>
     {
+        IEnumerable<Screening> GetAll();
         IEnumerable<Screening> GetAllByTheatre(int theatreId);
         IEnumerable<Screening> GetAllByCinemaAndMovie(int cinemaId,int movieId);
     }
@@ -13,6 +14,11 @@ namespace CinemaBookingSystem.Data.Repositories
         public ScreeningRepository(IDbFactory dbFactory) : base(dbFactory)
         {
 
+        }
+
+        public IEnumerable<Screening> GetAll()
+        {
+            return DbContext.Screenings.AsNoTracking().ToList();
         }
 
         public IEnumerable<Screening> GetAllByCinemaAndMovie(int cinemaId, int movieId)

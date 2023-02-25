@@ -51,7 +51,7 @@
                         </div>
                     </form>
                     <hr />
-                    <a asp-action="Index" asp-controller="Screening" asp-route-id="@Context.Session.GetInt32("currentTheatreId")"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
+                    <a asp-action="Details" asp-controller="Screening" asp-route-id="@Model.ScreeningId"> <input type="submit" class="btn btn-primary" value="Trở về" /></a>
                 </div>
             </div>
         </div>

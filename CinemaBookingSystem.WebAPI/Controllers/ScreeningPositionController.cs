@@ -144,6 +144,49 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Route("updatemulti")]
+        public ActionResult PutMulti([FromHeader, Required] string CBSToken, [FromBody] IEnumerable<ScreeningPositionViewModel> screeningPositionVms)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState.ValidationState);
+            else
+            {
+                try
+                {
+                    var screeningPositions = _mapper.Map<IEnumerable<ScreeningPosition>>(screeningPositionVms);
+                    foreach (var sp in screeningPositions)
+                    {
+                        _screeningPositionService.Update(sp);
+                        _screeningPositionService.SaveChanges();
+                    }
+                    return Ok(screeningPositions);
+                }
+                catch (DbEntityValidationException ex)
+                {
+                    foreach (var eve in ex.EntityValidationErrors)
+                    {
+                        Trace.WriteLine($"Entity of type \"{eve.Entry.Entity.GetType().Name}\" in state \"{eve.Entry.State}\" has the following validation errors:");
+                        foreach (var ve in eve.ValidationErrors)
+                        {
+                            Trace.WriteLine($"- Property: \"{ve.PropertyName}\", Error \"{ve.ErrorMessage}\"");
+                        }
+                    }
+                    _errorService.LogError(ex);
+                    return BadRequest(ex.InnerException.Message);
+                }
+                catch (DbUpdateException dbEx)
+                {
+                    _errorService.LogError(dbEx);
+                    return BadRequest(dbEx.InnerException.Message);
+                }
+                catch (Exception ex)
+                {
+                    _errorService.LogError(ex);
+                    return BadRequest(ex.Message);
+                }
+            }
+        }
+
+        [HttpPost]
         [Route("update")]
         public ActionResult Put([FromHeader, Required] string CBSToken, [FromBody] ScreeningPositionViewModel screeningPositionVm)
         {

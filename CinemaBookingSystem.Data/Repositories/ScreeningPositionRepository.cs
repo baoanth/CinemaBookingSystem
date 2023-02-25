@@ -6,7 +6,7 @@ namespace CinemaBookingSystem.Data.Repositories
     public interface IScreeningPositionRepository : IRepository<ScreeningPosition>
     {
         IEnumerable<ScreeningPosition> GetAllByScreening(int screeningId);
-
+        IEnumerable<ScreeningPosition> GetAll();
         void DeleteByScreening(int screeningId);
     }
 
@@ -23,6 +23,11 @@ namespace CinemaBookingSystem.Data.Repositories
             {
                 DbContext.ScreeningPositions.Remove(item);
             }
+        }
+
+        public IEnumerable<ScreeningPosition> GetAll()
+        {
+            return DbContext.ScreeningPositions.AsNoTracking().ToList();
         }
 
         public IEnumerable<ScreeningPosition> GetAllByScreening(int screeningId)

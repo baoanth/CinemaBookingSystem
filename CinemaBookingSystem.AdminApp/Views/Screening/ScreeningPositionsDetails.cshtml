@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "ScreeningPositionsDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    int? currentId = Context.Session.GetInt32("currentTheatreId");
 }
 
 @section Styles{
@@ -105,7 +104,7 @@
             <div class="card mb-4">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <h5 class="mb-0">Chi tiết chỗ ngồi lịch chiếu</h5>
-                    <a asp-action="Index" asp-route-id="@currentId"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
+                    <a href="javascript:void(0);" onclick="history.go(-1);"> <input type="submit" class="btn btn-primary" value="Trở về" /></a>
                 </div>
                 <div class="card-body">
                     <!-- seat availabilty list -->

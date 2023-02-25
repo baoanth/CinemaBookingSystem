@@ -68,8 +68,17 @@
                     </form>
                     <div class="row justify-content-end">
                         <div class="col-sm-10">
-                            <a asp-action="Edit" asp-controller="Screening" asp-route-id="@Model.ScreeningId"> <input type="submit" class="btn btn-warning" value="Chỉnh sửa" /></a> &ensp;
-                            <a asp-action="Index" asp-controller="Screening" asp-route-id="@currentId"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
+                            <a href="javascript:void(0);" onclick="history.go(-1);"> <input type="submit" class="btn btn-primary" value="Trở về" /></a>
+                             &ensp;
+                            <a asp-action="ScreeningPositionsDetails" asp-controller="Screening" asp-route-id="@Model.ScreeningId"> <input type="submit" value="Xem thông tin chỗ ngồi" class="btn btn-primary" /></a>
+                            &ensp;
+                            @if (!(Model.ShowTime <= DateTime.Now))
+                            {
+                                <a asp-action="Edit" asp-controller="Screening" asp-route-id="@Model.ScreeningId"> <input type="submit" class="btn btn-warning" value="Chỉnh sửa" /></a>
+                                <text>&ensp;</text>
+                                <a asp-action="Delete" asp-controller="Screening" asp-route-id="@Model.ScreeningId"> <input type="submit" class="btn btn-danger" value="Xóa" /></a>
+
+                            }
                         </div>
                     </div>
                 </div>

@@ -33,6 +33,19 @@
                             </div>
                         </div>
                         <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="show-time">Chọn rạp<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                @Html.DropDownList("Cinema", ViewBag.Cinemas as SelectList, "Hãy chọn rạp", new { @class="form-select"})
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="show-time">Chọn phòng chiếu<span class="text-danger"> *</span></label>
+                            <div class="col-sm-10">
+                                @Html.DropDownList("Theatre", new SelectList(string.Empty, "theatreId", "theatreName"), "Hãy chọn phòng chiếu", new { @class = "form-select" })
+                                <span asp-validation-for="ScreeningId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="show-time">Ngày giờ chiếu<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
                                 <input asp-for="ShowTime" type="datetime-local" class="form-control" id="show-time" />
@@ -62,4 +75,32 @@
         </div>
     </div>
 </div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Country Dropdown Selectedchange event
+        $("#Cinema").change(function () {
+            $("#Theatre").empty();
+            $.ajax({
+                type: 'POST',
+                url: '/Screening/GetTheatre', // Calling json method
+                dataType: 'json',
+                data: { id: $("#Cinema").val() },
+                // Get Selected Country ID.
+                success: function (theatres) {
+                    console.log(theatres);
+                    $.each(theatres, function (i, theatre) {
+                        $("#Theatre").append('<option value="' + theatre.theatreId + '">' +
+                            theatre.theatreName + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve states.' + ex);
+                }
+            });
+            return false;
+        })
+    });
+</script>

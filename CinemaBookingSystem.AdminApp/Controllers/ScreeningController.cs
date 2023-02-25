@@ -1,5 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using CinemaBookingSystem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -64,26 +65,36 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         public ActionResult Create()
         {
+            GetData();
+            return View();
+        }
+
+        private void GetData()
+        {
             IEnumerable<MovieViewModel> movieList = GetMovieListRequest();
             ViewBag.MovieList = movieList;
-            return View();
+            IEnumerable<CinemaViewModel> cinemas = GetCinemaListRequest();
+            ViewBag.Cinemas = new SelectList(cinemas, "CinemaId", "CinemaName");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("ScreeningId,MovieId,ShowTime")] ScreeningViewModel screening, int positionPrice)
+        public IActionResult Create([Bind("ScreeningId,MovieId,ShowTime")] ScreeningViewModel screening, int positionPrice, string Theatre)
         {
+            TheatreViewModel theatre = GetTheatreDetailsRequest(Convert.ToInt32(Theatre));
             if (screening.ShowTime < DateTime.Now.AddDays(1))
             {
                 _notyf.Error("Thời gian chiếu không hợp lệ! Thời gian hợp lệ không được nhỏ hơn 1 ngày so với thời gian hiện tại", 5);
-                return View();
             }
-            //Setting attribute for screening schedule
-            int? currentTheatreId = HttpContext.Session.GetInt32("currentTheatreId");
-            TheatreViewModel theatre = GetTheatreDetailsRequest(currentTheatreId);
-            screening.ShowStatus = false;
-            screening.TheatreId = theatre.TheatreId;
-
+            if (theatre != null)
+            {
+                screening.TheatreId = Convert.ToInt32(Theatre);
+                screening.ShowStatus = false;
+            }
+            else
+            {
+                _notyf.Error("Phòng chiếu là thông tin bắt buộc", 5);
+            }
             //Send API request
             HttpResponseMessage response = CreateScreeningRequest(screening);
             if (response.IsSuccessStatusCode)
@@ -92,14 +103,15 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 string body = response.Content.ReadAsStringAsync().Result;
                 screening = JsonConvert.DeserializeObject<ScreeningViewModel>(body);
                 CreateScreeningPositions(theatre.Capacity, screening.ScreeningId, positionPrice);
-                return RedirectToAction("Index", new { id = currentTheatreId });
+                return RedirectToAction("Index", "Screening");
             }
             else
             {
                 _notyf.Error("Không thể thêm vì trùng lịch chiếu", 4);
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
-            return View();
+            GetData();
+            return View(screening);
         }
 
         [HttpPost]
@@ -145,21 +157,37 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(ScreeningViewModel screening)
+        public IActionResult Edit(ScreeningViewModel screening, int? price)
         {
             //Send API request
             HttpResponseMessage response = UpdateScreeningRequest(screening);
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Cập nhật thành công lịch chiếu", 3);
-                return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentTheatreId") });
+                if (price != null)
+                {
+                    UpdateScreeningPositions(screening.ScreeningId, (int)price);
+                }
+                return RedirectToAction("Details","Screening", new { id = screening.ScreeningId });
             }
             else
             {
-                _notyf.Error("Không thể thực hiện do lỗi server hoặc thông tin chưa hợp lệ", 4);
+                _notyf.Error("Thời gian chiếu điều chỉnh trùng với lịch chiếu khác", 4);
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
+            GetData();
             return View(screening);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        private void UpdateScreeningPositions(int screeningId, int price)
+        {
+            List<ScreeningPositionViewModel> screeningPositions = GetScreeningPositionsDetailsRequest(screeningId).Where(x => x.IsBooked == false).ToList();
+            foreach (var item in screeningPositions)
+            {
+                item.Price = price;
+                UpdateScreeningPositionsRequest(item);
+            }
         }
 
         public ActionResult Delete(int? id)
@@ -185,13 +213,13 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Xóa thành công khỏi danh sách!", 4);
-                return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentTheatreId") });
+                return RedirectToAction("Index", "Screening");
             }
             else
             {
                 _notyf.Error("Không thể thực hiện do lỗi server", 4);
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentTheatreId") });
+                return RedirectToAction("Delete", "Screening", id);
             }
         }
 
@@ -381,6 +409,19 @@ namespace CinemaBookingSystem.AdminApp.Controllers
 
             return _client.SendAsync(request).Result;
         }
+        public HttpResponseMessage UpdateScreeningPositionsRequest(ScreeningPositionViewModel screeningPosition)
+        {
+            string data = JsonConvert.SerializeObject(screeningPosition);
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri($"https://localhost:44322/api/screeningposition/update");
+            request.Method = HttpMethod.Post;
+            request.Headers.Add("CBSToken", APIKEY);
+            request.Content = content;
+
+            return _client.SendAsync(request).Result;
+        }
 
         public HttpResponseMessage DeleteScreeningPositionsRequest(int id)
         {
@@ -412,6 +453,46 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
             return screeningPositions;
+        }
+        public ActionResult Calendar(string? Theatre)
+        {
+            if (!String.IsNullOrEmpty(Theatre))
+            {
+                return View(Convert.ToInt32(Theatre));
+            }
+            return View();
+        }
+        public JsonResult JsonScreeningCalendar(double? start, double? end, int? id)
+        {
+            DateTime aDateTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            DateTime retDateTime = aDateTime.AddMonths(1).AddDays(-1);
+            if (start != null && end != null)
+            {
+                aDateTime = UnixTimeStampToDateTime(start.Value);
+                retDateTime = UnixTimeStampToDateTime(end.Value);
+            }
+            var details = GetScreeningListRequest()
+                .Where(x => x.ShowTime >= aDateTime
+                && x.ShowTime <= retDateTime 
+                && x.TheatreId == id)
+                .AsEnumerable()
+                .Select(x => new
+                {
+                    code = x.ScreeningId,
+                    title = $"{x.Movie.MovieName}",
+                    start = x.ShowTime.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                    end = x.ShowTime.AddMinutes(x.Movie.RunningTime + 30).ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                    allDay = false,
+                    className = x.ShowTime > DateTime.Now ? "ChuaChieu" : "DaChieu"
+                });
+            return Json(details);
+        }
+        public DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+        {
+            // Unix timestamp is seconds past epoch
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            return dtDateTime;
         }
     }
 }

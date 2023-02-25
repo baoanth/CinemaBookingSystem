@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    int? currentTheatreId = Context.Session.GetInt32("currentTheatreId");
     bool IsShowed = Model.ShowTime < DateTime.Now;
 }
 
@@ -61,7 +60,12 @@
                                 <span asp-validation-for="ShowTime" class="text-danger"></span>
                             </div>
                         </div>
-
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label" for="price">Điều chỉnh giá ghế</label>
+                            <div class="col-sm-10">
+                                <input name="price" type="number" class="form-control" id="price" />
+                            </div>
+                        </div>
                         <div class="row justify-content-end">
                             <div class="col-sm-10">
                                 <button type="submit" class="btn btn-warning w-100">Chỉnh sửa</button> &ensp;
@@ -70,7 +74,7 @@
                     </form>
                     <div class="row justify-content-end">
                         <div class="col-sm-10">
-                            <a asp-action="Index" asp-route-id="@currentTheatreId"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
+                            <a href="javascript:void(0);" onclick="history.go(-1);"> <input type="submit" class="btn btn-primary" value="Trở về" /></a>
                         </div>
                     </div>
                 </div>

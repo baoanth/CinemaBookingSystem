@@ -20,6 +20,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\assets\img\slides\" />
     <Folder Include="wwwroot\assets\img\thumpnails\" />
+    <Folder Include="wwwroot\assets\scripts\" />
   </ItemGroup>
 
 </Project>

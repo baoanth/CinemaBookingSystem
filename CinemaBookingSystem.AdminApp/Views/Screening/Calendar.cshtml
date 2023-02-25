@@ -1,0 +1,109 @@
+﻿@model int;
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/assets/scripts/fullcalendar.min.css" />
+<style>
+    .ChuaChieu {
+        background-color: #F89406 !important;
+    }
+
+    .DaChieu {
+        background-color: green !important;
+    }
+    .swal2-content {
+        text-align: left;
+    }
+
+    .swal2-footer {
+        font-size: 1.3em;
+    }
+    .fc-content{
+        color:white;
+    }
+    .fc-center{
+        text-transform:uppercase !important;
+    }
+</style>
+<div class="row">
+    <a asp-action="Index" asp-controller="Screening" style="padding-left:30px !important">Trở về</a>
+</div>
+<div class="row">
+    <div class="col-sm-10">
+        <div id="calendar"></div>
+    </div>
+    <div class="col-sm-2">
+        <div>
+            <ul class="list-unstyled spaced">
+                <li><i class="ace-icon fa fa-circle" style="color: green"></i>Đã chiếu</li>
+                <li><i class="ace-icon fa fa-circle" style="color: #F89406"></i>Chưa chiếu</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>'
+
+<script src="~/assets/scripts/moment.min.js"></script>
+<script src="~/assets/scripts/fullcalendar.min.js"></script>
+<script src="~/assets/scripts/locale-all.js"></script>
+<script type="text/javascript">
+    jQuery(function ($) {
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+        var calendar = $('#calendar').fullCalendar({
+            buttonHtml: {
+                prev: '<i class="ace-icon fa fa-chevron-left"></i>',
+                next: '<i class="ace-icon fa fa-chevron-right"></i>'
+            },
+
+            header: {
+                left: 'prev,next',
+                center: 'title',
+                right: 'month'
+            },
+            locale: 'vi',
+            events: function (start, end, timezone, callback) {
+                $.ajax({
+                    url: `@Url.Action("JsonScreeningCalendar", "Screening", new {id = Model})`,
+                    dataType: 'JSON',
+                    data: {
+                        start: start.unix(),
+                        end: end.unix()
+                    },
+                    success: function (doc) {
+                        console.log(doc);
+                        callback(doc);
+                    }
+                })
+            },
+            height: 750,
+            contentHeight: 'auto',
+            buttonIcons: false, // show the prev/next text
+            weekNumbers: true,
+            navLinks: true, // can click day/week names to navigate views
+            editable: false,
+            eventLimit: true,
+            timeFormat: 'H:mm',
+            selectable: true,
+            selectHelper: true,
+            select: function (start, end, allDay) {
+                calendar.fullCalendar('unselect');
+            },
+            windowResize: function (view) {
+                console.log(view);
+            },
+            eventClick: function (calEvent) {
+                console.log(calEvent);
+                window.location.href = '/Screening/Details/' + calEvent.code;
+            }
+        });
+    });
+</script>
+

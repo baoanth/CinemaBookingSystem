@@ -10,7 +10,7 @@ namespace CinemaBookingSystem.Service
 
         void Delete(int id);
 
-        void Update(Screening screening);
+        bool Update(Screening screening);
 
         IEnumerable<Screening> GetAll();
 
@@ -26,29 +26,22 @@ namespace CinemaBookingSystem.Service
     public class ScreeningService : IScreeningService
     {
         private IScreeningRepository _screeningRepository;
+        private IMovieRepository _movieRepository;
         private IUnitOfWork _unitOfWork;
 
-        public ScreeningService(IScreeningRepository screeningRepository, IUnitOfWork unitOfWork)
+        public ScreeningService(IScreeningRepository screeningRepository, IUnitOfWork unitOfWork, IMovieRepository movieRepository)
         {
             _screeningRepository = screeningRepository;
             _unitOfWork = unitOfWork;
+            _movieRepository = movieRepository;
         }
 
         public bool Add(Screening screening)
         {
-            bool check = _screeningRepository.GetAll().Where(x => x.TheatreId == screening.TheatreId).Any(x => (x.ShowTime <= screening.ShowTime
-            && x.ShowTime.AddMinutes(x.Movie.RunningTime + 30) >= screening.ShowTime)
-            || (x.ShowTime <= screening.ShowTime.AddMinutes(screening.Movie.RunningTime + 30)
-            && x.ShowTime.AddMinutes(x.Movie.RunningTime + 30) >= screening.ShowTime.AddMinutes(screening.Movie.RunningTime + 30)));
-            /*            foreach (var item in list)
-                        {
-                            DateTime startShow = item.ShowTime;
-                            DateTime endShow = item.ShowTime.AddMinutes(item.Movie.RunningTime + 30);
-                            if (screening.ShowTime < endShow && screening.ShowTime > startShow && screening.TheatreId == item.TheatreId)
-                            {
-                                return false;
-                            }
-                        }*/
+            Movie movie = _movieRepository.GetSingleById(screening.MovieId);
+            bool check = _screeningRepository.GetAll().Any(x => x.TheatreId == screening.TheatreId
+            && (x.ShowTime <= screening.ShowTime && x.ShowTime.AddMinutes(x.Movie.RunningTime + 30) >= screening.ShowTime.AddMinutes(movie.RunningTime + 30)
+            || x.ShowTime <= screening.ShowTime.AddMinutes(movie.RunningTime + 30) && x.ShowTime.AddMinutes(x.Movie.RunningTime + 30) >= screening.ShowTime.AddMinutes(movie.RunningTime + 30)));
             if (!check)
             {
                 _screeningRepository.Add(screening);
@@ -86,9 +79,21 @@ namespace CinemaBookingSystem.Service
             _unitOfWork.Commit();
         }
 
-        public void Update(Screening screening)
+        public bool Update(Screening screening)
         {
-            _screeningRepository.Update(screening);
+            if (Check(screening))
+            {
+                _screeningRepository.Update(screening);
+            }
+            return Check(screening);
+        }
+        private bool Check(Screening screening)
+        {
+            Movie movie = _movieRepository.GetSingleById(screening.MovieId);
+            bool check = _screeningRepository.GetAll().Any(x => x.TheatreId == screening.TheatreId && x.ScreeningId != screening.ScreeningId
+            && (x.ShowTime <= screening.ShowTime && x.ShowTime.AddMinutes(x.Movie.RunningTime + 30) >= screening.ShowTime.AddMinutes(movie.RunningTime + 30)
+            || x.ShowTime <= screening.ShowTime.AddMinutes(movie.RunningTime + 30) && x.ShowTime.AddMinutes(x.Movie.RunningTime + 30) >= screening.ShowTime.AddMinutes(movie.RunningTime + 30)));
+            return !check;
         }
     }
 }

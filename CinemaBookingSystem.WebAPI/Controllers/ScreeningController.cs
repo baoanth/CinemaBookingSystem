@@ -129,9 +129,14 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                 try
                 {
                     var screening = _mapper.Map<Screening>(screeningVm);
-                    _screeningService.Update(screening);
-                    _screeningService.SaveChanges();
-                    return Ok(screening);
+                    if (!_screeningService.Update(screening))
+                    {
+                        return BadRequest();
+                    }
+                    else
+                    {
+                        return Ok(screening);
+                    }
                 }
                 catch (DbEntityValidationException ex)
                 {
