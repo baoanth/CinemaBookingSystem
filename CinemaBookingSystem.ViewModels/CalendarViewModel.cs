@@ -3,7 +3,7 @@
     public class CalendarViewModel
     {
         public int TheatreId { get; set; }
-        public DateTime? Start { get; set; }
-        public DateTime? End { get; set; }
+        public string Start { get; set; }
+        public string End { get; set; }
     }
 }

@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 using X.PagedList;
 
@@ -454,14 +456,21 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             }
             return screeningPositions;
         }
-        public ActionResult Calendar(string? Theatre)
+        public ActionResult Calendar(string? Theatre, string from, string to)
         {
+
+
             if (!String.IsNullOrEmpty(Theatre))
             {
                 var theatre = GetTheatreDetailsRequest(Convert.ToInt32(Theatre));
                 ViewBag.Theatre = theatre.TheatreName;
                 ViewBag.Cinema = theatre.Cinema.CinemaName;
-                return View(Convert.ToInt32(Theatre));
+                return View(new CalendarViewModel()
+                {
+                    TheatreId = theatre.TheatreId,
+                    Start = from,
+                    End = to,
+                });
             }
             else
             {
@@ -469,18 +478,28 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             }
             return RedirectToAction("Index","Screening");
         }
-        public JsonResult JsonScreeningCalendar(DateTime? start, DateTime? end, int? id)
+        public JsonResult JsonScreeningCalendar(string start, string end, int? id)
         {
-            DateTime aDateTime = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-            DateTime retDateTime = aDateTime.AddMonths(1).AddDays(-1);
-            if (start.HasValue && end.HasValue)
+            DateTime d_startDate = new DateTime();
+            DateTime d_endDate = new DateTime();
+            if (!string.IsNullOrEmpty(start) && !string.IsNullOrEmpty(end))
             {
-                aDateTime = start.Value;
-                retDateTime = end.Value;
+                if (DateTime.TryParseExact(start, "yyyy-MM-dd", new CultureInfo("vi-VN"), DateTimeStyles.None, out d_startDate))
+                {
+                    if (DateTime.TryParseExact(end, "yyyy-MM-dd", new CultureInfo("vi-VN"), DateTimeStyles.None, out d_endDate))
+                    {
+                        d_endDate = d_endDate.AddHours(23).AddMinutes(59);
+                    }
+                }
+            }
+            else
+            {
+                d_startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                d_endDate = d_startDate.AddMonths(1).AddDays(-1);
             }
             var details = GetScreeningListRequest()
-                .Where(x => x.ShowTime >= aDateTime
-                && x.ShowTime <= retDateTime 
+                .Where(x => x.ShowTime >= d_startDate
+                && x.ShowTime <= d_endDate 
                 && x.TheatreId == id)
                 .AsEnumerable()
                 .Select(x => new

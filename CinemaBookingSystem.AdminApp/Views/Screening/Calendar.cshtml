@@ -1,4 +1,4 @@
-﻿@model string;
+﻿@model CinemaBookingSystem.ViewModels.CalendarViewModel;
 @using X.PagedList.Mvc.Core;
 @using X.PagedList.Web.Common;
 @{
@@ -36,6 +36,8 @@
         text-transform: uppercase !important;
     }
 </style>
+<input type="hidden" value="@Model.Start" id="start" />
+<input type="hidden" value="@Model.End" id="end" />
 <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Basic Layout & Basic with Icons -->
     <div class="row">
@@ -95,11 +97,11 @@
             locale: 'vi',
             events: function (start, end, timezone, callback) {
                 $.ajax({
-                    url: `@Url.Action("JsonScreeningCalendar", "Screening", new {id = Model})`,
+                    url: `@Url.Action("JsonScreeningCalendar", "Screening", new {id = Model.TheatreId})`,
                     dataType: 'JSON',
                     data: {
-                        start: start.unix(),
-                        end: end.unix()
+                        start: $("#start").val(),
+                        end: $("#end").val()
                     },
                     success: function (doc) {
                         console.log(doc);
