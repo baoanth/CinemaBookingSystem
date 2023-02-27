@@ -173,8 +173,15 @@ namespace CinemaBookingSystem.WebApp.Controllers
             string errorCode = HttpContext.Request.Query["errorCode"].ToString();
             if (errorCode == "0")
             {
-                SavePayment();
-                return View();
+                if (SavePayment())
+                {
+                    return View();
+                }
+                else
+                {
+                    DeleteBooking();
+                    return RedirectToAction("PaymentFailed", "Booking");
+                }
             }
             else
             {
@@ -188,7 +195,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             return View();
         }
 
-        public void SavePayment()
+        public bool SavePayment()
         {
             int bookingId = (int)HttpContext.Session.GetInt32("_bookingid");
             if (bookingId != null)
@@ -202,10 +209,19 @@ namespace CinemaBookingSystem.WebApp.Controllers
                 foreach (var position in bookingDetails)
                 {
                     ScreeningPositionViewModel screeningPosition = GetScreeningPositionsDetailsRequest(position.PositionId);
-                    screeningPosition.IsBooked = true;
-                    UpdateScreeningPositionsRequest(screeningPosition);
+                    if (!screeningPosition.IsBooked)
+                    {
+                        screeningPosition.IsBooked = true;
+                        UpdateScreeningPositionsRequest(screeningPosition);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    
                 }
             }
+            return true;
         }
 
         private void DeleteBooking()
@@ -278,9 +294,15 @@ namespace CinemaBookingSystem.WebApp.Controllers
                     string errorCode = HttpContext.Request.Query["vnp_ResponseCode"].ToString();
                     if (vnp_ResponseCode == "00")
                     {
-                        //Thanh toán thành công
-                        SavePayment();
-                        ViewBag.Message = "Thanh toán thành công qua VNPAY hóa đơn " + orderId + " | Mã giao dịch: " + vnpayTranId + ", cảm ơn bạn đã sử dụng dịch vụ đặt vé của CINEMAX";
+                        if (SavePayment())
+                        {
+                            ViewBag.Message = "Thanh toán thành công qua VNPAY hóa đơn " + orderId + " | Mã giao dịch: " + vnpayTranId + ", cảm ơn bạn đã sử dụng dịch vụ đặt vé của CINEMAX";
+                        }
+                        else
+                        {
+                            DeleteBooking();
+                            ViewBag.Message = "Có lỗi xảy ra trong quá trình xử lý, một trong số chỗ ngồi bạn chọn đã được đặt, thanh toán thất bại";
+                        }
                     }
                     else
                     {

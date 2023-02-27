@@ -5,6 +5,7 @@ using CinemaBookingSystem.WebApp.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Mail;
+using System.Text;
 
 namespace CinemaBookingSystem.WebApp.Controllers
 {
@@ -29,24 +30,41 @@ namespace CinemaBookingSystem.WebApp.Controllers
             return View(contact);
         }
         [HttpPost]
-        public async void SendContact(string fullname, string phonenumber, string email, string message)
+        [AutoValidateAntiforgeryToken]
+        public IActionResult SendContact(string email, string fullname, string phonenumber, string message)
         {
-            string subject = "Phản hồi từ khách hàng " + fullname;
-            const string receiveMailAddress = "huynhconghung131@gmail.com";
-            message = "Số điện thoại khách hàng:" + phonenumber + ". " + message;
-            using (SmtpClient client = new SmtpClient("localhost"))
+            CustomerContactViewModel customerContactViewModel = new CustomerContactViewModel()
             {
-                if(await MailUtils.SendMail(email, receiveMailAddress, subject, message, client))
-                {
-                    _notyf.Success("Phản hồi đã được gửi! Chúng tôi xin cảm ơn vì những feedback của bạn!", 5);
-                }
-                else
-                {
-                    _notyf.Warning("Lỗi", 5);
-                }
-                
+                CustomerName = fullname,
+                CustomerEmail = email,
+                CustomerPhone = phonenumber,
+                Content = message,
+                SendedAt = DateTime.Now,
+                Status = false
+            };
+            HttpResponseMessage response = SendContactRequest(customerContactViewModel);
+            if (response.IsSuccessStatusCode)
+            {
+                _notyf.Success("Gửi phản hồi thành công, chúng tôi sẽ liên hệ với bạn trong thời gian sớm nhất!", 4);
+                return RedirectToAction("Index", "Contact");
             }
-            RedirectToAction("Index", "Contact");
+            else
+            {
+                _notyf.Error("Hãy điền đầy đủ thông tin vào mẫu!", 4);
+                return RedirectToAction("Index", "Contact");
+            }
+        }
+
+        public HttpResponseMessage SendContactRequest(CustomerContactViewModel contact)
+        {
+            string data = JsonConvert.SerializeObject(contact);
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + "customercontact/create");
+            request.Method = HttpMethod.Post;
+            request.Content = content;
+
+            return _client.SendAsync(request).Result;
         }
 
         public IEnumerable<ContactViewModel> GetContactRequest()

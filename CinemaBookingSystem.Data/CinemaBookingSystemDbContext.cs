@@ -25,6 +25,7 @@ namespace CinemaBookingSystem.Data
         public DbSet<BookingDetail> TicketBookings { get; set; }
         public DbSet<Error> Errors { get; set; }
         public DbSet<Article> Articles { get; set; }
+        public DbSet<CustomerContact> CustomerContacts { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
