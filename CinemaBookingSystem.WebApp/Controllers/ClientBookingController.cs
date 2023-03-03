@@ -28,10 +28,9 @@ namespace CinemaBookingSystem.WebApp.Controllers
             int pageSize = 6;
             int pageNumber = (page ?? 1);
 
-            int sessionId = (int)HttpContext.Session.GetInt32("_clientid");
-            if (sessionId != null)
+            if (HttpContext.Session.GetInt32("_clientid") != null)
             {
-                IEnumerable<BookingViewModel> list = GetClientBookingRequest(sessionId);
+                IEnumerable<BookingViewModel> list = GetClientBookingRequest((int)HttpContext.Session.GetInt32("_clientid"));
                 if (!String.IsNullOrEmpty(key.ToString()))
                 {
                     list = list.Where(x => x.BookedAt.Date == key.Value.Date);
@@ -52,7 +51,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
 
         private IEnumerable<BookingDetailViewModel> GetClientBookingDetailsRequest(int id)
         {
-            IEnumerable<BookingDetailViewModel> bookingDetails = null;
+            IEnumerable<BookingDetailViewModel>? bookingDetails = null;
             HttpRequestMessage request = new HttpRequestMessage();
             request.RequestUri = new Uri(_baseUrl + $"bookingdetail/getallbybooking/{id}");
             request.Method = HttpMethod.Get;

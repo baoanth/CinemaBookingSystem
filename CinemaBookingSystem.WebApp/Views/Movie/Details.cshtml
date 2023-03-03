@@ -88,8 +88,8 @@
                                         <img src="~/assets/img/usericon.png" alt="">
                                     </div>
                                     <div class="anime__review__item__text">
-                                        @if (item.CommentedBy == Context.Session.GetInt32("_clientid"))
-                                            {
+                                        @if (item.CommentedBy == Context.Session.GetInt32("_clientid") || Context.Session.GetInt32("_clientroleid") == 1)
+                                        {
                                             <div style="display:flex; float:right">
                                                 <a asp-action="DeleteComment" asp-controller="Movie" asp-route-id="@item.CommentId" asp-route-movieid="@item.MovieId"><i class="fa fa-times" style="color:red"></i></a>
                                             </div> 

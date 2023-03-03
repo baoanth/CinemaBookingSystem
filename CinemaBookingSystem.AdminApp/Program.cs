@@ -1,6 +1,7 @@
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using Microsoft.Extensions.FileProviders;
+using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,5 +52,8 @@ app.UseFileServer(new FileServerOptions()
     EnableDirectoryBrowsing = false // you make this true or false.
 }
 );
+
+IWebHostEnvironment env = app.Environment;
+RotativaConfiguration.Setup((Microsoft.AspNetCore.Hosting.IHostingEnvironment)env);
 
 app.Run();

@@ -26,15 +26,15 @@
                     <h3 style="color:white !important">Liên hệ với chúng tôi</h3>
                     <form asp-action="SendContact" asp-controller="Contact" method="post">
                         <div class="input__item">
-                            <input type="text" name="fullname" placeholder="Nhập họ tên của bạn..." required>
+                            <input type="text" name="fullname" placeholder="Nhập họ tên của bạn..." value="@Context.Session.GetString("_clientfullname")" required>
                             <span class="icon_mail"></span>
                         </div>
                         <div class="input__item">
-                            <input type="text" name="email" placeholder="Nhập email của bạn..." required>
+                            <input type="text" name="email" placeholder="Nhập email của bạn..." value="@Context.Session.GetString("_clientemail")" required>
                             <span class="icon_mail"></span>
                         </div>
                         <div class="input__item">
-                            <input type="text" name="phonenumber" placeholder="Nhập số điện thoại của bạn..." required>
+                            <input type="text" name="phonenumber" placeholder="Nhập số điện thoại của bạn..." value="@Context.Session.GetString("_clientphone")" required>
                             <span class="icon_phone"></span>
                         </div>
                         <div>

@@ -52,6 +52,7 @@ builder.Services.AddScoped<ITheatreService, TheatreService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IVisitorStatisticService, VisitorStatisticService>();
 builder.Services.AddScoped<IArticleService, ArticleService>();
+builder.Services.AddScoped<ICustomerContactService, CustomerContactService>();
 
 //Repository
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
@@ -69,6 +70,7 @@ builder.Services.AddScoped<ITheatreRepository, TheatreRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVisitorStatisticRepository, VisitorStatisticRepository>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+builder.Services.AddScoped<ICustomerContactRepository, CustomerContactRepository>();
 
 //Add AutoMapper Singleton
 var mapperConfig = new MapperConfiguration(mc =>

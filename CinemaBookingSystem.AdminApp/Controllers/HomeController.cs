@@ -23,20 +23,20 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         public IActionResult Index()
         {
             IEnumerable<BookingDetailViewModel> bookingDetails = GetBookingDetailListRequest();
-            var monthTopMovie = bookingDetails.Where(x => x.Booking.BookedAt.Month == DateTime.Now.Month).GroupBy(x => new { x.ScreeningPosition.Screening.Movie.MovieId, x.ScreeningPosition.Screening.Movie.MovieName }, (Key, group) => new TopMovieViewModel()
+            var monthTopMovie = bookingDetails.Where(x => x.Booking.BookedAt.Month == DateTime.Now.Month && x.Booking.IsPaid).GroupBy(x => new { x.ScreeningPosition.Screening.Movie.MovieId, x.ScreeningPosition.Screening.Movie.MovieName }, (Key, group) => new TopMovieViewModel()
             {
                 MovieId = Key.MovieId,
                 MovieName = Key.MovieName,
                 TotalPrice = group.Sum(x => x.ScreeningPosition.Price),
                 TotalSell = group.Count(),
-            }).Take(5).ToList();
-            var yearTopMovie = bookingDetails.Where(x => x.Booking.BookedAt.Year == DateTime.Now.Year).GroupBy(x => new { x.ScreeningPosition.Screening.Movie.MovieId, x.ScreeningPosition.Screening.Movie.MovieName }, (Key, group) => new TopMovieViewModel()
+            }).Take(5).OrderByDescending(x => x.TotalPrice).ToList();
+            var yearTopMovie = bookingDetails.Where(x => x.Booking.BookedAt.Year == DateTime.Now.Year && x.Booking.IsPaid).GroupBy(x => new { x.ScreeningPosition.Screening.Movie.MovieId, x.ScreeningPosition.Screening.Movie.MovieName }, (Key, group) => new TopMovieViewModel()
             {
                 MovieId = Key.MovieId,
                 MovieName = Key.MovieName,
                 TotalPrice = group.Sum(x => x.ScreeningPosition.Price),
                 TotalSell = group.Count(),
-            }).Take(5).ToList();
+            }).Take(5).OrderByDescending(x => x.TotalPrice).ToList();
             ViewBag.MonthTopMovie = monthTopMovie;
             ViewBag.YearTopMovie = yearTopMovie;
 

@@ -15,14 +15,8 @@ namespace CinemaBookingSystem.WebApp.Controllers
         private HttpClient _client;
         private const string APIKEY = "movienew";
         private readonly INotyfService _notyf;
-        private BookingViewModel _booking;
-        private static List<ScreeningPositionViewModel> _seats;
 
-        public BookingViewModel Booking
-        {
-            set { _booking = value; }
-            get { return _booking; }
-        }
+        private static List<ScreeningPositionViewModel> _seats;
 
         public static List<ScreeningPositionViewModel> Seats
         {
@@ -38,79 +32,122 @@ namespace CinemaBookingSystem.WebApp.Controllers
             _notyf = notyf;
         }
 
-        public IActionResult PositionsChoose(int id)
+        public IActionResult SeatPick(int id)
         {
-            HttpContext.Session.SetInt32("_currentScreeningId", id);
             IEnumerable<ScreeningPositionViewModel> screeningPositions = GetScreeningPositionsListRequest(id);
             return View(screeningPositions);
         }
 
         [HttpPost]
-        public IActionResult BookingConfirm(List<int> availSeats)
+        public IActionResult Confirm(List<int> chosenSeatIds)
         {
-            if (availSeats.Count == 0)
+            //zero seat check
+            if (chosenSeatIds.Count == 0)
             {
                 _notyf.Warning("Bạn hãy vui lòng chọn ghế trước khi xác nhận nhé.", 4);
-                return RedirectToAction("PositionsChoose", "Booking", new { id = HttpContext.Session.GetInt32("_currentScreeningId") });
+                return Redirect(Request.Headers["Referer"].ToString());
             }
+
+            //store picked seats
             List<ScreeningPositionViewModel> pickedSeats = new List<ScreeningPositionViewModel>();
-            for (int i = 0; i < availSeats.Count; i++)
+
+            for (int i = 0; i < chosenSeatIds.Count; i++)
             {
-                ScreeningPositionViewModel seat = GetScreeningPositionsDetailsRequest(availSeats[i]);
+                ScreeningPositionViewModel seat = GetScreeningPositionsDetailsRequest(chosenSeatIds[i]);
                 pickedSeats.Add(seat);
             }
-            ViewBag.PaymentMethods = GetPaymentListRequest();
+
             Seats = pickedSeats;
+
+            ViewBag.PaymentMethods = GetPaymentListRequest();
             return View(pickedSeats);
         }
 
-        public ActionResult Checkout(int paymentid, int total)
+        public IActionResult Checkout(int paymentid, int total)
         {
-            CreateBooking(paymentid);
-            CreateBookingDetails(Booking, Seats);
             switch (paymentid)
             {
                 case 4:
+                    CreateBooking(paymentid, Seats);
                     return MomoPayment(total);
                 case 5:
+                    CreateBooking(paymentid, Seats);
                     return VnPayPayment(total);
                 default:
-                    return MomoPayment(total);
+                    _notyf.Information("Chức năng hiện đang phát triển nên chưa thể sử dụng!");
+                    List<int> seats = new List<int>();
+                    foreach (var item in Seats)
+                    {
+                        seats.Add(item.PositionId);
+                    }
+                    return RedirectToAction("Confirm", seats);
             }
         }
 
-        private void CreateBookingDetails(BookingViewModel booking, IEnumerable<ScreeningPositionViewModel> seats)
+        public void CreateBooking(int paymentId, IEnumerable<ScreeningPositionViewModel> seats)
         {
-            foreach (var item in seats)
-            {
-                BookingDetailViewModel bookingDetail = new BookingDetailViewModel()
-                {
-                    BookingId = booking.BookingId,
-                    PositionId = item.PositionId,
-                };
-                CreateBookingDetailRequest(bookingDetail);
-            }
-        }
-
-        public void CreateBooking(int paymentId)
-        {
-            BookingViewModel booking = new BookingViewModel()
+            BookingViewModel bookingVm = new BookingViewModel()
             {
                 IsPaid = false,
                 UserId = (int)HttpContext.Session.GetInt32("_clientid"),
                 PaymentId = paymentId,
                 BookedAt = DateTime.Now,
             };
-            HttpResponseMessage response = CreateBookingRequest(booking);
+            HttpResponseMessage response = CreateBookingRequest(bookingVm);
             if (response.IsSuccessStatusCode)
             {
                 string body = response.Content.ReadAsStringAsync().Result;
-                Booking = JsonConvert.DeserializeObject<BookingViewModel>(body);
-                HttpContext.Session.SetInt32("_bookingid", Booking.BookingId);
+                BookingViewModel booking = JsonConvert.DeserializeObject<BookingViewModel>(body);
+                foreach (var item in seats)
+                {
+                    BookingDetailViewModel bookingDetail = new BookingDetailViewModel()
+                    {
+                        BookingId = booking.BookingId,
+                        PositionId = item.PositionId,
+                    };
+                    CreateBookingDetailRequest(bookingDetail);
+                }
+                HttpContext.Session.SetInt32("_bookingid", booking.BookingId);
             }
         }
 
-        #region MOMO PAYMENT
+        public bool SavePayment()
+        {
+            int bookingId = (int)HttpContext.Session.GetInt32("_bookingid");
+            if (bookingId != null)
+            {
+                BookingViewModel booking = GetSingleBookingRequest(bookingId);
+                booking.IsPaid = true;
+                booking.VerifyCode = Guid.NewGuid().ToString();
+                UpdateBookingRequest(booking);
+                IEnumerable<BookingDetailViewModel> bookingDetails = GetBookingDetailByIdRequest(bookingId);
+                foreach (var position in bookingDetails)
+                {
+                    ScreeningPositionViewModel screeningPosition = GetScreeningPositionsDetailsRequest(position.PositionId);
+                    if (!screeningPosition.IsBooked)
+                    {
+                        screeningPosition.IsBooked = true;
+                        UpdateScreeningPositionsRequest(screeningPosition);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                    
+                }
+            }
+            return bookingId != null;
+        }
+
+        private void DeleteBooking()
+        {
+            int bookingId = (int)HttpContext.Session.GetInt32("_bookingid");
+            if (bookingId != null)
+            {
+                DeleteBookingDetailRequest(bookingId);
+                DeleteBookingRequest(bookingId);
+            }
+        }
 
         public ActionResult MomoPayment(int total)
         {
@@ -120,7 +157,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             string accessKey = "iPXneGmrJH0G8FOP";
             string serectkey = "sFcbSGRSJjwGxwhhcEktCHWYUuTuPNDB";
             string orderInfo = "Thanh toán đặt vé tại rạp Cinemax";
-            string returnUrl = $"https://localhost:7094/Booking/ConfirmPaymentClient";
+            string returnUrl = $"https://localhost:7094/Booking/MomoResult";
             string notifyurl = "http://ba1adf48beba.ngrok.io/Home/SavePayment"; //lưu ý: notifyurl không được sử dụng localhost, có thể sử dụng ngrok để public localhost trong quá trình test
 
             string amount = total.ToString();
@@ -167,7 +204,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             return Redirect(jmessage.GetValue("payUrl").ToString());
         }
 
-        public ActionResult ConfirmPaymentClient()
+        public ActionResult MomoResult()
         {
             //hiển thị thông báo cho người dùng
             string errorCode = HttpContext.Request.Query["errorCode"].ToString();
@@ -175,72 +212,26 @@ namespace CinemaBookingSystem.WebApp.Controllers
             {
                 if (SavePayment())
                 {
-                    return View();
+                    ViewBag.Message = "Thanh toán thành công qua ví điện tử Momo, cảm ơn bạn đã sử dụng dịch vụ đặt vé của CINEMAX";
                 }
                 else
                 {
                     DeleteBooking();
-                    return RedirectToAction("PaymentFailed", "Booking");
+                    ViewBag.Message = "Có lỗi xảy ra trong quá trình xử lý, một trong số chỗ ngồi bạn chọn đã được đặt, thanh toán thất bại";
                 }
             }
             else
             {
                 DeleteBooking();
-                return RedirectToAction("PaymentFailed", "Booking");
+                ViewBag.Message = "Có lỗi xảy ra trong quá trình xử lý hóa đơn, thanh toán thất bại";
             }
-        }
-
-        public ActionResult PaymentFailed()
-        {
             return View();
         }
 
-        public bool SavePayment()
-        {
-            int bookingId = (int)HttpContext.Session.GetInt32("_bookingid");
-            if (bookingId != null)
-            {
-                BookingViewModel booking = GetSingleBookingRequest(bookingId);
-                booking.IsPaid = true;
-                booking.VerifyCode = Guid.NewGuid().ToString();
-                UpdateBookingRequest(booking);
-
-                IEnumerable<BookingDetailViewModel> bookingDetails = GetBookingDetailRequest(bookingId);
-                foreach (var position in bookingDetails)
-                {
-                    ScreeningPositionViewModel screeningPosition = GetScreeningPositionsDetailsRequest(position.PositionId);
-                    if (!screeningPosition.IsBooked)
-                    {
-                        screeningPosition.IsBooked = true;
-                        UpdateScreeningPositionsRequest(screeningPosition);
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                    
-                }
-            }
-            return true;
-        }
-
-        private void DeleteBooking()
-        {
-            int bookingId = (int)HttpContext.Session.GetInt32("_bookingid");
-            if (bookingId != null)
-            {
-                DeleteBookingDetailRequest(bookingId);
-                DeleteBookingRequest(bookingId);
-            }
-        }
-
-        #endregion MOMO PAYMENT
-
-        #region VNPAY
         public ActionResult VnPayPayment(int total)
         {
             string url = "http://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-            string returnUrl = "https://localhost:7094/Booking/VnPayPaymentConfirm";
+            string returnUrl = "https://localhost:7094/Booking/VnPayResult";
             string tmnCode = "GHHNT2HB";
             string hashSecret = "BAGAOHAPRHKQZASKQZASVPRSAKPXNYXS";
 
@@ -265,7 +256,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
             return Redirect(paymentUrl);
         }
 
-        public ActionResult VnPayPaymentConfirm()
+        public ActionResult VnPayResult()
         {
             if (HttpContext.Request.Query.Count() > 0)
             {
@@ -320,8 +311,8 @@ namespace CinemaBookingSystem.WebApp.Controllers
 
             return View();
         }
-        #endregion
-        public IEnumerable<BookingDetailViewModel> GetBookingDetailRequest(int bookingId)
+        //API Service
+        public IEnumerable<BookingDetailViewModel> GetBookingDetailByIdRequest(int bookingId)
         {
             IEnumerable<BookingDetailViewModel>? bookingDetail = null;
             HttpRequestMessage request = new HttpRequestMessage();

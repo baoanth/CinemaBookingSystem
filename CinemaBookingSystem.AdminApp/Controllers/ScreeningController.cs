@@ -87,6 +87,8 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             if (screening.ShowTime < DateTime.Now.AddDays(1))
             {
                 _notyf.Error("Thời gian chiếu không hợp lệ! Thời gian hợp lệ không được nhỏ hơn 1 ngày so với thời gian hiện tại", 5);
+                GetData();
+                return View(screening);
             }
             if (theatre != null)
             {
@@ -458,8 +460,6 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         }
         public ActionResult Calendar(string? Theatre, string from, string to)
         {
-
-
             if (!String.IsNullOrEmpty(Theatre))
             {
                 var theatre = GetTheatreDetailsRequest(Convert.ToInt32(Theatre));
@@ -494,8 +494,8 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             }
             else
             {
-                d_startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                d_endDate = d_startDate.AddMonths(1).AddDays(-1);
+                d_startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month - 1, 1);
+                d_endDate = d_startDate.AddMonths(2).AddDays(-1);
             }
             var details = GetScreeningListRequest()
                 .Where(x => x.ShowTime >= d_startDate

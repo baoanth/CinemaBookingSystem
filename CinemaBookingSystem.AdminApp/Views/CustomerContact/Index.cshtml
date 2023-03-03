@@ -21,7 +21,32 @@
                 </div>
                 <form method="post">
                     <div class="row">
+                        <div class="col-sm-7" style="padding-left:30px !important">
+                            <input type="text" name="fullname" placeholder="Nhập tên khách hàng" class="form-control" />
+                        </div>
                         <button type="submit" class="col-sm-1 btn btn-primary"><i class="fa fa-search"></i></button>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label" style="padding-left:30px !important">Khoảng thời gian:</label>
+                        <div class="col-sm-2">
+                            <input type="date" name="from" class="form-control" />
+                        </div>
+                        <label class="col-sm-1 col-form-label text-center">đến</label>
+                        <div class="col-sm-2">
+                            <input type="date" name="to" class="form-control" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label class="col-sm-2 col-form-label" style="padding-left:30px !important">Lọc theo trạng thái:</label>
+                        <div class="col-sm-5">
+                            <select class="form-select" name="status">
+                                <option value="">Tất cả phản hồi</option>
+                                <option value="true">Đã trả lời</option>
+                                <option value="false">Đợi trả lời</option>
+                            </select>
+                        </div>
                     </div>
                 </form>
                 <div class="card-body">

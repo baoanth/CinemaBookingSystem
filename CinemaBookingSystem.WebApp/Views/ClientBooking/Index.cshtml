@@ -5,6 +5,10 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
     string? sessionFullname = Context.Session.GetString("_clientfullname");
+    if (String.IsNullOrEmpty(sessionFullname))
+    {
+        Context.Response.Redirect("Account/Login");
+    }
 }
 <section class="normal-breadcrumb set-bg" data-setbg="@("../assets/img/banner.jpg")">
     <div class="container">
@@ -41,7 +45,7 @@
                         foreach (var item in Model)
                         {
                             <a class="follow-btn" asp-action="Details" asp-controller="ClientBooking" asp-route-id="@item.BookingId">
-                               Mã xác thực: @item.VerifyCode (<i class="fa fa-calendar"></i> @item.BookedAt.ToString("HH:mm dd/MM/yyyy"))
+                                Mã xác thực: @item.VerifyCode (<i class="fa fa-calendar"></i> @item.BookedAt.ToString("HH:mm dd/MM/yyyy"))
                             </a>
                             <br />
                             <br />

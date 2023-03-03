@@ -2,7 +2,6 @@
 using CinemaBookingSystem.Model.Models;
 using CinemaBookingSystem.Service;
 using CinemaBookingSystem.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.Infrastructure;
@@ -132,16 +131,14 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         [Route("delete/{id}")]
         public ActionResult Delete([FromHeader, Required] string CBSToken, int id)
         {
-            var customerContact = _customerContactService.GetById(id);
-            bool IsValid = customerContact != null;
-            if (!IsValid) return BadRequest("The input ID is not exist!");
+            if (_customerContactService.GetById(id) == null) return BadRequest("The input ID is not exist!");
             else
             {
                 try
                 {
                     _customerContactService.Delete(id);
                     _customerContactService.SaveChanges();
-                    return Ok(customerContact);
+                    return Ok();
                 }
                 catch (Exception ex)
                 {

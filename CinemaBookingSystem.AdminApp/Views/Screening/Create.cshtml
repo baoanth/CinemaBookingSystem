@@ -48,14 +48,14 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="show-time">Ngày giờ chiếu<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input asp-for="ShowTime" type="datetime-local" class="form-control" id="show-time" />
+                                <input asp-for="ShowTime" type="datetime-local" class="form-control" id="show-time" required />
                                 <span asp-validation-for="ShowTime" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="price">Giá chỗ ngồi (VNĐ)<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input  type="number" class="form-control" name="positionPrice" id="price" />
+                                <input  type="number" class="form-control" name="positionPrice" id="price" required/>
                             </div>
                         </div>
 

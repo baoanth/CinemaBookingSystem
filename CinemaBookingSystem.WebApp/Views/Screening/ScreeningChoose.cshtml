@@ -2,11 +2,16 @@
 @{
     ViewData["Title"] = "ScreeningChoose";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    string? sessionName = Context.Session.GetString("_clientname");
+    if (String.IsNullOrEmpty(sessionName))
+    {
+        Context.Response.Redirect("Account/Login");
+    }
 }
 
 @{
     List<DateTime> dateList = new List<DateTime>();
-    DateTime start = DateTime.Now.AddDays(1);
+    DateTime start = DateTime.Now;
     DateTime end = start.AddDays(7);
     while (start < end)
     {
@@ -43,12 +48,12 @@
                         }
                         else
                         {
-                            @foreach (var screening in Model.Where(m => m.ShowTime.Date == date.Date).OrderBy(x => x.ShowTime))
+                            @foreach (var screening in Model.Where(m => m.ShowTime.Date == date.Date && m.ShowTime.Hour > date.Hour).OrderBy(x => x.ShowTime))
                             {
                                 <div class="col-lg-1">
                                     <div class="anime__details__text">
                                         <div class="blog__details__tags" style="margin-bottom:0px !important">
-                                            <a asp-action="PositionsChoose" asp-controller="Booking" asp-route-id="@screening.ScreeningId">@screening.ShowTime.ToString("HH:mm")</a>
+                                            <a asp-action="SeatPick" asp-controller="Booking" asp-route-id="@screening.ScreeningId">@screening.ShowTime.ToString("HH:mm")</a>
                                         </div>
                                     </div>
                                 </div>

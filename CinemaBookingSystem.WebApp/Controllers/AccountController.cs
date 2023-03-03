@@ -20,6 +20,9 @@ namespace CinemaBookingSystem.WebApp.Controllers
         public const string SessionId = "_clientid";
         public const string SessionKeyName = "_clientname";
         public const string SessionFullName = "_clientfullname";
+        public const string SessionEmail = "_clientemail";
+        public const string SessionPhone = "_clientphone";
+        public const string SessionRole = "_clientrole";
         private INotyfService _notyf;
 
         public AccountController(INotyfService notyf)
@@ -45,7 +48,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
                 string body = response.Content.ReadAsStringAsync().Result;
                 UserViewModel user = JsonConvert.DeserializeObject<UserViewModel>(body);
                 _notyf.Success($"Chào mừng quay trở lại, {user.FullName}", 4);
-                SetSessionValues(user.UserId, user.Username, user.FullName);
+                SetSessionValues(user.UserId, user.Username, user.FullName, user.PhoneNumber, user.Email, user.RoleId);
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -55,11 +58,14 @@ namespace CinemaBookingSystem.WebApp.Controllers
             return View(login);
         }
 
-        private void SetSessionValues(int userId, string username, string fullName)
+        private void SetSessionValues(int userId, string username, string fullName, string phone, string email, int roleId)
         {
             HttpContext.Session.SetInt32(SessionId, userId);
+            HttpContext.Session.SetInt32(SessionRole, roleId);
             HttpContext.Session.SetString(SessionKeyName, username);
             HttpContext.Session.SetString(SessionFullName, fullName);
+            HttpContext.Session.SetString(SessionPhone, phone);
+            HttpContext.Session.SetString(SessionEmail, email);
         }
 
         private HttpResponseMessage LoginRequest(LoginViewModel login)
@@ -173,7 +179,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
                 string body = response.Content.ReadAsStringAsync().Result;
                 UserViewModel user = JsonConvert.DeserializeObject<UserViewModel>(body);
                 _notyf.Success($"Chào mừng quay trở lại, {user.FullName}", 4);
-                SetSessionValues(user.UserId, user.Username, user.FullName);
+                SetSessionValues(user.UserId, user.Username, user.FullName, user.PhoneNumber, user.Email, user.RoleId);
                 return true;
             }
             else

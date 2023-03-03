@@ -1,7 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Text;
@@ -65,7 +64,6 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 _notyf.Error("Không thể tìm thấy thông tin từ server");
                 _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                
             }
             return View(article);
         }
@@ -79,9 +77,9 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("ArticleId,ArticleTitle,ArticleContent")] ArticleViewModel article, IFormFile postedImage, IFormFile postedVideo)
         {
-            int? sessionId = HttpContext.Session.GetInt32("_id");
             article.CreatedDate = DateTime.Now;
-            article.CreatedBy = (int)sessionId;
+            article.CreatedBy = (int)HttpContext.Session.GetInt32("_id");
+
             var path = Path.Combine(Directory.GetCurrentDirectory(), "..\\sharedmedia\\images\\articles");
             if (!Directory.Exists(path))
             {
@@ -118,7 +116,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể thực hiện do lỗi server hoặc thông tin chưa hợp lệ", 4);
-                
+
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
             return View();
@@ -136,9 +134,8 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể tìm thấy thông tin từ server", 4);
-                
+
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                
             }
             return View(article);
         }
@@ -199,7 +196,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể thực hiện do lỗi server", 4);
-                
+
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
             return View(article);
@@ -217,9 +214,8 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể tìm thấy thông tin từ server", 4);
-                
+
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                
             }
             return View(article);
         }
@@ -237,7 +233,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             else
             {
                 _notyf.Error("Không thể thực hiện do lỗi server", 4);
-                
+
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
                 return RedirectToAction("Index");
             }
