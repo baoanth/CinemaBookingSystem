@@ -23,7 +23,7 @@
                 <div class="blog__details__content">
                     <div class="blog__details__text">
                         <p>
-                            @Model.ArticleContent
+                            @Html.Raw(Model.ArticleContent.Replace(Environment.NewLine,"<br />"))
                         </p>
                     </div>
                     <div class="blog__details__item__text">

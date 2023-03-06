@@ -26,49 +26,49 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="name">Tên người hỗ trợ<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for=Name class="form-control" id="name"/>
+                                <input type="text" asp-for=Name class="form-control" id="name" required />
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="department">Địa chỉ<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for=Department class="form-control" id="department"/>
+                                <input type="text" asp-for=Department class="form-control" id="department" required />
                                 <span asp-validation-for="Department" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="phone-number">Số điện thoại<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for="Mobile" class="form-control" id="phone-number" />
+                                <input type="text" asp-for="Mobile" class="form-control" id="phone-number" required />
                                 <span asp-validation-for="Mobile" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="facebook">Link Facebook<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for="FacebookURL" class="form-control" id="facebook" />
+                                <input type="text" asp-for="FacebookURL" class="form-control" id="facebook" required />
                                 <span asp-validation-for="FacebookURL" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="email">Email<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for="Email" class="form-control" id="email" />
+                                <input type="text" asp-for="Email" class="form-control" id="email" required />
                                 <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="message">Lời nhắn<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <textarea asp-for="Message" class="form-control" rows="3" id="message"></textarea>
+                                <textarea asp-for="Message" class="form-control" rows="3" id="message" required></textarea>
                                 <span asp-validation-for="Message" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="status">Trạng thái<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <select id="status" class="form-select" asp-for="IsWorking">
+                                <select id="status" class="form-select" asp-for="IsWorking" required>
                                     <option value="true">Đang hoạt động</option>
                                     <option value="false">Tạm ngưng hỗ trợ</option>
                                 </select>

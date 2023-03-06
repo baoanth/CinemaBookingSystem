@@ -148,6 +148,7 @@ namespace CinemaBookingSystem.WebAPI.Controllers
                     }
                     else
                     {
+                        _screeningService.SaveChanges();
                         return Ok(screening);
                     }
                 }

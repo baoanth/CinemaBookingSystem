@@ -5,7 +5,7 @@
     string? sessionName = Context.Session.GetString("_clientname");
     if (String.IsNullOrEmpty(sessionName))
     {
-        Context.Response.Redirect("Account/Login");
+        Context.Response.Redirect("/Account/Login");
     }
 }
 

@@ -38,7 +38,6 @@ namespace CinemaBookingSystem.WebApp.Controllers
             return View(screeningPositions);
         }
 
-        [HttpPost]
         public IActionResult Confirm(List<int> chosenSeatIds)
         {
             //zero seat check
@@ -80,7 +79,7 @@ namespace CinemaBookingSystem.WebApp.Controllers
                     {
                         seats.Add(item.PositionId);
                     }
-                    return RedirectToAction("Confirm", seats);
+                    return RedirectToAction("Confirm","Booking",new { chosenSeatIds = seats } );
             }
         }
 

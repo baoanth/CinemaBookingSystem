@@ -138,7 +138,7 @@ namespace TheatreBookingSystem.AdminApp.Controllers
                 
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
-            return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentCinemaId") });
+            return RedirectToAction("Index", "Theatre", new { id = HttpContext.Session.GetInt32("currentCinemaId") });
         }
 
         public IEnumerable<CinemaViewModel> GetCinemaListRequest()

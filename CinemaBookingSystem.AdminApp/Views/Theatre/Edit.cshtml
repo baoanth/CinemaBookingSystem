@@ -31,21 +31,21 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="theatre-name">Tên phòng chiếu<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for=TheatreName class="form-control" id="theatre-name" />
+                                <input type="text" asp-for=TheatreName class="form-control" id="theatre-name" required />
                                 <span asp-validation-for="TheatreName" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="capacity">Số chỗ ngồi<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <input type="text" asp-for=Capacity class="form-control" id="capacity" />
+                                <input type="text" asp-for=Capacity class="form-control" id="capacity" required />
                                 <span asp-validation-for="Capacity" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label" for="cinema-select">Thuộc rạp<span class="text-danger"> *</span></label>
                             <div class="col-sm-10">
-                                <select id="cinema-select" class="form-select" asp-for="CinemaId">
+                                <select id="cinema-select" class="form-select" asp-for="CinemaId" required>
                                     @{
                                         foreach (var item in ViewBag.CinemaList as IEnumerable<CinemaBookingSystem.ViewModels.CinemaViewModel>)
                                         {

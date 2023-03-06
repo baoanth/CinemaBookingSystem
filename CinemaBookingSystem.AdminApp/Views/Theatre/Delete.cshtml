@@ -5,6 +5,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@{
+    int? currentId = Context.Session.GetInt32("currentCinemaId");
+}
+
 <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Basic Layout & Basic with Icons -->
     <div class="row">
@@ -15,13 +19,13 @@
                     <h5 class="mb-0">Mọi thao tác không thể hoàn tác, bạn có chắc chắn muốn xóa phòng chiếu @Html.DisplayFor(model => model.TheatreName) ra khỏi danh sách?</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" asp-action="Delete" asp-controller="User" asp-route-id="@Model.TheatreId">
+                    <form method="post" asp-action="Delete" asp-controller="Theatre" asp-route-id="@Model.TheatreId">
                         <div class="row justify-content-end">
                             <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
                         </div>
                     </form>
                     <hr />
-                    <a asp-action="Index" asp-controller="Theatre"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
+                    <a asp-action="Index" asp-controller="Theatre" asp-route-id="@currentId"> <input type="submit" class="btn btn-primary" value="Trở về danh sách" /></a>
                 </div>
             </div>
         </div>
