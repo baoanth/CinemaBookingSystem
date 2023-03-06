@@ -61,6 +61,19 @@ namespace CinemaBookingSystem.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("getallbymovie/{id}")]
+        public ActionResult GetAllByMovie([FromHeader, Required] string CBSToken, int id)
+        {
+            var screening = _screeningService.GetAllByMovie(id);
+            if (screening == null) return NotFound("There's no screening schedule!");
+            else
+            {
+                var screeningVm = _mapper.Map<IEnumerable<ScreeningViewModel>>(screening);
+                return Ok(screeningVm);
+            }
+        }
+
+        [HttpGet]
         [Route("getallbycinemaandmovie/{cinemaId}/{movieId}")]
         public ActionResult GetAllByCinemaAndMovie([FromHeader, Required] string CBSToken, int cinemaId, int movieId)
         {

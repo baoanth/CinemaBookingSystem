@@ -41,7 +41,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label">Giờ kết thúc</label>
                             <div class="col-sm-10">
-                                @Model.ShowTime.AddMinutes(Model.Movie.RunningTime + 30).ToString("HH:mm")
+                                @Model.ShowTime.AddMinutes(Model.Movie.RunningTime + 20).ToString("HH:mm")
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -78,7 +78,7 @@
                              &ensp;
                             <a asp-action="ScreeningPositionsDetails" asp-controller="Screening" asp-route-id="@Model.ScreeningId"> <input type="submit" value="Xem thông tin chỗ ngồi" class="btn btn-primary" /></a>
                             &ensp;
-                            @if (!(Model.ShowTime <= DateTime.Now.AddDays(7)))
+                            @if (!(Model.ScreeningPositions.Any(x => x.IsBooked == true)))
                             {
                                 <a asp-action="Edit" asp-controller="Screening" asp-route-id="@Model.ScreeningId"> <input type="submit" class="btn btn-warning" value="Chỉnh sửa" /></a>
                                 <text>&ensp;</text>

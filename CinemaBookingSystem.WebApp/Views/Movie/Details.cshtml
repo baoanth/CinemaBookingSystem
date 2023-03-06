@@ -53,17 +53,24 @@
                         <div class="anime__details__btn">
                             <a asp-action="TrailerWatch" asp-controller="Movie" asp-route-id="@Model.MovieId" class="follow-btn"><i class="fa fa-film"></i> Xem trailer</a>
                             @{
-                                if (Model.ReleaseDate < DateTime.Now)
-                                {
-                                    <a asp-controller="Screening" asp-action="CinemaChoose" asp-route-id="@Model.MovieId" class="watch-btn">
-                                        <span>Đặt vé ngay</span> <i class="fa fa-angle-right"></i>
-                                    </a>
-                                }
-                                else
+                                if (Model.ReleaseDate > DateTime.Now)
                                 {
                                     <a href="#" class="watch-btn">
                                         <span>Phim sắp chiếu</span> <i class="fa fa-angle-right"></i>
                                     </a>
+                                }
+                                else if (Model.Screenings.Count() == 0)
+                                {
+                                    <a href="#" class="watch-btn">
+                                        <span>Hiện phim chưa có lịch chiếu</span> <i class="fa fa-angle-right"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Screening" asp-action="CinemaChoose" asp-route-id="@Model.MovieId" class="watch-btn">
+                                        <span>Đặt vé ngay</span> <i class="fa fa-angle-right"></i>
+                                    </a>
+                                    
                                 }
                             }
                             
@@ -88,7 +95,7 @@
                                         <img src="~/assets/img/usericon.png" alt="">
                                     </div>
                                     <div class="anime__review__item__text">
-                                        @if (item.CommentedBy == Context.Session.GetInt32("_clientid") || Context.Session.GetInt32("_clientroleid") == 1)
+                                        @if (item.CommentedBy == Context.Session.GetInt32("_clientid") || Context.Session.GetInt32("_clientrole") == 3)
                                         {
                                             <div style="display:flex; float:right">
                                                 <a asp-action="DeleteComment" asp-controller="Movie" asp-route-id="@item.CommentId" asp-route-movieid="@item.MovieId"><i class="fa fa-times" style="color:red"></i></a>

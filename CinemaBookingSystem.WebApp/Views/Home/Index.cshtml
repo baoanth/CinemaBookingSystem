@@ -8,7 +8,7 @@
     <div class="container">
         <div class="hero__slider owl-carousel">
             @{
-                foreach (var item in Model.Where(x => x.BannerImg != null && x.ReleaseDate < DateTime.Now).OrderByDescending(y => y.ReleaseDate).Take(6))
+                foreach (var item in ViewBag.Carousel)
                 {
                     <div class="hero__items set-bg" data-setbg="@("/media/banners/" + item.BannerImg)">
                         <div class="row">
@@ -16,8 +16,24 @@
                                 <div class="hero__text">
                                     <div class="label">@item.Genres</div>
                                     <h2>@item.MovieName</h2>
-                                    <p>@item.Description</p>
-                                    <a asp-action="Details" asp-controller="Movie" asp-route-id="@item.MovieId"><span>Đặt vé ngay</span> <i class="fa fa-angle-right"></i></a>
+                                    <p style="display: -webkit-box;
+                                        max-height: 4.8rem;
+                                       -webkit-box-orient: vertical;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        white-space: normal;
+                                        -webkit-line-clamp: 3;
+                                        line-height: 1.6rem;">
+                                        @item.Description
+                                    </p>
+                                    @if (item.ReleaseDate > DateTime.Now)
+                                    {
+                                        <a asp-action="Details" asp-controller="Movie" asp-route-id="@item.MovieId"><span>Phim sắp chiếu</span> <i class="fa fa-angle-right"></i></a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Details" asp-controller="Movie" asp-route-id="@item.MovieId"><span>Đặt vé ngay</span> <i class="fa fa-angle-right"></i></a>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -42,7 +58,7 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <div class="btn__all">
-                                <a asp-action="NowShowing" asp-controller="Movie" class="primary-btn">Xem tất cả <span class="arrow_right"></span></a>
+                                <a asp-action="New" asp-controller="Movie" class="primary-btn">Xem tất cả <span class="arrow_right"></span></a>
                             </div>
                         </div>
                     </div>
@@ -83,7 +99,7 @@
                     </div>
                     <div class="row">
                         @{
-                            foreach (var item in Model.Where(x => x.ReleaseDate < DateTime.Now).OrderByDescending(x => x.ReleaseDate).Take(6))
+                            foreach (var item in Model.Where(x => x.ReleaseDate < DateTime.Now && x.Screenings.Count() != 0).OrderByDescending(x => x.ReleaseDate).Take(6))
                             {
                                 <div class="col-lg-4 col-md-6 col-sm-6">
                                     <div class="product__item">

@@ -29,6 +29,8 @@ namespace TheatreBookingSystem.AdminApp.Controllers
             int pageSize = 6;
             int pageNumber = (page ?? 1);
             HttpContext.Session.SetInt32("currentCinemaId", id);
+            CinemaViewModel cinema = GetCinemaListRequest().Where(x => x.CinemaId == id).FirstOrDefault();
+            ViewData["CinemaName"] = cinema.CinemaName;
             IEnumerable<TheatreViewModel> list = GetTheatreListRequest(id);
             if (!String.IsNullOrEmpty(key))
             {
@@ -46,9 +48,14 @@ namespace TheatreBookingSystem.AdminApp.Controllers
 
         public ActionResult Create()
         {
+            GetData();
+            return View();
+        }
+
+        public void GetData()
+        {
             IEnumerable<CinemaViewModel> cinemaList = GetCinemaListRequest();
             ViewBag.CinemaList = cinemaList;
-            return View();
         }
 
         [HttpPost]
@@ -58,13 +65,14 @@ namespace TheatreBookingSystem.AdminApp.Controllers
             if (theatre.Capacity % 10 != 0)
             {
                 _notyf.Warning($"Số chỗ ngồi tối đa phải là bội số của 10", 3);
+                GetData();
                 return View(theatre);
             }
             HttpResponseMessage response = CreateTheatreRequest(theatre);
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Thêm mới thành công: {theatre.TheatreName}", 3);
-                return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentCinemaId") });
+                return RedirectToAction("Index", "Theatre", new { id = HttpContext.Session.GetInt32("currentCinemaId") });
             }
             else
             {
@@ -72,14 +80,14 @@ namespace TheatreBookingSystem.AdminApp.Controllers
                 
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
+            GetData();
             return View(theatre);
         }
 
         public ActionResult Edit(int id)
         {
             TheatreViewModel theatre = GetTheatreDetailsRequest(id);
-            IEnumerable<CinemaViewModel> cinemaList = GetCinemaListRequest();
-            ViewBag.CinemaList = cinemaList;
+            GetData();
             return View(theatre);
         }
 
@@ -90,6 +98,7 @@ namespace TheatreBookingSystem.AdminApp.Controllers
             if (theatre.Capacity % 10 != 0)
             {
                 _notyf.Warning($"Số chỗ ngồi tối đa phải là bội số của 10", 3);
+                GetData();
                 return View(theatre);
             }
             HttpResponseMessage response = UpdateTheatreRequest(theatre);
@@ -104,6 +113,7 @@ namespace TheatreBookingSystem.AdminApp.Controllers
                 
                 Debug.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
+            GetData();
             return View(theatre);
         }
 
@@ -121,15 +131,14 @@ namespace TheatreBookingSystem.AdminApp.Controllers
             if (response.IsSuccessStatusCode)
             {
                 _notyf.Success($"Xóa thành công khỏi danh sách!", 4);
-                return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentCinemaId") });
             }
             else
             {
                 _notyf.Error("Không thể thực hiện do lỗi server", 4);
                 
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
-                return RedirectToAction("Index");
             }
+            return RedirectToAction("Index", new { id = HttpContext.Session.GetInt32("currentCinemaId") });
         }
 
         public IEnumerable<CinemaViewModel> GetCinemaListRequest()

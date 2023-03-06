@@ -136,7 +136,7 @@
 <body>
     <article class="ticket">
         <header class="ticket__wrapper">
-            <div class="ticket__header">
+            <div class="ticket__header" style="text-align: center">
                 <h2>CINE<span style="color:red">MAX</span> Ticket</h2>
             </div>
         </header>
@@ -147,6 +147,8 @@
         <div class="ticket__body">
             <section class="ticket__section">
                 <h3>Khách hàng: @Model.First().Booking.User.FullName</h3>
+                <p>Ngày đặt: @Model.First().Booking.BookedAt.ToString("HH:mm dd/MM/yyyy")</p>
+                <p>Ngày nhận vé: @DateTime.Now.ToString("HH:mm dd/MM/yyyy")</p>
                 <p>Mã xác thực: @Model.First().Booking.VerifyCode</p>
             </section>
             <section class="ticket__section">

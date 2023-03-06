@@ -2,6 +2,7 @@
 using CinemaBookingSystem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace CinemaBookingSystem.AdminApp.Controllers
 {
@@ -29,19 +30,42 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                 MovieName = Key.MovieName,
                 TotalPrice = group.Sum(x => x.ScreeningPosition.Price),
                 TotalSell = group.Count(),
-            }).Take(5).OrderByDescending(x => x.TotalPrice).ToList();
+            }).OrderByDescending(x => x.TotalPrice).ToList();
             var yearTopMovie = bookingDetails.Where(x => x.Booking.BookedAt.Year == DateTime.Now.Year && x.Booking.IsPaid).GroupBy(x => new { x.ScreeningPosition.Screening.Movie.MovieId, x.ScreeningPosition.Screening.Movie.MovieName }, (Key, group) => new TopMovieViewModel()
             {
                 MovieId = Key.MovieId,
                 MovieName = Key.MovieName,
                 TotalPrice = group.Sum(x => x.ScreeningPosition.Price),
                 TotalSell = group.Count(),
-            }).Take(5).OrderByDescending(x => x.TotalPrice).ToList();
+            }).OrderByDescending(x => x.TotalPrice).ToList();
+            var todayTopMovie = bookingDetails.Where(x => x.Booking.BookedAt.Date == DateTime.Now.Date && x.Booking.IsPaid).GroupBy(x => new { x.ScreeningPosition.Screening.Movie.MovieId, x.ScreeningPosition.Screening.Movie.MovieName }, (Key, group) => new TopMovieViewModel()
+            {
+                MovieId = Key.MovieId,
+                MovieName = Key.MovieName,
+                TotalPrice = group.Sum(x => x.ScreeningPosition.Price),
+                TotalSell = group.Count(),
+            }).OrderByDescending(x => x.TotalPrice).ToList();
             ViewBag.MonthTopMovie = monthTopMovie;
             ViewBag.YearTopMovie = yearTopMovie;
+            ViewBag.TodayTopMovie = todayTopMovie;
+
+            var topCustomer = bookingDetails.Where(x => x.Booking.IsPaid).GroupBy(x => new { x.Booking.User.UserId, x.Booking.User.FullName }, (Key, group) => new TopCustomerViewModel()
+            {
+                UserId = Key.UserId,
+                Fullname = Key.FullName,
+                TotalPrice = group.Sum(x => x.ScreeningPosition.Price),
+                TotalSell = group.Count(),
+            }).OrderByDescending(x => x.TotalPrice).Take(5).ToList();
+            ViewBag.TopCustomer = topCustomer;
 
             IEnumerable<MovieViewModel> movies = GetMovieListRequest();
-            ViewBag.NowShowingMovies = movies.Where(x => x.ReleaseDate < DateTime.Now).Count();
+            foreach (var item in movies)
+            {
+                IEnumerable<ScreeningViewModel> screenings = GetScreeningListRequest(item.MovieId);
+                item.Screenings = screenings.Where(x => x.ShowTime > DateTime.Now);
+            }
+            ViewBag.AllMovies = movies.Count();
+            ViewBag.NowShowingMovies = movies.Where(x => x.ReleaseDate < DateTime.Now && x.Screenings.Count() != 0).Count();
             ViewBag.ComingSoonMovies = movies.Where(x => x.ReleaseDate > DateTime.Now).Count();
 
             IEnumerable<CinemaViewModel> cinemas = GetCinemaListRequest();
@@ -142,6 +166,26 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             return list;
         }
 
+        private IEnumerable<ScreeningViewModel> GetScreeningListRequest(int id)
+        {
+            IEnumerable<ScreeningViewModel> list = null;
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + $"screening/getallbymovie/{id}");
+            request.Method = HttpMethod.Get;
+
+            HttpResponseMessage response = _client.SendAsync(request).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                string body = response.Content.ReadAsStringAsync().Result;
+                list = JsonConvert.DeserializeObject<IEnumerable<ScreeningViewModel>>(body);
+            }
+            else
+            {
+                _notyf.Error("Không thể lấy thông tin bình luận do lỗi server");
+                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+            }
+            return list;
+        } 
         public IActionResult Logout()
         {
             if (HttpContext.Session.GetString("_name") == null)

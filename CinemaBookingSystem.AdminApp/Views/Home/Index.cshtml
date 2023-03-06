@@ -15,8 +15,15 @@
     {
         totalYear += item.ScreeningPosition.Price;
     }
+    int totalToday = 0;
+    foreach (var item in Model.Where(x => x.Booking.BookedAt.Date == DateTime.Now.Date && x.Booking.IsPaid))
+    {
+        totalToday += item.ScreeningPosition.Price;
+    }
+    int todayNum = 0;
     int monthNum = 0;
     int yearNum = 0;
+    int topCustomer = 0;
 }
 
 <div class="container-xxl flex-grow-1 container-p-y">
@@ -44,15 +51,20 @@
     </div>
     <div class="row">
         <!-- Order Statistics -->
-        <div class="col-md-4 col-lg-4 col-xl-4 order-0 mb-4">
+        <div class="col-md-6 col-lg-6 col-xl-6 order-0 mb-4">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between pb-0">
                     <div class="card-title mb-0">
-                        <h5 class="m-0 me-2">Tổng số phim</h5>
+                        <h5 class="m-0 me-2">Thông tin phim</h5>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex flex-column align-items-center gap-1">
+                            <br>
+                            <span>Tổng số phim</span>
+                            <h3 class="mb-2">@ViewBag.AllMovies</h3>
+                        </div>
                         <div class="d-flex flex-column align-items-center gap-1">
                             <br>
                             <span>Phim đang chiếu</span>
@@ -91,7 +103,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 col-lg-3 col-xl-3 order-0 mb-4">
+        <div class="col-md-2 col-lg-2 col-xl-2 order-0 mb-4">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between pb-0">
                     <div class="card-title mb-0">
@@ -110,8 +122,32 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-4 col-lg-4 col-xl-4 order-0 mb-4">
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between pb-0">
+                    <div class="card-title mb-0">
+                        <h5 class="m-0 me-2">Doanh thu hôm nay</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex flex-column align-items-center gap-1">
+                            <br>
+                            <h5 class="mb-2">@Model.Where(x => x.Booking.BookedAt.Date == DateTime.Now.Date).Count()</h5>
+                            <span>Số vé bán ra</span>
+                        </div>
+                        <div class="d-flex flex-column align-items-center gap-1">
+                            <br>
+
+                            <h5 class="mb-2">@string.Format("{0:#,##0}", totalToday)đ</h5>
+                            <span>Tổng tiền vé</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Order Statistics -->
-        <div class="col-md-6 col-lg-6 col-xl-6 order-0 mb-4">
+        <div class="col-md-4 col-lg-4 col-xl-4 order-1 mb-4">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between pb-0">
                     <div class="card-title mb-0">
@@ -122,13 +158,13 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class="d-flex flex-column align-items-center gap-1">
                             <br>
-                            <h3 class="mb-2">@Model.Where(x => x.Booking.BookedAt.Month == DateTime.Now.Month).Count()</h3>
+                            <h5 class="mb-2">@Model.Where(x => x.Booking.BookedAt.Month == DateTime.Now.Month).Count()</h5>
                             <span>Số vé bán ra</span>
                         </div>
                         <div class="d-flex flex-column align-items-center gap-1">
                             <br>
 
-                            <h3 class="mb-2">@string.Format("{0:#,##0}", totalMonth) đ</h3>
+                            <h5 class="mb-2">@string.Format("{0:#,##0}", totalMonth)đ</h5>
                             <span>Tổng tiền vé</span>
                         </div>
                     </div>
@@ -136,7 +172,7 @@
             </div>
         </div>
         <!--/ Order Statistics -->
-        <div class="col-md-6 col-lg-6 col-xl-6 order-1 mb-4">
+        <div class="col-md-4 col-lg-4 col-xl-4 order-2 mb-4">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between pb-0">
                     <div class="card-title mb-0">
@@ -147,12 +183,12 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div class="d-flex flex-column align-items-center gap-1">
                             <br>
-                            <h3 class="mb-2">@Model.Where(x => x.Booking.BookedAt.Year == DateTime.Now.Year).Count()</h3>
+                            <h5 class="mb-2">@Model.Where(x => x.Booking.BookedAt.Year == DateTime.Now.Year).Count()</h5>
                             <span>Số vé bán ra</span>
                         </div>
                         <div class="d-flex flex-column align-items-center gap-1">
                             <br>
-                            <h3 class="mb-2">@string.Format("{0:#,##0}", totalYear) đ</h3>
+                            <h5 class="mb-2">@string.Format("{0:#,##0}", totalYear)đ</h5>
                             <span>Tổng tiền vé</span>
                         </div>
                     </div>
@@ -161,14 +197,56 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-12 col-lg-12 col-xl-12 order-0 mb-4">
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between pb-0">
+                    <div class="card-title mb-0">
+                        <h5 class="m-0 me-2">Phim xem nhiều hôm nay</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive text-nowrap">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Hạng</th>
+                                    <th>Tên phim</th>
+                                    <th>Tổng vé bán ra</th>
+                                    <th>Tổng tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.TodayTopMovie)
+                                {
+                                    todayNum++;
+                                    <tr>
+                                        <td>
+                                            <span>Top @todayNum</span>
+                                        </td>
+                                        <td>
+                                            <a asp-action="Details" asp-controller="Movie" asp-route-id="@item.MovieId">@item.MovieName</a>
+                                        </td>
+                                        <td>
+                                            @item.TotalSell
+                                        </td>
+                                        <td>
+                                            @string.Format("{0:#,##0}", item.TotalPrice)đ
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Order Statistics -->
-        <div class="col-md-12 col-lg-12 col-xl-12 mb-4">
+        <div class="col-md-12 col-lg-12 col-xl-12 order-1 mb-4">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between pb-0">
                     <div class="card-title mb-0">
                         <h5 class="m-0 me-2">Phim top doanh thu tháng @DateTime.Now.ToString("MM")</h5>
                     </div>
-                    <a asp-action="Index" asp-controller="Statistic">Xem thêm</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive text-nowrap">
@@ -190,7 +268,7 @@
                                             <span>Top @monthNum</span>
                                         </td>
                                         <td>
-                                            @item.MovieName
+                                            <a asp-action="Details" asp-controller="Movie" asp-route-id="@item.MovieId">@item.MovieName</a>
                                         </td>
                                         <td>
                                             @item.TotalSell
@@ -207,13 +285,12 @@
             </div>
         </div>
         <!--/ Order Statistics -->
-        <div class="col-md-12 col-lg-12 col-xl-12 order-1 mb-4">
+        <div class="col-md-12 col-lg-12 col-xl-12 order-2 mb-4">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between pb-0">
                     <div class="card-title mb-0">
                         <h5 class="m-0 me-2">Phim top doanh thu năm @DateTime.Now.ToString("yyyy")</h5>
                     </div>
-                    <a asp-action="Index" asp-controller="Statistic">Xem thêm</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive text-nowrap">
@@ -236,7 +313,50 @@
                                             <span>Top @yearNum</span>
                                         </td>
                                         <td>
-                                            @item.MovieName
+                                            <a asp-action="Details" asp-controller="Movie" asp-route-id="@item.MovieId">@item.MovieName</a>
+                                        </td>
+                                        <td>
+                                            @item.TotalSell
+                                        </td>
+                                        <td>
+                                            @string.Format("{0:#,##0}", item.TotalPrice)đ
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-12 col-xl-12 order-3 mb-4">
+            <div class="card">
+                <div class="card-header d-flex align-items-center justify-content-between pb-0">
+                    <div class="card-title mb-0">
+                        <h5 class="m-0 me-2">Khách hàng mua vé nhiều nhất</h5>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive text-nowrap">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Hạng</th>
+                                    <th>Tên khách hàng</th>
+                                    <th>Số vé mua</th>
+                                    <th>Tổng tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in ViewBag.TopCustomer)
+                                {
+                                    topCustomer++;
+                                    <tr>
+                                        <td>
+                                            <span>Top @topCustomer</span>
+                                        </td>
+                                        <td>
+                                            <a asp-action="Details" asp-controller="User" asp-route-id="@item.UserId">@item.Fullname</a>
                                         </td>
                                         <td>
                                             @item.TotalSell

@@ -84,7 +84,8 @@ namespace CinemaBookingSystem.AdminApp.Controllers
             {
                 ViewName = "Ticket",
                 Model = bookingDetail,
-                PageSize = Size.A7,
+                PageHeight = 130,
+                PageWidth = 80,
                 PageOrientation = Orientation.Portrait,
                 PageMargins = new Margins { Bottom = 0, Left = 0, Right = 0, Top = 0 },
             };

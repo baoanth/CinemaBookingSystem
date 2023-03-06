@@ -56,6 +56,8 @@ namespace CinemaBookingSystem.AdminApp.Controllers
         public ActionResult Details(int id)
         {
             ScreeningViewModel screening = GetScreeningDetailsRequest(id);
+            IEnumerable<ScreeningPositionViewModel> screeningPositions = GetScreeningPositionsDetailsRequest(id);
+            screening.ScreeningPositions = screeningPositions;
             return View(screening);
         }
 
@@ -507,7 +509,7 @@ namespace CinemaBookingSystem.AdminApp.Controllers
                     code = x.ScreeningId,
                     title = $"{x.Movie.MovieName}",
                     start = x.ShowTime.ToString("yyyy-MM-ddTHH:mm:ssZ"),
-                    end = x.ShowTime.AddMinutes(x.Movie.RunningTime + 30).ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                    end = x.ShowTime.AddMinutes(x.Movie.RunningTime + 20).ToString("yyyy-MM-ddTHH:mm:ssZ"),
                     allDay = false,
                     className = x.ShowTime > DateTime.Now ? "ChuaChieu" : "DaChieu"
                 });

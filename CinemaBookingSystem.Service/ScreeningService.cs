@@ -16,6 +16,8 @@ namespace CinemaBookingSystem.Service
 
         IEnumerable<Screening> GetAllByTheatre(int theatreId);
 
+        IEnumerable<Screening> GetAllByMovie(int movieId);
+
         IEnumerable<Screening> GetAllByCinemaAndMovie(int cinemaId, int movieId);
 
         Screening GetById(int id);
@@ -39,14 +41,15 @@ namespace CinemaBookingSystem.Service
         public bool Add(Screening screening)
         {
             Movie movie = _movieRepository.GetSingleById(screening.MovieId);
-            bool check = _screeningRepository.GetAll().Any(x => x.TheatreId == screening.TheatreId
-            && (x.ShowTime <= screening.ShowTime && x.ShowTime.AddMinutes(x.Movie.RunningTime + 30) >= screening.ShowTime.AddMinutes(movie.RunningTime + 30)
-            || x.ShowTime <= screening.ShowTime.AddMinutes(movie.RunningTime + 30) && x.ShowTime.AddMinutes(x.Movie.RunningTime + 30) >= screening.ShowTime.AddMinutes(movie.RunningTime + 30)));
-            if (!check)
+            DateTime screeningStart = screening.ShowTime;
+            DateTime screeningEnd = screening.ShowTime.AddMinutes(movie.RunningTime + 20);
+            bool overlap = _screeningRepository.GetAll().Where(x => x.TheatreId == screening.TheatreId && x.ShowTime.Date == screening.ShowTime.Date)
+                .Any(x => x.ShowTime <= screeningEnd && screeningStart <= x.ShowTime.AddMinutes(x.Movie.RunningTime + 20));
+            if (!overlap)
             {
                 _screeningRepository.Add(screening);
             }
-            return !check;
+            return !overlap;
         }
 
         public void Delete(int id)
@@ -62,6 +65,11 @@ namespace CinemaBookingSystem.Service
         public IEnumerable<Screening> GetAllByCinemaAndMovie(int cinemaId, int movieId)
         {
             return _screeningRepository.GetAllByCinemaAndMovie(cinemaId, movieId);
+        }
+
+        public IEnumerable<Screening> GetAllByMovie(int movieId)
+        {
+            return _screeningRepository.GetAllByMovie(movieId);
         }
 
         public IEnumerable<Screening> GetAllByTheatre(int theatreId)
@@ -81,19 +89,16 @@ namespace CinemaBookingSystem.Service
 
         public bool Update(Screening screening)
         {
-            if (Check(screening))
+            Movie movie = _movieRepository.GetSingleById(screening.MovieId);
+            DateTime screeningStart = screening.ShowTime;
+            DateTime screeningEnd = screening.ShowTime.AddMinutes(movie.RunningTime + 20);
+            bool overlap = _screeningRepository.GetAll().Where(x => x.TheatreId == screening.TheatreId && x.ShowTime.Date == screening.ShowTime.Date && x.ScreeningId != screening.ScreeningId)
+                .Any(x => x.ShowTime <= screeningEnd && screeningStart <= x.ShowTime.AddMinutes(x.Movie.RunningTime + 20));
+            if (!overlap)
             {
                 _screeningRepository.Update(screening);
             }
-            return Check(screening);
-        }
-        private bool Check(Screening screening)
-        {
-            Movie movie = _movieRepository.GetSingleById(screening.MovieId);
-            bool check = _screeningRepository.GetAll().Any(x => x.TheatreId == screening.TheatreId && x.ScreeningId != screening.ScreeningId
-            && (x.ShowTime <= screening.ShowTime && x.ShowTime.AddMinutes(x.Movie.RunningTime + 30) >= screening.ShowTime.AddMinutes(movie.RunningTime + 30)
-            || x.ShowTime <= screening.ShowTime.AddMinutes(movie.RunningTime + 30) && x.ShowTime.AddMinutes(x.Movie.RunningTime + 30) >= screening.ShowTime.AddMinutes(movie.RunningTime + 30)));
-            return !check;
+            return !overlap;
         }
     }
 }

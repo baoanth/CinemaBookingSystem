@@ -28,10 +28,16 @@ namespace CinemaBookingSystem.WebApp.Controllers
             {
                 IEnumerable<CommentViewModel> comments = GetCommentListRequest(item.MovieId);
                 item.Comments = comments;
+                IEnumerable<ScreeningViewModel> screenings = GetScreeningListRequest(item.MovieId);
+                item.Screenings = screenings.Where(x => x.ShowTime > DateTime.Now);
             }
+            GetData(list);
             return View(list);
         }
-
+        private void GetData(IEnumerable<MovieViewModel> list)
+        {
+            ViewBag.Carousel = list.Where(x => (x.ReleaseDate > DateTime.Now) || (x.ReleaseDate <= DateTime.Now && x.Screenings.Count() != 0)).OrderByDescending(x => x.ReleaseDate).Take(10);
+        }
         public IActionResult Logout()
         {
             if (HttpContext.Session.GetString("_clientname") == null)
@@ -91,6 +97,27 @@ namespace CinemaBookingSystem.WebApp.Controllers
             {
                 _notyf.Error("Không thể lấy thông tin do lỗi server");
                 _notyf.Error($"Status code: {(int)response.StatusCode}, Message: {response.ReasonPhrase}");
+                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+            }
+            return list;
+        }
+
+        private IEnumerable<ScreeningViewModel> GetScreeningListRequest(int id)
+        {
+            IEnumerable<ScreeningViewModel> list = null;
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + $"screening/getallbymovie/{id}");
+            request.Method = HttpMethod.Get;
+
+            HttpResponseMessage response = _client.SendAsync(request).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                string body = response.Content.ReadAsStringAsync().Result;
+                list = JsonConvert.DeserializeObject<IEnumerable<ScreeningViewModel>>(body);
+            }
+            else
+            {
+                _notyf.Error("Không thể lấy thông tin bình luận do lỗi server");
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
             return list;

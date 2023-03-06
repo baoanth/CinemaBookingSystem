@@ -48,7 +48,7 @@
                         }
                         else
                         {
-                            @foreach (var screening in Model.Where(m => m.ShowTime.Date == date.Date && m.ShowTime.Hour > date.Hour).OrderBy(x => x.ShowTime))
+                            @foreach (var screening in Model.Where(m => m.ShowTime.Date == date.Date && m.ShowTime > DateTime.Now).OrderBy(x => x.ShowTime))
                             {
                                 <div class="col-lg-1">
                                     <div class="anime__details__text">

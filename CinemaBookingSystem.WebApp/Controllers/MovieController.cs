@@ -1,6 +1,8 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using CinemaBookingSystem.ViewModels;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -53,13 +55,38 @@ namespace CinemaBookingSystem.WebApp.Controllers
             {
                 IEnumerable<CommentViewModel> comments = GetCommentListRequest(item.MovieId);
                 item.Comments = comments;
+                IEnumerable<ScreeningViewModel> screenings = GetScreeningListRequest(item.MovieId);
+                item.Screenings = screenings.Where(x => x.ShowTime > DateTime.Now);
+            }
+            movies = movies.Where(x => x.ReleaseDate <= DateTime.Now);
+            if (!String.IsNullOrEmpty(key))
+            {
+                key = key.ToLower().Trim();
+                movies = movies.Where(mv => mv.MovieName.ToLower().Trim().Contains(key));
+            }
+
+            return View(movies.Where(x => x.ReleaseDate <= x.ReleaseDate.AddMonths(1) && x.Screenings.Count() != 0).OrderByDescending(x => x.ReleaseDate).ToPagedList(pageNumber, pageSize));
+        }
+
+        public IActionResult New(int? page, string? key)
+        {
+            if (page == null) page = 1;
+            int pageSize = 12;
+            int pageNumber = (page ?? 1);
+            IEnumerable<MovieViewModel> movies = GetMovieListRequest();
+            foreach (var item in movies)
+            {
+                IEnumerable<CommentViewModel> comments = GetCommentListRequest(item.MovieId);
+                item.Comments = comments;
+                IEnumerable<ScreeningViewModel> screenings = GetScreeningListRequest(item.MovieId);
+                item.Screenings = screenings.Where(x => x.ShowTime > DateTime.Now);
             }
             if (!String.IsNullOrEmpty(key))
             {
                 key = key.ToLower().Trim();
                 movies = movies.Where(mv => mv.MovieName.ToLower().Trim().Contains(key));
             }
-            return View(movies.Where(x => x.ReleaseDate <= DateTime.UtcNow).OrderByDescending(x => x.ReleaseDate).ToPagedList(pageNumber, pageSize));
+            return View(movies.Where(x => DateTime.Now.Subtract(x.ReleaseDate).Days <= 30).OrderByDescending(x => x.ReleaseDate).ToPagedList(pageNumber, pageSize));
         }
 
         public IActionResult TrailerWatch(int id)
@@ -76,6 +103,8 @@ namespace CinemaBookingSystem.WebApp.Controllers
             ViewBag.Movies = movies;
             IEnumerable<CommentViewModel> comments = GetCommentListRequest(id);
             movie.Comments = comments;
+            IEnumerable<ScreeningViewModel> screenings = GetScreeningListRequest(movie.MovieId);
+            movie.Screenings = screenings.Where(x => x.ShowTime > DateTime.Now);
             return View(movie);
         }
 
@@ -211,6 +240,26 @@ namespace CinemaBookingSystem.WebApp.Controllers
                 Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
             }
             return list.OrderByDescending(x => x.CommentedAt);
+        }
+        private IEnumerable<ScreeningViewModel> GetScreeningListRequest(int id)
+        {
+            IEnumerable<ScreeningViewModel> list = null;
+            HttpRequestMessage request = new HttpRequestMessage();
+            request.RequestUri = new Uri(_baseUrl + $"screening/getallbymovie/{id}");
+            request.Method = HttpMethod.Get;
+
+            HttpResponseMessage response = _client.SendAsync(request).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                string body = response.Content.ReadAsStringAsync().Result;
+                list = JsonConvert.DeserializeObject<IEnumerable<ScreeningViewModel>>(body);
+            }
+            else
+            {
+                _notyf.Error("Không thể lấy thông tin bình luận do lỗi server");
+                Console.WriteLine("{0} ({1})", (int)response.StatusCode, response.ReasonPhrase);
+            }
+            return list;
         }
     }
 }

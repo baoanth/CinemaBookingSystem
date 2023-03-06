@@ -26,14 +26,29 @@
                     @{
                         foreach (var item in Model)
                         {
-                            <div class="col-lg-3 col-md-3 col-sm-3">
-                                <div class="blog__item small__item set-bg" data-setbg="@("/media/articles/" + item.ArticleImage)">
-                                    <div class="blog__item__text">
-                                        <p><span class="icon_calendar"></span> @item.CreatedDate.ToString("HH:mm dd/MM/yyyy")</p>
-                                        <h4><a asp-action="Details" asp-controller="Article" asp-route-id="@item.ArticleId">@item.ArticleTitle</a></h4>
+                            @if (!String.IsNullOrEmpty(item.ArticleImage))
+                            {
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                    <div class="blog__item small__item set-bg" data-setbg="@("/media/articles/" + item.ArticleImage)">
+                                        <div class="blog__item__text">
+                                            <p><span class="icon_calendar"></span> @item.CreatedDate.ToString("HH:mm dd/MM/yyyy")</p>
+                                            <h4><a asp-action="Details" asp-controller="Article" asp-route-id="@item.ArticleId">@item.ArticleTitle</a></h4>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
+                            else
+                            {
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                    <div class="blog__item small__item set-bg" data-setbg="@("../assets/img/article.png")">
+                                        <div class="blog__item__text">
+                                            <p><span class="icon_calendar"></span> @item.CreatedDate.ToString("HH:mm dd/MM/yyyy")</p>
+                                            <h4><a asp-action="Details" asp-controller="Article" asp-route-id="@item.ArticleId">@item.ArticleTitle</a></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
                         }
                     }  
                 </div>
